@@ -1,0 +1,15 @@
+{
+  "name": "sof-dbapp",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ]
+}
