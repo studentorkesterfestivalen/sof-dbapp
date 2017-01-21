@@ -13,12 +13,12 @@
 ActiveRecord::Schema.define(version: 20161208122608) do
 
   create_table "menu_items", force: :cascade do |t|
-    t.string   "title",                      null: false
-    t.boolean  "active",     default: false, null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "parent_id"
-    t.index ["parent_id"], name: "index_menu_items_on_parent_id"
+    t.string   "title",                        null: false
+    t.boolean  "active",       default: false, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "menu_item_id"
+    t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
   end
 
 end

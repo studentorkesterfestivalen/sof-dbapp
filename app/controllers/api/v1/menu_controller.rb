@@ -2,7 +2,7 @@ class API::V1::MenuController < ApplicationController
 
   def index
     # TODO: Unwrap child menu items into resulting json data
-    render :json => MenuItem.where(parent_id: nil), :include => [:menu_items]
+    render :json => MenuItem.where(menu_item_id: nil), :include => [:menu_items]
 
   end
 
