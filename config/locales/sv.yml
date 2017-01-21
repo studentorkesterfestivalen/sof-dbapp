@@ -1,0 +1,56 @@
+sv:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "saknas"
+            password:
+              blank: "saknas"
+              too_short: "är för kort"
+            password_confirmation:
+              confirmation: "matchar inte"
+    attributes:
+      user:
+        email: "E-mail"
+        password: "Lösenord"
+        password_confirmation: "Upprepat lösenord"
+
+  devise_token_auth:
+    sessions:
+      not_confirmed: "Ett bekräftelse-mail har skickats till '%{email}'. Du måste bekräfta din e-postadress innan du kan logga in."
+      bad_credentials: "Felaktiga inloggningsuppgifter"
+      user_not_found: "Användaren kunde inte hittas eller är inte inloggad"
+    token_validations:
+      invalid: "Ogiltig inloggning"
+    registrations:
+      email_already_exists: "Ett konto med e-postadressen '%{email}' finns redan"
+      user_not_found: "Användaren hittades inte"
+    passwords:
+      missing_email: "Du måste ange en e-postadress"
+      sended: "Ett mail har skickats till '%{email}' med instruktioner för att återställa ditt lösenord."
+      user_not_found: "Det finns inget konto registrerat för '%{email}'."
+      password_not_required: "Logga in med ditt LiU-ID istället"
+      missing_passwords: "Du måste fylla i båda lösenordsfälten"
+      successfully_updated: "Ditt lösenord har uppdaterats"
+  errors:
+    messages:
+      not_email: "är ingen e-postadress"
+      already_in_use: "används redan"
+  devise:
+    mailer:
+      confirmation_instructions:
+        confirm_link_msg: "Aktivera ditt konto genom att klicka på länken nedan:"
+        confirm_account_link: "Bekräfta e-postadress"
+      reset_password_instructions:
+        request_reset_link_msg: "Någon har begärt att återställa ditt lösenord. Välj ett nytt lösenord genom att besöka länken nedan."
+        password_change_link: "Ändra lösenord"
+        ignore_mail_msg: "Om du inte begärt återställningen kan du ignorera detta mail."
+        no_changes_msg: "Ditt lösenord är oförändrat tills du besöker länken och byter till ett nytt."
+      unlock_instructions:
+        account_lock_msg: "Ditt konto har blivit låst på grund av ett stort antal försök att logga in."
+        unlock_link_msg: "Klicka på nedanstående länk för att låsa upp ditt konto:"
+        unlock_link: "Lås upp konto"
+  hello: "Hej"
+  welcome: "Hej"

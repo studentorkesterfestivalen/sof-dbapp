@@ -35,5 +35,8 @@ module SofDbapp
     # Session storage is required for Omniauth (CAS) authentication.
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    # Fallback to English locale when Swedish translation is missing.
+    config.i18n.fallbacks = [:en]
   end
 end
