@@ -5,4 +5,8 @@ Rails.application.routes.draw do
       resources :menu
     end
   end
+
+  # Let’s encrypt
+  get '/.well-known/acme-challenge/:id' => 'lets_encrypt#challenge', as: :letsencrypt_challenge
+
 end
