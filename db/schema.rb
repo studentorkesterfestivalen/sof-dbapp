@@ -12,6 +12,15 @@
 
 ActiveRecord::Schema.define(version: 20161213104841) do
 
+  create_table "menu_items", force: :cascade do |t|
+    t.string   "title",                        null: false
+    t.boolean  "active",       default: false, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "menu_item_id"
+    t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
     t.string   "uid",                    default: "",      null: false
