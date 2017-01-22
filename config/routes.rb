@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   namespace :api, :defaults => {:format => :json} do
     namespace :v1 do
       resources :menu
+      resources :pages do
+        collection do
+          get 'find(/:category)(/:page)', action: 'find'
+        end
+      end
     end
   end
 

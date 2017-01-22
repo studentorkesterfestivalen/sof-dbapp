@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  category: MyCategory
+  page: MyPage
+  header: MyHeader
+  content: MyContent
+  show_in_menu: true
+
+two:
+  category: MyCategory
+  page: MyPage
+  header: MyHeader
+  content: MyContent
+  show_in_menu: false
