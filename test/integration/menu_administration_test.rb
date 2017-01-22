@@ -21,7 +21,7 @@ class MenuAdministrationTest < ActionDispatch::IntegrationTest
     item_to_update = items.first
 
     # Update title for menu item
-    put api_v1_menu_url(item_to_update['id']), params: {item: {title: 'New title'}}, as: :json
+    put "/api/v1/menu/#{item_to_update['id']}", params: {item: {title: 'New title'}}, as: :json
 
     get '/api/v1/menu'
     assert_match /New title/, @response.body, 'Menu item was not updated'
@@ -32,7 +32,7 @@ class MenuAdministrationTest < ActionDispatch::IntegrationTest
     item_to_delete = items.first
     old_count = items.size
 
-    delete api_v1_menu_url(item_to_delete['id'])
+    delete "/api/v1/menu/#{item_to_delete['id']}"
 
     new_count = fetch_menu_items.size
 

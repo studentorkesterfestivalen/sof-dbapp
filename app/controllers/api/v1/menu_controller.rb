@@ -1,9 +1,7 @@
 class API::V1::MenuController < ApplicationController
 
   def index
-    # TODO: Unwrap child menu items into resulting json data
     render :json => MenuItem.where(menu_item_id: nil), :include => [:menu_items]
-
   end
 
   def create
@@ -37,13 +35,13 @@ class API::V1::MenuController < ApplicationController
     menu_item = MenuItem.find(params[:id])
     menu_item.destroy
 
-    # What is preferably returned here?
-    render :json => []
+    head :no_content
   end
 
   private
 
   def item_params
+    # TODO: Support creating and modifying nested menu items
     params.require(:item).permit(:title, :active)
   end
 
