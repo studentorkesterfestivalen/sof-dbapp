@@ -25,5 +25,5 @@ def create_menu_item(title, active, children)
   return a
 end
 
-
+MenuItem.delete_all
 test_menu_items.each { |c| create_menu_item *c }

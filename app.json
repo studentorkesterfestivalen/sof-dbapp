@@ -3,6 +3,15 @@
   "scripts": {
   },
   "env": {
+    "SENDGRID_USERNAME": {
+      "required": true
+    },
+    "SENDGRID_PASSWORD": {
+      "required": true
+    },
+    "MAILER_URL": {
+      "required": true
+    }
   },
   "formation": {
   },

@@ -56,3 +56,6 @@ fabric.properties
 # *.iml
 # modules.xml
 # *.ipr
+
+# Ignore vagrant files
+.vagrant/

@@ -21,3 +21,6 @@
 
 en:
   hello: "Hello world"
+  errors:
+    messages:
+      must_use_cas: "Log in using the LiU-login instead"
