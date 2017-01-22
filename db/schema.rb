@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213104841) do
+ActiveRecord::Schema.define(version: 20170122130352) do
 
   create_table "menu_items", force: :cascade do |t|
     t.string   "title",                        null: false
@@ -18,7 +18,19 @@ ActiveRecord::Schema.define(version: 20161213104841) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.integer  "menu_item_id"
+    t.string   "category"
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "category",     default: "index", null: false
+    t.string   "page",         default: "",      null: false
+    t.string   "header",       default: "",      null: false
+    t.text     "content",      default: "",      null: false
+    t.boolean  "show_in_menu", default: false,   null: false
+    t.string   "image"
   end
 
   create_table "users", force: :cascade do |t|
