@@ -38,6 +38,7 @@ sv:
     messages:
       not_email: "är ingen e-postadress"
       already_in_use: "används redan"
+      must_use_cas: "Logga in med LiU-inloggningen istället"
   devise:
     mailer:
       confirmation_instructions:
