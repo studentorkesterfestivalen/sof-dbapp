@@ -1,0 +1,57 @@
+class API::V1::OrchestraController < ApplicationController
+  include ViewPermissionConcern
+
+  before_action :authenticate_user!
+
+  def index
+    require_permission LIST_ORCHESTRA_SIGNUPS
+
+    render :json => Orchestra.all
+  end
+
+  def create
+    orchestra = Orchestra.new(item_params)
+    orchestra.user = current_user
+    orchestra.save
+
+    redirect_to api_v1_orchestra_url(orchestra)
+  end
+
+  def show
+    orchestra = Orchestra.find(params[:id])
+    require_membership orchestra
+
+    render :json => orchestra
+  end
+
+  def update
+    orchestra = Orchestra.find(params[:id])
+    require_ownership orchestra
+
+    if orchestra.update(item_params)
+      redirect_to api_v1_orchestra_url(orchestra)
+    else
+      raise 'Unable to save orchestra'
+    end
+  end
+
+  def destroy
+    orchestra = Orchestra.find(params[:id])
+    require_ownership orchestra
+
+    orchestra.destroy
+
+    head :no_content
+  end
+
+  private
+
+  def item_params
+    params.require(:item).permit(
+        :name,
+        :ballet,
+        :allow_signup,
+        :dormitory
+    )
+  end
+end

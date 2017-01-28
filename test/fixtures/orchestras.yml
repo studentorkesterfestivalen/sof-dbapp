@@ -1,0 +1,14 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+default:
+  name: Test orchestra
+  code: cafebabe
+  ballet: false
+  allow_signup: true
+  dormitory: true
+
+closed:
+  name: Closed test orchestra
+  code: deadbeef
+  ballet: false
+  allow_signup: false

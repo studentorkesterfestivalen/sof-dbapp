@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170122130352) do
+ActiveRecord::Schema.define(version: 20170128144611) do
+
+  create_table "available_articles", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "price"
+    t.string   "data_name"
+    t.text     "data_description"
+    t.boolean  "orchestra_only"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
 
   create_table "menu_items", force: :cascade do |t|
     t.string   "title",                        null: false
@@ -20,6 +31,58 @@ ActiveRecord::Schema.define(version: 20170122130352) do
     t.integer  "menu_item_id"
     t.string   "category"
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
+  end
+
+  create_table "orchestra_articles", force: :cascade do |t|
+    t.integer  "kind"
+    t.string   "data"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "orchestra_signup_id"
+    t.index ["orchestra_signup_id"], name: "index_orchestra_articles_on_orchestra_signup_id"
+  end
+
+  create_table "orchestra_food_tickets", force: :cascade do |t|
+    t.integer  "kind"
+    t.string   "diet"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "orchestra_signup_id"
+    t.index ["orchestra_signup_id"], name: "index_orchestra_food_tickets_on_orchestra_signup_id"
+  end
+
+  create_table "orchestra_signups", force: :cascade do |t|
+    t.boolean  "dormitory"
+    t.boolean  "active_member"
+    t.boolean  "consecutive_10"
+    t.boolean  "attended_25"
+    t.integer  "instrument_size"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "orchestra_id"
+    t.integer  "user_id"
+    t.index ["orchestra_id"], name: "index_orchestra_signups_on_orchestra_id"
+    t.index ["user_id"], name: "index_orchestra_signups_on_user_id"
+  end
+
+  create_table "orchestra_tickets", force: :cascade do |t|
+    t.integer  "kind"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "orchestra_signup_id"
+    t.index ["orchestra_signup_id"], name: "index_orchestra_tickets_on_orchestra_signup_id"
+  end
+
+  create_table "orchestras", force: :cascade do |t|
+    t.string   "name",                         null: false
+    t.string   "code",                         null: false
+    t.boolean  "ballet",       default: false, null: false
+    t.boolean  "allow_signup", default: true
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "user_id"
+    t.boolean  "dormitory",    default: false, null: false
+    t.index ["user_id"], name: "index_orchestras_on_user_id"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -34,13 +97,13 @@ ActiveRecord::Schema.define(version: 20170122130352) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "provider",               default: "email", null: false
-    t.string   "uid",                    default: "",      null: false
-    t.string   "encrypted_password",     default: "",      null: false
+    t.string   "provider",                         default: "email", null: false
+    t.string   "uid",                              default: "",      null: false
+    t.string   "encrypted_password",               default: "",      null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,       null: false
+    t.integer  "sign_in_count",                    default: 0,       null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -54,8 +117,9 @@ ActiveRecord::Schema.define(version: 20170122130352) do
     t.string   "image"
     t.string   "email"
     t.text     "tokens"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.integer  "permissions",            limit: 8
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true

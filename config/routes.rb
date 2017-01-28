@@ -9,6 +9,9 @@ Rails.application.routes.draw do
           get 'find(/:category)(/:page)', action: 'find'
         end
       end
+      resources :orchestra
+      resources :orchestra_signup
+      resources :article
     end
   end
 

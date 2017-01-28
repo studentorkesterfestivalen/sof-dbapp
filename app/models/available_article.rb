@@ -1,0 +1,2 @@
+class AvailableArticle < ApplicationRecord
+end
