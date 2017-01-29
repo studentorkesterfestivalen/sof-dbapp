@@ -12,10 +12,11 @@ Rails.application.routes.draw do
       resources :orchestra
       resources :orchestra_signup
       resources :article
+      resources :users
+
+      get 'user', to: 'users#show'
     end
   end
-
-  get '/api/v1/user', to: 'user#index'
 
   # Let’s encrypt
   get '/.well-known/acme-challenge/:id' => 'lets_encrypt#challenge', as: :letsencrypt_challenge

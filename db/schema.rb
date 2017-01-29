@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170129111711) do
+ActiveRecord::Schema.define(version: 20170129114622) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 20170129111711) do
     t.text     "tokens"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
-    t.integer  "permissions",            limit: 8
+    t.integer  "permissions",            limit: 8, default: 0,       null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
