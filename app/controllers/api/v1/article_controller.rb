@@ -4,7 +4,7 @@ class API::V1::ArticleController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    if current_user.has_permission? MODIFY_ARTICLES
+    if current_user.has_permission? Permission::MODIFY_ARTICLES
       render :json => AvailableArticle.all
     else
       render :json => AvailableArticle.where(enabled: true)
@@ -12,7 +12,7 @@ class API::V1::ArticleController < ApplicationController
   end
 
   def create
-    require_permission MODIFY_ARTICLES
+    require_permission Permission::MODIFY_ARTICLES
 
     article = AvailableArticle.new(item_params)
     article.save!
@@ -27,7 +27,7 @@ class API::V1::ArticleController < ApplicationController
   end
 
   def update
-    require_permission MODIFY_ARTICLES
+    require_permission Permission::MODIFY_ARTICLES
 
     article = AvailableArticle.find(params[:id])
     if article.update(item_params)
@@ -38,7 +38,7 @@ class API::V1::ArticleController < ApplicationController
   end
 
   def destroy
-    require_permission MODIFY_ARTICLES
+    require_permission Permission::MODIFY_ARTICLES
 
     if OrchestraArticle.where(kind: params[:id]).any?
       raise 'Unable to remove article with remaining references'

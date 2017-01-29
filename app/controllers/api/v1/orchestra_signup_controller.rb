@@ -4,7 +4,7 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission LIST_ORCHESTRA_SIGNUPS
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => OrchestraSignup.all
   end
