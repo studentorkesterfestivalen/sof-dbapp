@@ -6,10 +6,8 @@ class Orchestra < ApplicationRecord
 
   before_save :ensure_access_code_present
 
-  def ensure_access_code_present
-    if code.nil?
-      self[:code] = SecureRandom.hex(n=CODE_SIZE_BYTES)
-    end
+  def generate_new_access_code
+    self[:code] = SecureRandom.hex(n=CODE_SIZE_BYTES)
   end
 
   def has_member?(member)
@@ -18,5 +16,13 @@ class Orchestra < ApplicationRecord
 
   def has_owner?(owner)
     user == owner
+  end
+
+  private
+
+  def ensure_access_code_present
+    if code.nil?
+      generate_new_access_code
+    end
   end
 end

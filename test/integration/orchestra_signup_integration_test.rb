@@ -81,4 +81,20 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
     get '/api/v1/orchestra_signup/3', headers: auth_headers
     assert_response :success
   end
+
+  test 'orchestra owner can generate a new access code' do
+    get "/api/v1/orchestra/#{orchestras(:default).id}", headers: auth_headers
+    assert_response :success
+
+    orchestra = JSON.parse response.body
+    access_code = orchestra['code']
+
+    put "/api/v1/orchestra/#{orchestras(:default).id}", headers: auth_headers, params: {item: {code: 'reset'}}
+    assert_response :redirect
+
+    get redirected_url, headers: auth_headers
+    orchestra = JSON.parse response.body
+
+    assert_not_equal access_code, orchestra['code']
+  end
 end

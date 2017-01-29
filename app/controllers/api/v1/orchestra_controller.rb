@@ -28,6 +28,14 @@ class API::V1::OrchestraController < ApplicationController
     orchestra = Orchestra.find(params[:id])
     require_ownership orchestra
 
+    unless params[:item][:code].nil?
+      # Don't allow setting a custom access code as it may be insecure
+      orchestra.generate_new_access_code
+      unless orchestra.save!
+        raise 'Unable to generate new access code'
+      end
+    end
+
     if orchestra.update(item_params)
       redirect_to api_v1_orchestra_url(orchestra)
     else
