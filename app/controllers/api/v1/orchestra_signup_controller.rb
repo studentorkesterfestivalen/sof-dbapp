@@ -25,7 +25,7 @@ class API::V1::OrchestraSignupController < ApplicationController
 
   def show
     signup = OrchestraSignup.find(params[:id])
-    require_ownership signup
+    require_membership signup
 
     render :json => signup, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket]
   end

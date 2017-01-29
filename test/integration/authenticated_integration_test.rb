@@ -1,25 +1,31 @@
 class AuthenticatedIntegrationTest < ActionDispatch::IntegrationTest
-  def current_user
-    if @user.nil?
-      @user = User.new
-      @user.email = 'test@sof17.se'
-      @user.password = 'hunter2760'
-      @user.skip_confirmation!
-      @user.save!
-    end
+  def initialize(*args)
+    super *args
 
-    @user
+    @auth_tokens = {}
   end
 
-  def auth_headers
-    if @auth_token.nil?
-      @auth_token = current_user.create_new_auth_token
-    end
+  def current_user
+    @user ||= create_user 'test@sof17.se'
+  end
 
-    @auth_token
+  def create_user(email)
+    user = User.new
+    user.email = email
+    user.password = 'hunter2760'
+    user.skip_confirmation!
+    user.save!
+
+    user
+  end
+
+  def auth_headers(user=nil)
+    user = user || current_user
+
+    @auth_tokens[user] ||= user.create_new_auth_token
   end
 
   def redirected_url
-    @response.headers['location']
+    response.headers['location']
   end
 end

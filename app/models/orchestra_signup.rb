@@ -8,7 +8,7 @@ class OrchestraSignup < ApplicationRecord
   accepts_nested_attributes_for :orchestra_ticket, :orchestra_food_ticket, :orchestra_articles
 
   def has_member?(member)
-    false
+    has_owner? member or orchestra.has_owner? member
   end
 
   def has_owner?(owner)

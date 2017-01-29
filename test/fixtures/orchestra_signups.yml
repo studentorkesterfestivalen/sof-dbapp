@@ -7,6 +7,11 @@ default:
   orchestra: default
 
 no_dormitory:
- id: 2
- user_id: 1
- orchestra: default
+  id: 2
+  user_id: 1
+  orchestra: default
+
+different_owner:
+  id: 3
+  user_id: 2
+  orchestra: default

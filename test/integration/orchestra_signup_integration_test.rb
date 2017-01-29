@@ -76,4 +76,9 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
 
     assert_equal signup['dormitory'], true
   end
+
+  test 'orchestra owner can view member signups' do
+    get '/api/v1/orchestra_signup/3', headers: auth_headers
+    assert_response :success
+  end
 end
