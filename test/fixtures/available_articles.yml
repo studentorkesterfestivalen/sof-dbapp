@@ -8,3 +8,14 @@ default:
   data_name: Storlek
   data_description: Vilken storlek vill du ha?
   orchestra_only: true
+  enabled: true
+
+disabled_tshirt:
+  id: 2
+  name: T-shirt
+  description: Bekväm T-shirt med SOF-tryck
+  price: 9000
+  data_name: Storlek
+  data_description: Vilken storlek vill du ha?
+  orchestra_only: true
+  enabled: false

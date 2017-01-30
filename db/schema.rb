@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170129114622) do
+ActiveRecord::Schema.define(version: 20170130164607) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -19,8 +19,9 @@ ActiveRecord::Schema.define(version: 20170129114622) do
     t.string   "data_name"
     t.text     "data_description"
     t.boolean  "orchestra_only"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "enabled",          default: true, null: false
   end
 
   create_table "menu_items", force: :cascade do |t|

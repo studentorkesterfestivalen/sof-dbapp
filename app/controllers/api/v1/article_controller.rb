@@ -31,7 +31,7 @@ class API::V1::ArticleController < ApplicationController
 
     article = AvailableArticle.find(params[:id])
     if article.update(item_params)
-      redirect_to api_v1_orchestra_signup_url(article)
+      redirect_to api_v1_article_url(article)
     else
       raise 'Unable to save article'
     end
