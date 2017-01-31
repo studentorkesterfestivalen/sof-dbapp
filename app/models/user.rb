@@ -24,4 +24,8 @@ class User < ActiveRecord::Base
   def has_owner?(owner)
     owner == self
   end
+
+  def email
+    super || "#{nickname}@student.liu.se"
+  end
 end
