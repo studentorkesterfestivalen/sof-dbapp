@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170204100948) do
+ActiveRecord::Schema.define(version: 20170204103941) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20170204100948) do
     t.string   "category"
     t.integer  "required_permissions", default: 0,     null: false
     t.boolean  "display_empty",        default: true,  null: false
+    t.string   "href",                 default: "#",   null: false
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
   end
 

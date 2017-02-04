@@ -31,7 +31,8 @@ class MenuItem < ApplicationRecord
     Page.where(category: category, show_in_menu: true).map do |page|
       MenuItem.new(
           title: page.header,
-          active: true
+          active: true,
+          href: page.href
       )
     end
   end
