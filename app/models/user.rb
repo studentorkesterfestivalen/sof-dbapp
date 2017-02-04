@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
     super
   end
 
-  def is_lintek_member?
+  def is_lintek_member
     self[:union] == 'LinTek'
   end
 
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
         response = kobra.get_student(id: nickname, union: true)
 
         self[:union] = response[:union]
-        if is_lintek_member?
+        if is_lintek_member
           self[:union_valid_thru] = end_of_fiscal_year
         else
           self[:union_valid_thru] = DateTime.now.at_end_of_day
