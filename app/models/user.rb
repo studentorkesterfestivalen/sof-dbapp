@@ -1,3 +1,5 @@
+require 'kobra'
+
 class User < ActiveRecord::Base
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
@@ -27,5 +29,18 @@ class User < ActiveRecord::Base
 
   def email
     super || "#{nickname}@student.liu.se"
+  end
+
+  def is_lintek_member?
+    return false if provider != 'cas'
+
+    begin
+      kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
+      response = kobra.get_student(id: nickname, union: true)
+
+      return response[:union] == 'LinTek'
+    rescue
+      return false
+    end
   end
 end
