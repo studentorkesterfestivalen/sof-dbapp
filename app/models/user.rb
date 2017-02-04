@@ -31,16 +31,47 @@ class User < ActiveRecord::Base
     super || "#{nickname}@student.liu.se"
   end
 
+  def union
+    if union_valid_thru.past?
+      update_union
+    end
+
+    super
+  end
+
   def is_lintek_member?
-    return false if provider != 'cas'
+    self[:union] == 'LinTek'
+  end
 
-    begin
-      kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
-      response = kobra.get_student(id: nickname, union: true)
+  private
 
-      return response[:union] == 'LinTek'
-    rescue
-      return false
+  def update_union
+    if provider == 'cas'
+      begin
+        puts Rails.configuration.kobra_api_key
+        kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
+        response = kobra.get_student(id: nickname, union: true)
+
+        self[:union] = response[:union]
+        if is_lintek_member?
+          self[:union_valid_thru] = end_of_fiscal_year
+        else
+          self[:union_valid_thru] = DateTime.now.at_end_of_day
+        end
+
+        save!
+      rescue
+        puts 'Failed to update union from Kobra'
+      end
+    end
+  end
+
+  def end_of_fiscal_year
+    now = DateTime.now
+    if now.month >= 7
+      DateTime.new(now.year + 1, 6, 30)
+    else
+      DateTime.new(now.year, 6, 30)
     end
   end
 end
