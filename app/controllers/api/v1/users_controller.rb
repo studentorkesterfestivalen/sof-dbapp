@@ -11,7 +11,7 @@ class API::V1::UsersController < ApplicationController
 
   def show
     if params[:id].nil?
-      render json: current_user, except: [:created_at, :updated_at], include: [:orchestras, :orchestra_signups], methods: [:is_lintek_member]
+      render json: current_user, except: [:created_at, :updated_at], include: [:orchestras, orchestra_signups: {include: [:orchestra]}], methods: [:is_lintek_member]
     else
       user = User.find(params[:id])
       if current_user.has_permission? Permission::LIST_USERS
