@@ -1,7 +1,11 @@
 class API::V1::MenuController < ApplicationController
 
   def index
-    render :json => MenuItem.where(menu_item_id: nil), :include => [:menu_items]
+    items = MenuItem.where(menu_item_id: nil)
+    items.each { |x| x.setup_for current_user }
+    items = items.select { |x| x.should_show? }
+
+    render :json => items, :include => [:menu_items]
   end
 
   def create

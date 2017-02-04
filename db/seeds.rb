@@ -9,19 +9,24 @@
 
 
 test_menu_items = [
-    ['Kontakt', true, 'contact', [
-        ['Press', true, '', []]
+    ['Kontakt', true, 'contact', 0, true, [
+        ['Press', true, '', 0, true, []]
     ]
     ],
-    ['Festival', true, 'festival', []],
-    ['Test', true, 'test', []],
+    ['Festival', true, 'festival', 0, true, []],
+    ['Test', true, 'test', 0, true, []],
+    ['Administration', true, 'admin', 0, false, [
+        ['Hantera användare', true, '', Permission::LIST_USERS, true, []]
+    ]]
 ]
 
-def create_menu_item(title, active, category, children)
+def create_menu_item(title, active, category, permissions, display_empty, children)
   a = MenuItem.new
   a.title = title
   a.active = active
   a.category = category
+  a.required_permissions = permissions
+  a.display_empty = display_empty
   a.menu_items = children.map { |c| create_menu_item *c }
   a.save
   return a
