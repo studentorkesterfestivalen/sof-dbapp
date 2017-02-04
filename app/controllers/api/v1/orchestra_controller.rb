@@ -12,7 +12,7 @@ class API::V1::OrchestraController < ApplicationController
   def create
     orchestra = Orchestra.new(item_params)
     orchestra.user = current_user
-    orchestra.save
+    orchestra.save!
 
     redirect_to api_v1_orchestra_url(orchestra)
   end

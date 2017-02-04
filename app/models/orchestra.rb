@@ -4,6 +4,8 @@ class Orchestra < ApplicationRecord
   belongs_to :user
   has_many :orchestra_signups
 
+  validates :name, presence: true
+
   before_save :ensure_access_code_present
 
   def generate_new_access_code
