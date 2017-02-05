@@ -10,6 +10,10 @@ class API::V1::OrchestraSignupController < ApplicationController
   end
 
   def create
+    unless current_user.orchestra_signup.nil?
+      raise 'Cannot sign up for another orchestra'
+    end
+
     orchestra = Orchestra.find_by(code: params[:item][:code].downcase, allow_signup: true)
     if orchestra.nil?
       raise 'Unable to find matching orchestra'
