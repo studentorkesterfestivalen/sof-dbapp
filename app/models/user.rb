@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   include UserPermissionConcern
 
-  has_many :orchestras
-  has_many :orchestra_signups
+  has_one :orchestra
+  has_one :orchestra_signup
 
   validate :liu_accounts_must_use_cas
 
