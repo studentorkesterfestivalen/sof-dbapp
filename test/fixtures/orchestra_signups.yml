@@ -3,12 +3,10 @@
 default:
   id: 1
   dormitory: false
-  user_id: 1
   orchestra: default
 
 no_dormitory:
   id: 2
-  user_id: 1
   orchestra: default
 
 different_owner:

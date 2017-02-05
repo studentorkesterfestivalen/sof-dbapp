@@ -59,6 +59,9 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'modifying signup' do
+    orchestra_signups(:default).user = current_user
+    orchestra_signups(:default).save!
+
     put '/api/v1/orchestra_signup/1', headers: auth_headers, params: {item: {dormitory: true}}
     assert_response :redirect
 
