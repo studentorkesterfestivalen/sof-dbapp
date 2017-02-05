@@ -3,8 +3,8 @@ require 'kobra'
 class User < ActiveRecord::Base
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :trackable, :validatable,
-          :confirmable, :omniauthable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
   include UserPermissionConcern
 
@@ -31,6 +31,14 @@ class User < ActiveRecord::Base
     super || "#{nickname}@student.liu.se"
   end
 
+  def display_name
+    if provider == 'cas' and super.nil?
+      update_display_name
+    end
+
+    super
+  end
+
   def union
     if union_valid_thru.past?
       update_union
@@ -48,7 +56,6 @@ class User < ActiveRecord::Base
   def update_union
     if provider == 'cas'
       begin
-        puts Rails.configuration.kobra_api_key
         kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
         response = kobra.get_student(id: nickname, union: true)
 
@@ -63,6 +70,18 @@ class User < ActiveRecord::Base
       rescue
         puts 'Failed to update union from Kobra'
       end
+    end
+  end
+
+  def update_display_name
+    begin
+      kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
+      response = kobra.get_student(id: nickname)
+
+      self[:display_name] = response[:name]
+      save!
+    rescue
+      puts 'Failed to update name from Kobra'
     end
   end
 

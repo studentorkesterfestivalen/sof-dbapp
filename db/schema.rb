@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170204132551) do
+ActiveRecord::Schema.define(version: 20170205144530) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(version: 20170204132551) do
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
     t.datetime "union_valid_thru",                 default: '2017-02-04 13:39:17', null: false
+    t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true

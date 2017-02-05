@@ -62,7 +62,7 @@ class API::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-        :name
+        :display_name
     )
   end
 
@@ -70,7 +70,7 @@ class API::V1::UsersController < ApplicationController
     require_permission Permission::MODIFY_USERS
 
     params.require(:user).permit(
-        :name,
+        :display_name,
         :permissions
     )
   end
