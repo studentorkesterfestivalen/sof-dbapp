@@ -57,7 +57,7 @@ class API::V1::OrchestraController < ApplicationController
   def item_params
     params.require(:item).permit(
         :name,
-        :ballet,
+        :orchestra_type,
         :allow_signup,
         :dormitory
     )

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205144530) do
+ActiveRecord::Schema.define(version: 20170205164334) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -78,14 +78,14 @@ ActiveRecord::Schema.define(version: 20170205144530) do
   end
 
   create_table "orchestras", force: :cascade do |t|
-    t.string   "name",                         null: false
-    t.string   "code",                         null: false
-    t.boolean  "ballet",       default: false, null: false
-    t.boolean  "allow_signup", default: true
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.string   "name",                           null: false
+    t.string   "code",                           null: false
+    t.boolean  "allow_signup",   default: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "user_id"
-    t.boolean  "dormitory",    default: false, null: false
+    t.boolean  "dormitory",      default: false, null: false
+    t.integer  "orchestra_type", default: 0,     null: false
     t.index ["user_id"], name: "index_orchestras_on_user_id"
   end
 

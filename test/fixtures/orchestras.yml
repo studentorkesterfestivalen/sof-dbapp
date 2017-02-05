@@ -3,7 +3,7 @@
 default:
   name: Test orchestra
   code: cafebabe
-  ballet: false
+  orchestra_type: 0
   allow_signup: true
   dormitory: true
   user_id: 1
@@ -11,5 +11,5 @@ default:
 closed:
   name: Closed test orchestra
   code: deadbeef
-  ballet: false
+  orchestra_type: 0
   allow_signup: false
