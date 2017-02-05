@@ -72,6 +72,9 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'inherit dormitory' do
+    orchestra_signups(:no_dormitory).user = current_user
+    orchestra_signups(:no_dormitory).save!
+
     get '/api/v1/orchestra_signup/2', headers: auth_headers
     assert_response :success
 
@@ -81,11 +84,17 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'orchestra owner can view member signups' do
+    orchestras(:default).user = current_user
+    orchestras(:default).save!
+
     get '/api/v1/orchestra_signup/3', headers: auth_headers
     assert_response :success
   end
 
   test 'orchestra owner can generate a new access code' do
+    orchestras(:default).user = current_user
+    orchestras(:default).save!
+
     get "/api/v1/orchestra/#{orchestras(:default).id}", headers: auth_headers
     assert_response :success
 

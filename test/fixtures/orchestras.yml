@@ -6,7 +6,6 @@ default:
   orchestra_type: 0
   allow_signup: true
   dormitory: true
-  user_id: 1
 
 closed:
   name: Closed test orchestra

@@ -10,6 +10,10 @@ class API::V1::OrchestraController < ApplicationController
   end
 
   def create
+    unless current_user.orchestra.nil?
+      raise 'Cannot create another orchestra'
+    end
+
     orchestra = Orchestra.new(item_params)
     orchestra.user = current_user
     orchestra.save!
