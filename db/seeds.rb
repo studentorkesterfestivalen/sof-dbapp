@@ -15,11 +15,9 @@ test_menu_items = [
         ['Anmälan', '/orchestra/register', true, '', 0, true, []],
     ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
+        ['Kommitté', '/contact', true, '', 0, true, []],
         ['Press', '/press', true, '', 0, true, []]
-    ]
-    ],
-    ['Festival', '/festival', true, 'festival', 0, true, []],
-    ['Test', '/test', true, 'test', 0, true, []],
+    ]],
     ['Administration', '#', true, 'admin', 0, false, [
         ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []]
     ]]
