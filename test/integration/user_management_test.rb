@@ -36,13 +36,13 @@ class UserManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'normal users can update their display name' do
-    put '/api/v1/users/1', headers: auth_headers, params: {user:{name: 'SOF-Putten'}}
+    put '/api/v1/users/1', headers: auth_headers, params: {user:{display_name: 'SOF-Putten'}}
     assert_response :redirect
 
     get redirected_url, headers: auth_headers
     user = JSON.parse response.body
 
-    assert_equal 'SOF-Putten', user['name']
+    assert_equal 'SOF-Putten', user['display_name']
   end
 
   test 'normal users can not grant themselves permissions' do
