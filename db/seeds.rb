@@ -11,7 +11,6 @@
 test_menu_items = [
     ['Orkester', '#', true, 'orchestra', 0, true, [
         ['Information', '/orchestra', true, '', 0, true, []],
-        ['Skapa', '/orchestra/create', true, '', 0, true, []],
         ['Anmälan', '/orchestra/register', true, '', 0, true, []],
     ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
