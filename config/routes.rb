@@ -10,7 +10,11 @@ Rails.application.routes.draw do
         end
       end
       resources :orchestra
-      resources :orchestra_signup
+      resources :orchestra_signup do
+        collection do
+          get 'verify', action: 'verify_code'
+        end
+      end
       resources :article
       resources :users
 

@@ -50,6 +50,15 @@ class API::V1::OrchestraSignupController < ApplicationController
     head :no_content
   end
 
+  def verify_code
+    orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
+    if orchestra.nil?
+      raise 'Unable to find matching orchestra'
+    end
+
+    head :no_content
+  end
+
   private
 
   def item_params
