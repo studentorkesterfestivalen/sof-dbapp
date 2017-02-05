@@ -20,4 +20,30 @@ class OrchestraSignup < ApplicationRecord
     # Allow dormitory to inherit from orchestra default preference
     super || orchestra.dormitory
   end
+
+  def total_cost
+    cost = 0
+    cost += ticket_prices[orchestra_ticket.kind]
+    cost += food_prices[orchestra_food_ticket.kind]
+    cost += 50 if dormitory?
+    orchestra_articles.each { |x| cost += article_prices[x] }
+
+    cost
+  end
+
+  def ticket_prices
+    if user.is_lintek_member
+      [435, 410, 190, 0]
+    else
+      [535, 510, 220, 0]
+    end
+  end
+
+  def food_prices
+    [215, 140, 75, 0]
+  end
+
+  def article_prices
+    [0, 100, 40, 20]
+  end
 end

@@ -31,7 +31,7 @@ class API::V1::OrchestraSignupController < ApplicationController
     signup = OrchestraSignup.find(params[:id])
     require_membership signup
 
-    render :json => signup, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets]
+    render :json => signup, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets], methods: :total_cost
   end
 
   def update
