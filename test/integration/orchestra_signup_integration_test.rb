@@ -2,16 +2,22 @@ require 'test_helper'
 
 class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   test 'create orchestra' do
+    Orchestra.delete_all
+
     post '/api/v1/orchestra', params: {item: {name: 'Testorkester'}}, headers: auth_headers, as: :json
     assert_response :redirect
   end
 
   test 'join orchestra' do
+    OrchestraSignup.delete_all
+
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'cafebabe'}}
     assert_response :redirect
   end
 
   test 'join orchestra with case insensitive code' do
+    OrchestraSignup.delete_all
+
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'CAFEbabe'}}
     assert_response :redirect
   end
@@ -23,6 +29,8 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'extra orders in signup' do
+    OrchestraSignup.delete_all
+
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {
         item: {
             code: 'cafebabe',
@@ -59,9 +67,6 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'modifying signup' do
-    orchestra_signups(:default).user = current_user
-    orchestra_signups(:default).save!
-
     put '/api/v1/orchestra_signup/1', headers: auth_headers, params: {item: {dormitory: true}}
     assert_response :redirect
 
@@ -72,9 +77,6 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'inherit dormitory' do
-    orchestra_signups(:no_dormitory).user = current_user
-    orchestra_signups(:no_dormitory).save!
-
     get '/api/v1/orchestra_signup/2', headers: auth_headers
     assert_response :success
 
@@ -84,17 +86,11 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'orchestra owner can view member signups' do
-    orchestras(:default).user = current_user
-    orchestras(:default).save!
-
     get '/api/v1/orchestra_signup/3', headers: auth_headers
     assert_response :success
   end
 
   test 'orchestra owner can generate a new access code' do
-    orchestras(:default).user = current_user
-    orchestras(:default).save!
-
     get "/api/v1/orchestra/#{orchestras(:default).id}", headers: auth_headers
     assert_response :success
 

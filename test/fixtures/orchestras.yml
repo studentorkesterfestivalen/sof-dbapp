@@ -6,9 +6,11 @@ default:
   orchestra_type: 0
   allow_signup: true
   dormitory: true
+  user_id: 1
 
 closed:
   name: Closed test orchestra
   code: deadbeef
   orchestra_type: 0
   allow_signup: false
+  user_id: 1

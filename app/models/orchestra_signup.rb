@@ -23,8 +23,8 @@ class OrchestraSignup < ApplicationRecord
 
   def total_cost
     cost = 0
-    cost += ticket_prices[orchestra_ticket.kind]
-    cost += food_prices[orchestra_food_ticket.kind]
+    cost += ticket_prices[orchestra_ticket.kind] unless orchestra_ticket.nil?
+    cost += food_prices[orchestra_food_ticket.kind] unless orchestra_food_ticket.nil?
     cost += 50 if dormitory?
 
     unless orchestra_articles.nil?
