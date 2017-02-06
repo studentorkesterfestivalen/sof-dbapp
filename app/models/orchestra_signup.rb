@@ -26,7 +26,10 @@ class OrchestraSignup < ApplicationRecord
     cost += ticket_prices[orchestra_ticket.kind]
     cost += food_prices[orchestra_food_ticket.kind]
     cost += 50 if dormitory?
-    orchestra_articles.each { |x| cost += article_prices[x] }
+
+    unless orchestra_articles.nil?
+      orchestra_articles.each { |x| cost += article_prices[x.kind] }
+    end
 
     cost
   end
