@@ -72,6 +72,7 @@ class API::V1::OrchestraSignupController < ApplicationController
         :consecutive_10,
         :attended_25,
         :instrument_size,
+        :other_performances,
         orchestra_ticket_attributes: [
             :kind
         ],

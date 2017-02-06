@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205165437) do
+ActiveRecord::Schema.define(version: 20170206150015) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -19,9 +19,9 @@ ActiveRecord::Schema.define(version: 20170205165437) do
     t.string   "data_name"
     t.text     "data_description"
     t.boolean  "orchestra_only"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.boolean  "enabled",          default: true, null: false
+    t.boolean  "enabled"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "menu_items", force: :cascade do |t|
@@ -61,10 +61,11 @@ ActiveRecord::Schema.define(version: 20170205165437) do
     t.boolean  "consecutive_10"
     t.boolean  "attended_25"
     t.integer  "instrument_size"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "orchestra_id"
     t.integer  "user_id"
+    t.text     "other_performances"
     t.index ["orchestra_id"], name: "index_orchestra_signups_on_orchestra_id"
     t.index ["user_id"], name: "index_orchestra_signups_on_user_id"
   end
@@ -78,15 +79,14 @@ ActiveRecord::Schema.define(version: 20170205165437) do
   end
 
   create_table "orchestras", force: :cascade do |t|
-    t.string   "name",                               null: false
-    t.string   "code",                               null: false
-    t.boolean  "allow_signup",       default: true
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.string   "name",                           null: false
+    t.string   "code",                           null: false
+    t.boolean  "allow_signup",   default: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "user_id"
-    t.boolean  "dormitory",          default: false, null: false
-    t.integer  "orchestra_type",     default: 0,     null: false
-    t.text     "other_performances"
+    t.boolean  "dormitory",      default: false, null: false
+    t.integer  "orchestra_type", default: 0,     null: false
     t.index ["user_id"], name: "index_orchestras_on_user_id"
   end
 
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 20170205165437) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-02-04 13:39:17', null: false
+    t.datetime "union_valid_thru",                 default: '2017-02-06 15:12:59', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
