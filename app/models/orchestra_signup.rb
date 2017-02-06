@@ -3,8 +3,8 @@ class OrchestraSignup < ApplicationRecord
   belongs_to :user
   has_one :orchestra_ticket
   has_one :orchestra_food_ticket
-  has_many :orchestra_articles
-  has_many :special_diets
+  has_many :orchestra_articles, dependent: :destroy
+  has_many :special_diets, dependent: :destroy
 
   accepts_nested_attributes_for :orchestra_ticket, :orchestra_food_ticket, :orchestra_articles, :special_diets
 
