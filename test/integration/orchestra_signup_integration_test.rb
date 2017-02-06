@@ -105,4 +105,20 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
 
     assert_not_equal access_code, orchestra['code']
   end
+
+  test 'deleting orchestras deletes their signups' do
+    OrchestraSignup.delete_all
+
+    post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'cafebabe'}}
+    assert_response :redirect
+
+    get redirected_url, headers: auth_headers
+    signup = JSON.parse response.body
+
+    delete "/api/v1/orchestra/#{orchestras(:default).id}", headers: auth_headers
+
+    assert_raises (ActiveRecord::RecordNotFound) {
+      get "/api/v1/orchestra_signup/#{signup['id']}", headers: auth_headers
+    }
+  end
 end

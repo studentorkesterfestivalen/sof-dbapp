@@ -2,7 +2,7 @@ class Orchestra < ApplicationRecord
   CODE_SIZE_BYTES = 4
 
   belongs_to :user
-  has_many :orchestra_signups
+  has_many :orchestra_signups, dependent: :destroy
 
   validates :name, presence: true
 
