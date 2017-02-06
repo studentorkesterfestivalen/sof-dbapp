@@ -2,21 +2,21 @@ require 'test_helper'
 
 class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   test 'create orchestra' do
-    Orchestra.delete_all
+    prepare_orchestra_creation!
 
     post '/api/v1/orchestra', params: {item: {name: 'Testorkester'}}, headers: auth_headers, as: :json
     assert_response :redirect
   end
 
   test 'join orchestra' do
-    OrchestraSignup.delete_all
+    prepare_signup!
 
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'cafebabe'}}
     assert_response :redirect
   end
 
   test 'join orchestra with case insensitive code' do
-    OrchestraSignup.delete_all
+    prepare_signup!
 
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'CAFEbabe'}}
     assert_response :redirect
@@ -29,7 +29,7 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'extra orders in signup' do
-    OrchestraSignup.delete_all
+    prepare_signup!
 
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {
         item: {
@@ -107,7 +107,7 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
   end
 
   test 'deleting orchestras deletes their signups' do
-    OrchestraSignup.delete_all
+    prepare_signup!
 
     post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'cafebabe'}}
     assert_response :redirect
@@ -120,5 +120,21 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
     assert_raises (ActiveRecord::RecordNotFound) {
       get "/api/v1/orchestra_signup/#{signup['id']}", headers: auth_headers
     }
+  end
+
+  private
+
+  def prepare_orchestra_creation!
+    # A user can at most have one orchestra created. Since the fixtures are preconfigured with already existing
+    # orchestras they must be removed before running any tests involving creating orchestras. Note that the fixtures
+    # may contain a configuration with multiple orchestras belonging to a single user, necessitating delete_all.
+    Orchestra.where(user: current_user).delete_all
+  end
+
+  def prepare_signup!
+    # A user can at most have one signup made. Since the fixtures are preconfigured with already existing signups
+    # they must be removed before running any tests involving signing up for orchestras. Note that the fixtures
+    # may contain a configuration with multiple signups belonging to a single user, necessitating delete_all.
+    OrchestraSignup.where(user: current_user).delete_all
   end
 end
