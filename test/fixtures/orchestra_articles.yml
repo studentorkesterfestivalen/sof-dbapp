@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+default:
+  kind: 1
+  data: M
+  orchestra_signup_id: default
+
+default:
+  kind: 1
+  data: L
+  orchestra_signup_id: default
+
+default:
+  kind: 3
+  orchestra_signup_id: default

@@ -9,10 +9,18 @@ Rails.application.routes.draw do
           get 'find(/:category)(/:page)', action: 'find'
         end
       end
+      resources :orchestra
+      resources :orchestra_signup do
+        collection do
+          get 'verify', action: 'verify_code'
+        end
+      end
+      resources :article
+      resources :users
+
+      get 'user', to: 'users#show'
     end
   end
-
-  get '/api/v1/user', to: 'user#index'
 
   # Let’s encrypt
   get '/.well-known/acme-challenge/:id' => 'lets_encrypt#challenge', as: :letsencrypt_challenge

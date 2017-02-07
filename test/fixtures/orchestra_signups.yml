@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+default:
+  id: 1
+  dormitory: false
+  orchestra: default
+  user_id: 1
+
+no_dormitory:
+  id: 2
+  orchestra: default
+  user_id: 1
+
+different_owner:
+  id: 3
+  user_id: 2
+  orchestra: default

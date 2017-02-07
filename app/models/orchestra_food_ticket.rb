@@ -1,0 +1,2 @@
+class OrchestraFoodTicket < ApplicationRecord
+end

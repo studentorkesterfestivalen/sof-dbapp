@@ -1,0 +1,2 @@
+class OrchestraTicket < ApplicationRecord
+end
