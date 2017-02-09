@@ -22,7 +22,7 @@ module ViewPermissionConcern
       raise 'Not logged in'
     end
 
-    unless model.has_member?(current_user) or current_user.has_permission? permissions
+    unless model.has_member?(current_user) or current_user.has_permission?(permissions)
       raise 'Is not member of model or lacks required permissions'
     end
   end
@@ -32,7 +32,7 @@ module ViewPermissionConcern
       raise 'Not logged in'
     end
 
-    unless model.has_owner?(current_user) or current_user.has_permission? permissions
+    unless model.has_owner?(current_user) or current_user.has_permission?(permissions)
       raise 'Is not owner of model or lacks required permissions'
     end
   end
