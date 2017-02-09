@@ -18,7 +18,8 @@ test_menu_items = [
         ['Press', '/press', true, '', 0, true, []]
     ]],
     ['Administration', '#', true, 'admin', 0, false, [
-        ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []]
+        ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []],
+        ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []]
     ]]
 ]
 
