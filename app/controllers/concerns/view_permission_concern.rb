@@ -16,4 +16,24 @@ module ViewPermissionConcern
       raise 'Is not owner of model'
     end
   end
+
+  def require_membership_or_permission(model, permissions)
+    if current_user.nil?
+      raise 'Not logged in'
+    end
+
+    unless model.has_member?(current_user) or current_user.has_permission? permissions
+      raise 'Is not member of model or lacks required permissions'
+    end
+  end
+
+  def require_ownership_or_permission(model, permissions)
+    if current_user.nil?
+      raise 'Not logged in'
+    end
+
+    unless model.has_owner?(current_user) or current_user.has_permission? permissions
+      raise 'Is not owner of model or lacks required permissions'
+    end
+  end
 end
