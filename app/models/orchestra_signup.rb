@@ -18,7 +18,12 @@ class OrchestraSignup < ApplicationRecord
 
   def dormitory
     # Allow dormitory to inherit from orchestra default preference
-    super || orchestra.dormitory
+    value = super
+    if value.nil?
+      orchestra.dormitory
+    else
+      value
+    end
   end
 
   def total_cost
