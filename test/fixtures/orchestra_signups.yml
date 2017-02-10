@@ -15,3 +15,9 @@ different_owner:
   id: 3
   user_id: 2
   orchestra: default
+
+without_dormitory:
+  id: 4
+  dormitory: false
+  orchestra: default
+  user_id: 1
