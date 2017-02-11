@@ -131,6 +131,16 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
     }
   end
 
+  test 'verifying code returns orchestra name and dormitory preference' do
+    get '/api/v1/orchestra_signup/verify', headers: auth_headers, params: {code: 'cafebabe'}
+    assert_response :success
+
+    orchestra = JSON.parse response.body
+
+    assert_equal 'Test orchestra', orchestra['name']
+    assert_equal true, orchestra['dormitory']
+  end
+
   private
 
   def prepare_orchestra_creation!
