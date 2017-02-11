@@ -60,7 +60,7 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
-    head :no_content
+    render :json => orchestra, only: [:name, :dormitory]
   end
 
   private
