@@ -23,7 +23,7 @@ class API::V1::OrchestraController < ApplicationController
 
   def show
     orchestra = Orchestra.find(params[:id])
-    require_ownership orchestra
+    require_ownership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}]
   end

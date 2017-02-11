@@ -29,7 +29,7 @@ class API::V1::OrchestraSignupController < ApplicationController
 
   def show
     signup = OrchestraSignup.find(params[:id])
-    require_membership signup
+    require_membership_or_permission signup, Permission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => signup, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets], methods: :total_cost
   end
