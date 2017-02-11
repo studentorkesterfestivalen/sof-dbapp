@@ -13,6 +13,10 @@ test_menu_items = [
         ['Information', '/orchestra', true, '', 0, true, []],
         ['Anmälan', '/orchestra/register', true, '', 0, true, []],
     ]],
+    ['Kårtege', '#', true, 'cortege', 0, true, [
+        ['Information', '/cortege', true, '', 0, true, []],
+        ['Intresseanmälan', '/cortege/interest', true, '', 0, true, []],
+    ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
         ['Kommitté', '/contact', true, '', 0, true, []],
     ]],
