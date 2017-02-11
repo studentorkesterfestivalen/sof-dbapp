@@ -6,7 +6,7 @@ class API::V1::OrchestraController < ApplicationController
   def index
     require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
-    render :json => Orchestra.all
+    render :json => Orchestra.all, include: [:user]
   end
 
   def create
