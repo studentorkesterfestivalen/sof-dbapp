@@ -6,7 +6,7 @@ class API::V1::CortegeController < ApplicationController
   def index
     require_permission Permission::LIST_CORTEGE_APPLICATIONS
 
-    render :json => Cortege.all
+    render :json => Cortege.all, include: [:user]
   end
 
   def create
