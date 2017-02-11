@@ -18,7 +18,8 @@ test_menu_items = [
     ]],
     ['Administration', '#', true, 'admin', 0, false, [
         ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []],
-        ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []]
+        ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []],
+        ['Hantera kårteger', '/manage/corteges', true, '', Permission::LIST_CORTEGE_APPLICATIONS, true, []]
     ]]
 ]
 
