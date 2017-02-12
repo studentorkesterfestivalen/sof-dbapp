@@ -85,6 +85,15 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
     assert_equal signup['dormitory'], true
   end
 
+  test 'dont inherit dormitory for negative preference' do
+    get '/api/v1/orchestra_signup/4', headers: auth_headers
+    assert_response :success
+
+    signup = JSON.parse response.body
+
+    assert_equal signup['dormitory'], false
+  end
+
   test 'orchestra owner can view member signups' do
     get '/api/v1/orchestra_signup/3', headers: auth_headers
     assert_response :success
