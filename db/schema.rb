@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170211125940) do
+ActiveRecord::Schema.define(version: 20170212113933) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -22,6 +22,20 @@ ActiveRecord::Schema.define(version: 20170211125940) do
     t.boolean  "enabled"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "case_corteges", force: :cascade do |t|
+    t.string   "education",                             null: false
+    t.string   "contact_phone",                         null: false
+    t.integer  "case_cortege_type",                     null: false
+    t.string   "group_name",                            null: false
+    t.text     "motivation",                            null: false
+    t.boolean  "approved",          default: false,     null: false
+    t.string   "status",            default: "pending", null: false
+    t.integer  "user_id"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.index ["user_id"], name: "index_case_corteges_on_user_id"
   end
 
   create_table "corteges", force: :cascade do |t|
