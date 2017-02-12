@@ -25,7 +25,7 @@ class API::V1::CortegeController < ApplicationController
     cortege = Cortege.find(params[:id])
     require_ownership_or_permission cortege, Permission::LIST_CORTEGE_APPLICATIONS
 
-    render :json => cortege
+    render :json => cortege, include: [:user]
   end
 
   def update
