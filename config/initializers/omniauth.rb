@@ -1,3 +1,6 @@
+# Load LiU-ID fix
+require 'ext/cas'
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :cas,
            host:      'login.liu.se',
