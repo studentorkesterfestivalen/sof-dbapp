@@ -4,6 +4,15 @@ class UserManagementTest < AuthenticatedIntegrationTest
   test 'showing current user requires no permissions' do
     get '/api/v1/user', headers: auth_headers
     assert_response :success
+  end
+
+  test 'showing current user via management url requires permissions' do
+    assert_raises (Exception) {
+      get '/api/v1/users/1', headers: auth_headers
+    }
+
+    current_user.permissions |= Permission::LIST_USERS
+    current_user.save!
 
     get '/api/v1/users/1', headers: auth_headers
     assert_response :success
