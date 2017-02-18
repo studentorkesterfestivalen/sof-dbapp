@@ -13,12 +13,20 @@ test_menu_items = [
         ['Information', '/orchestra', true, '', 0, true, []],
         ['Anmälan', '/orchestra/register', true, '', 0, true, []],
     ]],
+    ['Kårtege', '#', true, 'cortege', 0, true, [
+        ['Information', '/cortege', true, '', 0, true, []],
+        ['Om casekårtege', '/case_cortege', true, '', 0, true, []],
+        ['Intresseanmälan', '/cortege/interest', true, '', 0, true, []],
+        ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
+    ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
         ['Kommitté', '/contact', true, '', 0, true, []],
     ]],
     ['Administration', '#', true, 'admin', 0, false, [
         ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []],
-        ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []]
+        ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []],
+        ['Hantera kårteger', '/manage/corteges', true, '', Permission::LIST_CORTEGE_APPLICATIONS, true, []],
+        ['Hantera casekårteger', '/manage/case_corteges', true, '', Permission::LIST_CORTEGE_APPLICATIONS, true, []]
     ]]
 ]
 
