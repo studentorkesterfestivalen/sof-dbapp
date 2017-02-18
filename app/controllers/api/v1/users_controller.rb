@@ -11,15 +11,30 @@ class API::V1::UsersController < ApplicationController
 
   def show
     if params[:id].nil?
-      render json: current_user, except: [:created_at, :updated_at], include: [:case_cortege, :cortege, :orchestra, orchestra_signup: {include: [:orchestra]}], methods: [:is_lintek_member]
+      render json: current_user,
+             except: [
+                 :created_at,
+                 :updated_at,
+                 :permissions
+             ],
+             include: [
+                 :case_cortege,
+                 :cortege,
+                 :orchestra,
+                 orchestra_signup: {
+                     include: [
+                         :orchestra
+                     ]
+                 }
+             ],
+             methods: [
+                 :is_lintek_member
+             ]
     else
+      require_permission Permission::LIST_USERS
+
       user = User.find(params[:id])
-      if current_user.has_permission? Permission::LIST_USERS
-        render json: user
-      else
-        require_ownership user
-        render json: user, except: [:created_at, :updated_at]
-      end
+      render json: user
     end
   end
 
@@ -39,7 +54,7 @@ class API::V1::UsersController < ApplicationController
       require_ownership user
 
       if user.update(user_params)
-        redirect_to api_v1_user_url(user)
+        redirect_to '/api/v1/user'
       else
         raise 'Unable to save profile'
       end
