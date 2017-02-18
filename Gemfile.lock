@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/studentorkesterfestivalen/kobra_client.git
-  revision: 1e5eb299d5ae6f10052566c0e58e021323661ebb
+  revision: dfe778cc2afc26d08746266b7c0b133650bcaf17
   specs:
-    kobra_client (0.0.3)
+    kobra_client (0.0.4)
       json_pure (~> 2.0.2)
       rest-client (~> 2.0.0)
 
