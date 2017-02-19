@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def union
-    if union_valid_thru.past? and is_compatible_liu_student?
+    if provider == 'cas' and union_valid_thru.past? and is_compatible_liu_student?
       update_union
     end
 
