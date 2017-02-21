@@ -14,9 +14,9 @@ test_menu_items = [
         ['Anmälan', '/orchestra/register', true, '', 0, true, []],
     ]],
     ['Kårtege', '#', true, 'cortege', 0, true, [
-        ['Information', '/cortege', true, '', 0, true, []],
-        ['Om casekårtege', '/case_cortege', true, '', 0, true, []],
-        ['Intresseanmälan', '/cortege/interest', true, '', 0, true, []],
+        ['Om Kårtegen', '/cortege', true, '', 0, true, []],
+        ['Om Casekårtege', '/case_cortege', true, '', 0, true, []],
+        ['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
         ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
     ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
