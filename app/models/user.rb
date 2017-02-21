@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Kobra does seem to have any records for students with liu ids shorter than 8 characters,
+  # Kobra doesn't seem to have any records for students with liu ids shorter than 8 characters,
   # from this assumption we avoid this lookup completely and increase performance
   def is_compatible_liu_student?
     nickname.length >= 8
