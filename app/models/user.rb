@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    if provider == 'cas' and super.nil?
+    if provider == 'cas' and super.nil? and is_compatible_liu_student?
       update_display_name
     end
 
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def union
-    if union_valid_thru.past?
+    if provider == 'cas' and union_valid_thru.past? and is_compatible_liu_student?
       update_union
     end
 
@@ -69,10 +69,16 @@ class User < ActiveRecord::Base
         end
 
         save!
+      rescue Kobra::Client::NotFound
+        puts 'Failed to find student in Kobra, trying again tomorrow'
+        self[:union_valid_thru] = DateTime.now.at_end_of_day
       rescue
-        puts 'Failed to update union from Kobra'
+        puts 'Failed to update union from Kobra, trying again in 10 minutes'
+        self[:union_valid_thru] = DateTime.now + 10.minutes
       end
     end
+
+    save!
   end
 
   def update_display_name
@@ -94,5 +100,11 @@ class User < ActiveRecord::Base
     else
       DateTime.new(now.year, 6, 30)
     end
+  end
+
+  # Kobra doesn't seem to have any records for students with liu ids shorter than 8 characters,
+  # from this assumption we avoid this lookup completely and increase performance
+  def is_compatible_liu_student?
+    nickname.length >= 8
   end
 end
