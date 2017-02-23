@@ -8,6 +8,8 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
     assert_response :redirect
   end
 
+
+
   test 'join orchestra' do
     prepare_signup!
 

@@ -30,6 +30,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   # Use sqlite3 as the database for Active Record when developing and testing
   gem 'sqlite3'
+
 end
 
 group :development do
