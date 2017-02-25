@@ -19,6 +19,8 @@ Rails.application.routes.draw do
       resources :users
       resources :cortege
       resources :case_cortege
+      resources :payments
+
 
       get 'user', to: 'users#show'
     end

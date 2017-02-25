@@ -25,6 +25,9 @@ gem 'puma', '~> 3.0'
 # Kobra integration to verify student union membership
 gem 'kobra_client', git: 'https://github.com/studentorkesterfestivalen/kobra_client.git'
 
+# Stripe payments API
+gem 'stripe'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
