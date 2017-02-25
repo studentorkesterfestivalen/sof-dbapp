@@ -34,8 +34,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: ENV['PORT'] }
 
   # Mailcatcher
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { :address => '127.0.0.1', :port => 1025 }
+  if ENV['LOCAL_MAILSERVER'] == 'true'
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = { :address => '127.0.0.1', :port => 1025 }
+  end
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
