@@ -72,6 +72,10 @@ class User < ActiveRecord::Base
     cart
   end
 
+  def shopping_cart_count
+    shopping_cart.cart_items.count
+  end
+
   private
 
   def update_union
