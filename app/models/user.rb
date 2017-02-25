@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_one :orchestra_signup
   has_one :cortege
   has_one :case_cortege
+  has_one :shopping_cart
 
   validate :liu_accounts_must_use_cas
 
@@ -51,6 +52,24 @@ class User < ActiveRecord::Base
 
   def is_lintek_member
     self[:union] == 'LinTek'
+  end
+
+  def shopping_cart
+    cart = super
+    if cart.nil?
+      cart = ShoppingCart.new
+      cart.save!
+
+      self.shopping_cart = cart
+      self.save!
+    else
+      # TODO: Refactor out this duration to a class variable
+      if cart.updated_at < DateTime.now - 12.hours
+        cart.empty!
+      end
+    end
+
+    cart
   end
 
   private
