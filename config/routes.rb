@@ -22,6 +22,13 @@ Rails.application.routes.draw do
       resources :payments
 
 
+      scope '/cart' do
+        get '/', to: 'shopping_cart#show'
+        delete '/', to: 'shopping_cart#clear'
+        put '/item', to: 'shopping_cart#add_item'
+        delete '/item/:id', to: 'shopping_cart#delete_item'
+      end
+
       get 'user', to: 'users#show'
     end
   end

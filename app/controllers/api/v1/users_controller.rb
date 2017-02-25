@@ -28,7 +28,8 @@ class API::V1::UsersController < ApplicationController
                  }
              ],
              methods: [
-                 :is_lintek_member
+                 :is_lintek_member,
+                 :shopping_cart_count
              ]
     else
       require_permission Permission::LIST_USERS
