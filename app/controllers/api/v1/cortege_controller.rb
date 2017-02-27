@@ -10,8 +10,10 @@ class API::V1::CortegeController < ApplicationController
   end
 
   def create
+    # 2017-02-27
     # Added to 'close' application period
-    unless Rails env.test?
+    # Remove the lines below to open application again
+    unless Rails.env.test?
       raise 'Application period is over.'
     end
 
