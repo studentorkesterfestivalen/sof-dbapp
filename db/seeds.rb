@@ -19,8 +19,8 @@ test_menu_items = [
         #['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
         ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
     ]],
-    ['Kontakt', '#', true, 'contact', 0, true, [
-        ['Kommitté', '/contact', true, '', 0, true, []],
+    #['Kontakt', '#', true, 'contact', 0, true, [
+    #    ['Kommitté', '/contact', true, '', 0, true, []],
     ]],
     ['Administration', '#', true, 'admin', 0, false, [
         ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []],
