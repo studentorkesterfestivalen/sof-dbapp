@@ -16,7 +16,7 @@ test_menu_items = [
     ['Kårtege', '#', true, 'cortege', 0, true, [
         ['Om Kårtegen', '/cortege', true, '', 0, true, []],
         ['Om Casekårtege', '/case_cortege', true, '', 0, true, []],
-        ['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
+        #['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
         ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
     ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
