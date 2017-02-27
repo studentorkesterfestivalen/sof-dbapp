@@ -10,6 +10,9 @@ class API::V1::CortegeController < ApplicationController
   end
 
   def create
+    # Added to 'close' application period
+    raise 'Application period is over.'
+
     unless current_user.cortege.nil?
       raise 'Cannot create another cortege application'
     end
