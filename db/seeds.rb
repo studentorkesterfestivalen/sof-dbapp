@@ -19,9 +19,14 @@ test_menu_items = [
         #['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
         ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
     ]],
-    ['Kontakt', '/contact', true, 'contact', 0, true, []],
-    #    ['Kommitté', '/contact', true, '', 0, true, []],
-    #]],
+    ['Kontakt', '#', true, 'contact', 0, true, [], [
+        ['Press', '/contact/press', true, '', 0, true, []],
+        ['Funkis', '/contact/funkis', true, '', 0, true, []],
+        ['Orkestrar', '/contact/orchestra', true, '', 0, true, []],
+        ['Kårtege', '/contact/cortege', true, '', 0, true, []],
+        ['Biljetter', '/contact/tickets', true, '', 0, true, []],
+        ['It/Webbsupport', '/contact/it', true, '', 0, true, []]
+    ]],
     ['Administration', '#', true, 'admin', 0, false, [
         ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []],
         ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []],
