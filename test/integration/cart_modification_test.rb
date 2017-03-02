@@ -2,8 +2,7 @@ require 'test_helper'
 
 class CaseCortegeManagementTest < AuthenticatedIntegrationTest
   DUMMY_ITEM = {
-      object_type: 'ticket',
-      object_name: 'Biljett'
+      product_id: 1
   }
 
   test 'users can view their shopping cart' do
@@ -20,7 +19,7 @@ class CaseCortegeManagementTest < AuthenticatedIntegrationTest
 
     cart = JSON.parse response.body
 
-    assert cart['cart_items'].any? { |x| x['object_type'] == DUMMY_ITEM[:object_type] and x['object_name'] == DUMMY_ITEM[:object_name] }
+    assert cart['cart_items'].any? { |x| x['product_id'] == DUMMY_ITEM[:product_id] }
   end
 
   test 'users can remove items from their shopping cart' do

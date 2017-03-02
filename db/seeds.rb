@@ -56,3 +56,39 @@ Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam erat volut
 Vestibulum finibus turpis sed condimentum commodo. Curabitur sed sodales orci, id luctus erat. Quisque libero ipsum, consequat sit amet magna vestibulum, vestibulum pharetra odio. In luctus turpis ac augue rutrum blandit. Aenean a luctus elit. Fusce semper dictum sagittis. Mauris leo mi, vestibulum a dignissim sodales, lacinia et ipsum. Praesent pellentesque tempor ex, eget sagittis nisi tempor sed. Nunc dignissim nec quam at volutpat.", image: "https://s3-eu-west-1.amazonaws.com/lintek-sof/sof-homepage/logos/Logga_SOF_pafarg2.png",  show_in_menu: true )
 
 Page.create(category: "foo", page: "bar", header: "Foo Bar", content: " <img> <h> Test </h>  Foo Bar.", image: "https://s3-eu-west-1.amazonaws.com/lintek-sof/sof-homepage/logos/Logga_SOF_pafarg2.png",  show_in_menu: false )
+
+ShoppingProduct.delete_all
+ShoppingProduct.create(
+  id: 1,
+  name: 'Helhelgsbiljett',
+  description: 'Fullt ös medvetslös',
+  cost: 9001
+)
+ShoppingProduct.create(
+    id: 2,
+    name: 'Dagsbiljett',
+    description: 'Halvt ös pretantiös',
+    cost: 1337,
+    options: '
+    [
+      {
+        "title": "Dag",
+        "request": "Välj dag",
+        "name": "day",
+        "choices": [
+          {
+            "title": "Torsdag",
+            "value": "t"
+          },
+          {
+            "title": "Fredag",
+            "value": "f"
+          },
+          {
+            "title": "Lördag",
+            "value": "l"
+          }
+        ]
+      }
+    ]'
+)

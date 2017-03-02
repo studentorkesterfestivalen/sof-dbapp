@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170225131223) do
+ActiveRecord::Schema.define(version: 20170302170006) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -25,12 +25,12 @@ ActiveRecord::Schema.define(version: 20170225131223) do
   end
 
   create_table "cart_items", force: :cascade do |t|
-    t.string   "object_type",      null: false
-    t.string   "object_name",      null: false
     t.text     "data"
     t.integer  "shopping_cart_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "product_id"
+    t.index ["product_id"], name: "index_cart_items_on_product_id"
     t.index ["shopping_cart_id"], name: "index_cart_items_on_shopping_cart_id"
   end
 
@@ -148,6 +148,35 @@ ActiveRecord::Schema.define(version: 20170225131223) do
     t.index ["user_id"], name: "index_shopping_carts_on_user_id"
   end
 
+  create_table "shopping_items", force: :cascade do |t|
+    t.integer  "cost"
+    t.text     "name"
+    t.text     "data"
+    t.string   "type"
+    t.integer  "shopping_order_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["shopping_order_id"], name: "index_shopping_items_on_shopping_order_id"
+  end
+
+  create_table "shopping_orders", force: :cascade do |t|
+    t.integer  "order_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_shopping_orders_on_user_id"
+  end
+
+  create_table "shopping_products", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "cost"
+    t.text     "options"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "enabled",     default: true, null: false
+  end
+
   create_table "special_diets", force: :cascade do |t|
     t.string   "name",                                null: false
     t.boolean  "is_default",          default: false, null: false
@@ -182,7 +211,7 @@ ActiveRecord::Schema.define(version: 20170225131223) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-02-19 23:54:06', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-02 21:07:33', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
