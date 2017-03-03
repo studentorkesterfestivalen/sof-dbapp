@@ -1,5 +1,4 @@
-  
-require '../test_helper'
+require 'spec_helper'
 
 
 class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
@@ -22,34 +21,34 @@ end
 
 describe OrchestraSignupIntegrationTest do
   context "Orchestra signup" do
-    it 'should create orchestra' do
+    it 'creates a orchestra' do
       prepare_orchestra_creation!
 
       post '/api/v1/orchestra', params: {item: {name: 'Testorkester'}}, headers: auth_headers, as: :json
       assert_response :redirect
     end
 
-    it 'should join orchestra' do
+    it 'joins a orchestra' do
       prepare_signup!
 
       post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'cafebabe'}}
       assert_response :redirect
     end
 
-    it 'should join orchestra with case insensitive code' do
+    it 'joins a orchestra with case insensitive code' do
       prepare_signup!
 
       post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'CAFEbabe'}}
       assert_response :redirect
     end
 
-    it 'joining orchestra with closed signup' do
+    it 'fails to joins a orchestra with closed signup' do
       assert_raises (Exception) {
         post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'deadbeef'}}
       }
     end
 
-    it 'extra orders in signup' do
+    it 'creates extra orders in signup' do
       prepare_signup!
 
       post '/api/v1/orchestra_signup', headers: auth_headers, params: {
@@ -87,7 +86,7 @@ describe OrchestraSignupIntegrationTest do
       assert_equal signup['orchestra_food_ticket']['diet'], 'Peanuts'
     end
 
-    it 'modifying signup' do
+    it 'modifies signup' do
       put '/api/v1/orchestra_signup/1', headers: auth_headers, params: {item: {dormitory: true}}
       assert_response :redirect
 
@@ -97,7 +96,7 @@ describe OrchestraSignupIntegrationTest do
       assert_equal signup['dormitory'], true
     end
 
-    it 'inherit dormitory' do
+    it 'inherits dormitory' do
       get '/api/v1/orchestra_signup/2', headers: auth_headers
       assert_response :success
 
@@ -106,7 +105,7 @@ describe OrchestraSignupIntegrationTest do
       assert_equal signup['dormitory'], true
     end
 
-    it 'dont inherit dormitory for negative preference' do
+    it 'does not inherit dormitory for negative preference' do
       get '/api/v1/orchestra_signup/4', headers: auth_headers
       assert_response :success
 
@@ -115,12 +114,12 @@ describe OrchestraSignupIntegrationTest do
       assert_equal signup['dormitory'], false
     end
 
-    it 'orchestra owner can view member signups' do
+    it 'tests if a orchestra owner can view member signups' do
       get '/api/v1/orchestra_signup/3', headers: auth_headers
       assert_response :success
     end
 
-    it 'orchestra owner can generate a new access code' do
+    it 'tests if a orchestra owner can generate a new access code' do
       get "/api/v1/orchestra/#{orchestras(:default).id}", headers: auth_headers
       assert_response :success
 
@@ -136,7 +135,7 @@ describe OrchestraSignupIntegrationTest do
       assert_not_equal access_code, orchestra['code']
     end
 
-    it 'deleting orchestras deletes their signups' do
+    it 'tests if deleting a orchestras deletes their signups' do
       prepare_signup!
 
       post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'cafebabe'}}
@@ -152,7 +151,7 @@ describe OrchestraSignupIntegrationTest do
       }
     end
 
-    it 'verifying code returns orchestra name and dormitory preference' do
+    it 'verifies that code returns orchestra name and dormitory preference' do
       get '/api/v1/orchestra_signup/verify', headers: auth_headers, params: {code: 'cafebabe'}
       assert_response :success
 
