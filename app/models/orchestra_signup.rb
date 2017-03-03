@@ -48,7 +48,7 @@ class OrchestraSignup < ApplicationRecord
   end
 
   def food_prices
-    [215, 140, 75, 0]
+    [215, 140, 75, 0, 140]
   end
 
   def article_prices
