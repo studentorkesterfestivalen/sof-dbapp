@@ -2,7 +2,18 @@ class API::V1::ShoppingCartController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    render json: current_user.cart, include: [cart_items: {include: [:product]}]
+    render json: current_user.cart,
+           include: [
+               cart_items: {
+                   include: [
+                       product: {
+                           include: [
+                               :base_product
+                           ]
+                       }
+                   ]
+               }
+           ]
   end
 
   def clear
