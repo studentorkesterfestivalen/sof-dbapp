@@ -57,38 +57,41 @@ Vestibulum finibus turpis sed condimentum commodo. Curabitur sed sodales orci, i
 
 Page.create(category: "foo", page: "bar", header: "Foo Bar", content: " <img> <h> Test </h>  Foo Bar.", image: "https://s3-eu-west-1.amazonaws.com/lintek-sof/sof-homepage/logos/Logga_SOF_pafarg2.png",  show_in_menu: false )
 
-ShoppingProduct.delete_all
-ShoppingProduct.create(
+BaseProduct.delete_all
+Product.delete_all
+
+weekend_ticket = BaseProduct.create(
   id: 1,
   name: 'Helhelgsbiljett',
-  description: 'Fullt ös medvetslös',
-  cost: 9001
+  description: 'En biljett som räcker en hel helg',
+  cost: 5000
 )
-ShoppingProduct.create(
-    id: 2,
-    name: 'Dagsbiljett',
-    description: 'Halvt ös pretantiös',
-    cost: 1337,
-    options: '
-    [
-      {
-        "title": "Dag",
-        "request": "Välj dag",
-        "name": "day",
-        "choices": [
-          {
-            "title": "Torsdag",
-            "value": "t"
-          },
-          {
-            "title": "Fredag",
-            "value": "f"
-          },
-          {
-            "title": "Lördag",
-            "value": "l"
-          }
-        ]
-      }
-    ]'
+
+weekend_ticket.products.push(
+  Product.create
+)
+
+single_day_ticket = BaseProduct.create(
+  id: 2,
+  name: 'Dagsbiljett',
+  description: 'En biljett som räcker en dag',
+  cost: 2000
+)
+
+single_day_ticket.products.push(
+  Product.create(
+    kind: 'Torsdag'
+  )
+)
+
+single_day_ticket.products.push(
+  Product.create(
+    kind: 'Fredag'
+  )
+)
+
+single_day_ticket.products.push(
+  Product.create(
+    kind: 'Lördag'
+  )
 )
