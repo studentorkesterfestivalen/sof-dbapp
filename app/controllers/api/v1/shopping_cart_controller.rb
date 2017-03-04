@@ -2,11 +2,11 @@ class API::V1::ShoppingCartController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    render json: current_user.shopping_cart, include: [cart_items: {include: [:product]}]
+    render json: current_user.cart, include: [cart_items: {include: [:product]}]
   end
 
   def clear
-    current_user.shopping_cart.empty!
+    current_user.cart.empty!
 
     head :no_content
   end
@@ -15,22 +15,21 @@ class API::V1::ShoppingCartController < ApplicationController
     item = CartItem.new(item_params)
     item.save!
 
-    current_user.shopping_cart.cart_items.push(item)
-    current_user.shopping_cart.touch
+    current_user.cart.cart_items.push(item)
+    current_user.cart.touch
 
     head :no_content
   end
 
   def delete_item
-    current_user.shopping_cart.cart_items.destroy params[:id]
+    current_user.cart.cart_items.destroy params[:id]
   end
 
   private
 
   def item_params
     params.require(:item).permit(
-      :product_id,
-      :data
+      :product_id
     )
   end
 

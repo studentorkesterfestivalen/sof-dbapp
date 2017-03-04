@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   has_one :orchestra_signup
   has_one :cortege
   has_one :case_cortege
-  has_one :shopping_cart
+  has_one :cart
 
   validate :liu_accounts_must_use_cas
 
@@ -54,13 +54,13 @@ class User < ActiveRecord::Base
     self[:union] == 'LinTek'
   end
 
-  def shopping_cart
+  def cart
     cart = super
     if cart.nil?
-      cart = ShoppingCart.new
+      cart = Cart.new
       cart.save!
 
-      self.shopping_cart = cart
+      self.cart = cart
       self.save!
     else
       # TODO: Refactor out this duration to a class variable
@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
   end
 
   def shopping_cart_count
-    shopping_cart.cart_items.count
+    cart.cart_items.count
   end
 
   private
