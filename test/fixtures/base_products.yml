@@ -1,0 +1,7 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+default:
+  id: 1
+  name: T-shirt
+  description: Bekväm T-shirt med SOF-tryck
+  cost: 9000

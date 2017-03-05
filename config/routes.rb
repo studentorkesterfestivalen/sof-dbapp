@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :cortege
       resources :case_cortege
       resources :payments
-
+      resources :shopping_product
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'

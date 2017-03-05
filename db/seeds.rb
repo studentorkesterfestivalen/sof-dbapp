@@ -56,3 +56,42 @@ Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam erat volut
 Vestibulum finibus turpis sed condimentum commodo. Curabitur sed sodales orci, id luctus erat. Quisque libero ipsum, consequat sit amet magna vestibulum, vestibulum pharetra odio. In luctus turpis ac augue rutrum blandit. Aenean a luctus elit. Fusce semper dictum sagittis. Mauris leo mi, vestibulum a dignissim sodales, lacinia et ipsum. Praesent pellentesque tempor ex, eget sagittis nisi tempor sed. Nunc dignissim nec quam at volutpat.", image: "https://s3-eu-west-1.amazonaws.com/lintek-sof/sof-homepage/logos/Logga_SOF_pafarg2.png",  show_in_menu: true )
 
 Page.create(category: "foo", page: "bar", header: "Foo Bar", content: " <img> <h> Test </h>  Foo Bar.", image: "https://s3-eu-west-1.amazonaws.com/lintek-sof/sof-homepage/logos/Logga_SOF_pafarg2.png",  show_in_menu: false )
+
+BaseProduct.delete_all
+Product.delete_all
+
+weekend_ticket = BaseProduct.create(
+  id: 1,
+  name: 'Helhelgsbiljett',
+  description: 'En biljett som räcker en hel helg',
+  cost: 5000
+)
+
+weekend_ticket.products.push(
+  Product.create
+)
+
+single_day_ticket = BaseProduct.create(
+  id: 2,
+  name: 'Dagsbiljett',
+  description: 'En biljett som räcker en dag',
+  cost: 2000
+)
+
+single_day_ticket.products.push(
+  Product.create(
+    kind: 'Torsdag'
+  )
+)
+
+single_day_ticket.products.push(
+  Product.create(
+    kind: 'Fredag'
+  )
+)
+
+single_day_ticket.products.push(
+  Product.create(
+    kind: 'Lördag'
+  )
+)
