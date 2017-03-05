@@ -1,4 +1,4 @@
-class API::V1::PaymentsController < ApplicationController
+class API::V1::OrdersController < ApplicationController
   include ViewPermissionConcern
 
   before_action :authenticate_user!
