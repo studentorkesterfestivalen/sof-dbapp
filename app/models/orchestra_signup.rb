@@ -1,4 +1,6 @@
 class OrchestraSignup < ApplicationRecord
+  LATE_REGISTRATION_START_DATE = Time.utc(2017, 3, 6)
+
   belongs_to :orchestra
   belongs_to :user
   has_one :orchestra_ticket
@@ -31,6 +33,7 @@ class OrchestraSignup < ApplicationRecord
     cost += ticket_prices[orchestra_ticket.kind] unless orchestra_ticket.nil?
     cost += food_prices[orchestra_food_ticket.kind] unless orchestra_food_ticket.nil?
     cost += 50 if dormitory
+    cost += 100 if is_late_registration?
 
     unless orchestra_articles.nil?
       orchestra_articles.each { |x| cost += article_prices[x.kind] }
@@ -53,5 +56,9 @@ class OrchestraSignup < ApplicationRecord
 
   def article_prices
     [0, 100, 40, 20]
+  end
+
+  def self.include_late_registration_fee?
+    Time.now >= LATE_REGISTRATION_START_DATE
   end
 end
