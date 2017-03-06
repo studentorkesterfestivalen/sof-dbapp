@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212113933) do
+ActiveRecord::Schema.define(version: 20170306074905) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -91,11 +91,12 @@ ActiveRecord::Schema.define(version: 20170212113933) do
     t.boolean  "consecutive_10"
     t.boolean  "attended_25"
     t.integer  "instrument_size"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.integer  "orchestra_id"
     t.integer  "user_id"
     t.text     "other_performances"
+    t.boolean  "is_late_registration", default: false, null: false
     t.index ["orchestra_id"], name: "index_orchestra_signups_on_orchestra_id"
     t.index ["user_id"], name: "index_orchestra_signups_on_user_id"
   end
@@ -165,7 +166,7 @@ ActiveRecord::Schema.define(version: 20170212113933) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-02-06 22:31:07', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-06 08:06:21', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
