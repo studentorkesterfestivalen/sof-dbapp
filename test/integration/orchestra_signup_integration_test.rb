@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
+  teardown do
+    Timecop.return
+  end
+
   test 'create orchestra' do
     prepare_orchestra_creation!
 
@@ -139,6 +143,30 @@ class OrchestraSignupIntegrationTest < AuthenticatedIntegrationTest
 
     assert_equal 'Test orchestra', orchestra['name']
     assert_equal true, orchestra['dormitory']
+  end
+
+  test 'late registrations includes a fee of 100 SEK' do
+    Timecop.travel Time.utc(2017, 3, 1)
+
+    prepare_signup!
+    post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'CAFEbabe'}}
+    assert_response :redirect
+
+    get redirected_url, headers: auth_headers
+    signup = JSON.parse response.body
+    normal_cost = signup['total_cost']
+
+    Timecop.travel Time.utc(2017, 3, 6)
+
+    prepare_signup!
+    post '/api/v1/orchestra_signup', headers: auth_headers, params: {item: {code: 'CAFEbabe'}}
+    assert_response :redirect
+
+    get redirected_url, headers: auth_headers
+    signup = JSON.parse response.body
+    new_cost = signup['total_cost']
+
+    assert_equal normal_cost + 100, new_cost
   end
 
   private
