@@ -23,6 +23,7 @@ module Formats
     def column_names
       {
           :name => 'Namn',
+          :email => 'E-mail',
           :orchestra_ticket => 'Biljett',
           :dormitory => 'Boende',
           :medal => 'Medalj',
@@ -54,6 +55,8 @@ module Formats
       case column
         when :name
           item.user.display_name
+        when :email
+          item.user.email
         when :medal, :tag, :tshirt
           item_article(item, column)
         else
@@ -64,6 +67,7 @@ module Formats
     def extra_row
       [
           'TOTALT',
+          '',
           total_ticket_str(@total[:ticket]),
           @total[:dormitory],
           @total[:medal],
