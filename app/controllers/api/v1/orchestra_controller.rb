@@ -30,7 +30,7 @@ class API::V1::OrchestraController < ApplicationController
 
   def all_signups
     orchestra = Orchestra.find(params[:id])
-    require_membership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
+    require_ownership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
 
     render :text => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
   end
