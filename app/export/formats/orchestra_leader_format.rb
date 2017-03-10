@@ -7,12 +7,12 @@ module Formats
           :tag => 0,
           :tshirt => 0,
           :total_cost => 0,
-          :ticket => {
+          :orchestra_ticket => {
               :thursday => 0,
               :friday => 0,
               :saturday => 0
           },
-          :food_ticket => {
+          :orchestra_food_ticket => {
               :thursday => 0,
               :friday => 0,
               :saturday => 0
@@ -68,12 +68,12 @@ module Formats
       [
           'TOTALT',
           '',
-          total_ticket_str(@total[:ticket]),
+          total_ticket_str(@total[:orchestra_ticket]),
           @total[:dormitory],
           @total[:medal],
           @total[:tag],
           @total[:tshirt],
-          total_ticket_str(@total[:food_ticket]),
+          total_ticket_str(@total[:orchestra_food_ticket]),
           @total[:total_cost]
       ]
     end
@@ -84,17 +84,11 @@ module Formats
       if @total.has_key? column
         if value.is_a? Numeric
           @total[column] += value
+        elsif value.is_a? ApplicationRecord
+          increase_ticket_total(@total[column], ticket_count_increase_for(value.kind))
         elsif value
           @total[column] += 1
         end
-      end
-
-      if column == :orchestra_ticket
-        increase_ticket_total(@total[:ticket], ticket_count_increase_for(value.kind))
-      end
-
-      if column == :orchestra_food_ticket
-        increase_ticket_total(@total[:food_ticket], ticket_count_increase_for(value.kind))
       end
     end
 
