@@ -32,9 +32,7 @@ class API::V1::OrchestraController < ApplicationController
     orchestra = Orchestra.find(params[:id])
     require_membership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
 
-    render :json => orchestra, include: [orchestra_signups: {include :user, :orchestra_articles,
-        :orchestra_ticket,
-        :orchestra_food_ticket, :special_diets}]
+    render :text => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
   end
 
   def update
