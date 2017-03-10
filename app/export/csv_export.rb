@@ -3,7 +3,8 @@ class CSVExport
     def render_csv(data, format_class)
       format = format_class.new
       columns = format.column_names
-      CSV.generate(:col_sep => ';') do |csv|
+      CSV.generate do |csv|
+        csv << ['sep=,']
         csv << columns.values
         data.each do |item|
           values = columns.keys.map { |col| format.data_for(item, col) }
