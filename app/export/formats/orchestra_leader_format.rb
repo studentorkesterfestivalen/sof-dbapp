@@ -65,17 +65,7 @@ module Formats
     end
 
     def extra_row
-      [
-          'TOTALT',
-          '',
-          total_ticket_str(@total[:orchestra_ticket]),
-          @total[:dormitory],
-          @total[:medal],
-          @total[:tag],
-          @total[:tshirt],
-          total_ticket_str(@total[:orchestra_food_ticket]),
-          @total[:total_cost]
-      ]
+      column_names.keys.map { |col| total_value_for(col) }
     end
 
     private
@@ -94,6 +84,17 @@ module Formats
 
     def increase_ticket_total(total_field, increments)
       increments.each { |k,v| total_field[k] += v }
+    end
+
+    def total_value_for(col)
+      case col
+        when :name
+          'TOTALT'
+        when :orchestra_ticket, :orchestra_food_ticket
+          total_ticket_str @total[col]
+        else
+          @total[col]
+      end
     end
 
     def item_article(item, article_name)
