@@ -7,6 +7,7 @@ module Formats
           :tag => 0,
           :tshirt => 0,
           :total_cost => 0,
+          :is_late_registration => 0,
           :orchestra_ticket => {
               :thursday => 0,
               :friday => 0,
@@ -30,6 +31,7 @@ module Formats
           :tag => 'Märke',
           :tshirt => 'T-shirt',
           :orchestra_food_ticket => 'Mat',
+          :is_late_registration => 'Sen anmälan',
           :total_cost => 'Kostnad'
       }
     end
@@ -44,7 +46,7 @@ module Formats
       case column
         when :orchestra_ticket, :orchestra_food_ticket
           ticket_description_for value.kind
-        when :dormitory
+        when :dormitory, :is_late_registration
           yes_no value
         else
           value
@@ -65,17 +67,7 @@ module Formats
     end
 
     def extra_row
-      [
-          'TOTALT',
-          '',
-          total_ticket_str(@total[:orchestra_ticket]),
-          @total[:dormitory],
-          @total[:medal],
-          @total[:tag],
-          @total[:tshirt],
-          total_ticket_str(@total[:orchestra_food_ticket]),
-          @total[:total_cost]
-      ]
+      column_names.keys.map { |col| total_value_for(col) }
     end
 
     private
@@ -94,6 +86,17 @@ module Formats
 
     def increase_ticket_total(total_field, increments)
       increments.each { |k,v| total_field[k] += v }
+    end
+
+    def total_value_for(col)
+      case col
+        when :name
+          'TOTALT'
+        when :orchestra_ticket, :orchestra_food_ticket
+          total_ticket_str @total[col]
+        else
+          @total[col]
+      end
     end
 
     def item_article(item, article_name)
