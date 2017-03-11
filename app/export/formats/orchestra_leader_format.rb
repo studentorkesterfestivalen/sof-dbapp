@@ -7,6 +7,7 @@ module Formats
           :tag => 0,
           :tshirt => 0,
           :total_cost => 0,
+          :is_late_registration => 0,
           :orchestra_ticket => {
               :thursday => 0,
               :friday => 0,
@@ -30,6 +31,7 @@ module Formats
           :tag => 'Märke',
           :tshirt => 'T-shirt',
           :orchestra_food_ticket => 'Mat',
+          :is_late_registration => 'Sen anmälan',
           :total_cost => 'Kostnad'
       }
     end
@@ -44,7 +46,7 @@ module Formats
       case column
         when :orchestra_ticket, :orchestra_food_ticket
           ticket_description_for value.kind
-        when :dormitory
+        when :dormitory, :is_late_registration
           yes_no value
         else
           value
