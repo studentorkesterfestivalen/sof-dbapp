@@ -24,6 +24,31 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "base_products", force: :cascade do |t|
+    t.string   "name",                                null: false
+    t.text     "description",                         null: false
+    t.integer  "cost"
+    t.integer  "required_permissions"
+    t.boolean  "enabled",              default: true, null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  create_table "cart_items", force: :cascade do |t|
+    t.integer  "cart_id"
+    t.integer  "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id"], name: "index_cart_items_on_cart_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
   create_table "case_corteges", force: :cascade do |t|
     t.string   "education",                             null: false
     t.string   "contact_phone",                         null: false
@@ -121,6 +146,25 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.index ["user_id"], name: "index_orchestras_on_user_id"
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "order_id"
+    t.integer  "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["user_id"], name: "index_order_items_on_user_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string   "payment_method", null: false
+    t.string   "payment_data"
+    t.integer  "user_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "pages", force: :cascade do |t|
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
@@ -130,6 +174,16 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.text     "content",      default: "",      null: false
     t.boolean  "show_in_menu", default: false,   null: false
     t.string   "image"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "kind"
+    t.integer  "cost"
+    t.boolean  "enabled",         default: true, null: false
+    t.integer  "base_product_id"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.index ["base_product_id"], name: "index_products_on_base_product_id"
   end
 
   create_table "special_diets", force: :cascade do |t|
@@ -166,7 +220,7 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-06 08:06:21', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-05 10:42:15', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

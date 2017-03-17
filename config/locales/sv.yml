@@ -42,10 +42,15 @@ sv:
   devise:
     mailer:
       confirmation_instructions:
-        confirm_link_msg: "Aktivera ditt konto genom att klicka på länken nedan:"
-        confirm_account_link: "Bekräfta e-postadress"
+        subject: "SOF17 - Välkommen till StudentOrkesterFestivalen"
+        welcome_to_sof: "och välkommen till StudentOrkesterFestivalen 2017:s hemsida!"
+        confirm_link_msg: "Innan du kan börja använda ditt konto måste du aktivera det, detta gör du genom att klicka
+         på knappen nedan."
+        confirm_account_link: "Aktivera konto"
       reset_password_instructions:
-        request_reset_link_msg: "Någon har begärt att återställa ditt lösenord. Välj ett nytt lösenord genom att besöka länken nedan."
+        subject: "SOF17 - Återställ lösenord"
+        request_reset_link_msg: "Någon har begärt att återställa ditt lösenord. Om det var du kan du välja ett nytt
+        lösenord genom att besöka länken nedan."
         password_change_link: "Ändra lösenord"
         ignore_mail_msg: "Om du inte begärt återställningen kan du ignorera detta mail."
         no_changes_msg: "Ditt lösenord är oförändrat tills du besöker länken och byter till ett nytt."
