@@ -9,7 +9,11 @@ Rails.application.routes.draw do
           get 'find(/:category)(/:page)', action: 'find'
         end
       end
-      resources :orchestra
+      resources :orchestra do
+        member do
+          get 'all_signups', action: 'all_signups'
+        end
+      end
       resources :orchestra_signup do
         collection do
           get 'verify', action: 'verify_code'

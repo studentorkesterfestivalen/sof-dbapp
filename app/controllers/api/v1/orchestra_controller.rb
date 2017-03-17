@@ -28,6 +28,13 @@ class API::V1::OrchestraController < ApplicationController
     render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}]
   end
 
+  def all_signups
+    orchestra = Orchestra.find(params[:id])
+    require_ownership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
+
+    render :text => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
+  end
+
   def update
     orchestra = Orchestra.find(params[:id])
     require_ownership orchestra
