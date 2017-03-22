@@ -16,7 +16,9 @@ module Formats
               :thursday => 0,
               :friday => 0,
               :saturday => 0
-          }
+          },
+          :consecutive_10 => 0,
+          :attended_25 => 0
       }
     end
 
