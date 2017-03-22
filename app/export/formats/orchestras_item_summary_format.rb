@@ -74,7 +74,7 @@ module Formats
 
       item.orchestra_signups.each do |signup|
         case column
-          when :dormitory, :is_late_registration
+          when :dormitory, :is_late_registration, :consecutive_10, :attended_25
             value += 1 if signup.send(column)
           when :medal, :tag, :tshirt
             value += item_article(signup, column)
