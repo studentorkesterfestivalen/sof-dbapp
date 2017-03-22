@@ -61,12 +61,12 @@ module Formats
         when :name
           return item.send(column)
         else
-          value_for_item(item, column)
+          value += value_for_item(item, column, value)
       end
       value
     end
 
-    def value_for_item(item, column)
+    def value_for_item(item, column, value)
       item.orchestra_signups.each do |signup|
         case column
           when :dormitory, :is_late_registration
@@ -79,6 +79,7 @@ module Formats
             value += signup.send(column)
         end
       end
+      value
     end
 
     def extra_row
