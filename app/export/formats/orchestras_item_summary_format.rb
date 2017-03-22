@@ -50,11 +50,10 @@ module Formats
     def value_for(item, column)
       case column
         when :name
-          return item.send(column)
+          item.send(column)
         else
-          value = value_for_item(item, column)
+          value_for_item(item, column)
       end
-      value
     end
 
     def value_for_item(item, column)
