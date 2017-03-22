@@ -16,7 +16,9 @@ module Formats
               :thursday => 0,
               :friday => 0,
               :saturday => 0
-          }
+          },
+          :consecutive_10 => 0,
+          :attended_25 => 0
       }
     end
 
@@ -27,8 +29,11 @@ module Formats
           :medal => 'Medaljer',
           :tag => 'Märken',
           :tshirt => 'T-shirt',
+          :orchestra_ticket => 'Festivalbiljetter',
           :orchestra_food_ticket => 'Matbiljetter',
           :is_late_registration => 'Sen anmälan',
+          :consecutive_10 => '10 år i rad',
+          :attended_25 => '25:e året'
       }
     end
 
