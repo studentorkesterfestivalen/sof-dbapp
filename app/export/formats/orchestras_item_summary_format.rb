@@ -61,7 +61,7 @@ module Formats
         when :name
           return item.send(column)
         else
-          value_for_item(item, column, value)
+          value = value_for_item(item, column, value)
       end
       value
     end
