@@ -30,6 +30,8 @@ module Formats
           :orchestra_ticket => 'Festivalbiljetter',
           :orchestra_food_ticket => 'Matbiljetter',
           :is_late_registration => 'Sen anmälan',
+          :consecutive_10 => '10 år i rad',
+          :attended_25 => '25:e året'
       }
     end
 
