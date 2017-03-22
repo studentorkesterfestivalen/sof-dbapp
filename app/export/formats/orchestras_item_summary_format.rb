@@ -48,6 +48,15 @@ module Formats
     end
 
     def value_for(item, column)
+      case column
+        when :name
+          item.send(column)
+        else
+          value_for_item(item, column)
+      end
+    end
+
+    def value_for_item(item, column)
       if column == :orchestra_ticket || column == :orchestra_food_ticket
         value = {
             :thursday => 0,
@@ -57,16 +66,7 @@ module Formats
       else
         value = 0
       end
-      case column
-        when :name
-          return item.send(column)
-        else
-          value_for_item(item, column)
-      end
-      value
-    end
 
-    def value_for_item(item, column)
       item.orchestra_signups.each do |signup|
         case column
           when :dormitory, :is_late_registration
@@ -79,6 +79,7 @@ module Formats
             value += signup.send(column)
         end
       end
+      value
     end
 
     def extra_row
