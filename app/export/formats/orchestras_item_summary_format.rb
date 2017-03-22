@@ -27,6 +27,7 @@ module Formats
           :medal => 'Medaljer',
           :tag => 'Märken',
           :tshirt => 'T-shirt',
+          :orchestra_ticket => 'Festivalbiljetter',
           :orchestra_food_ticket => 'Matbiljetter',
           :is_late_registration => 'Sen anmälan',
       }
