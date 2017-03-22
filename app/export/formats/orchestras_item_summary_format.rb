@@ -61,21 +61,24 @@ module Formats
         when :name
           return item.send(column)
         else
-          #TODO: Break out as own fucntion
-          item.orchestra_signups.each do |signup|
-            case column
-              when :dormitory, :is_late_registration
-                value += 1 if signup.send(column)
-              when :medal, :tag, :tshirt
-                value += item_article(signup, column)
-              when :orchestra_food_ticket, :orchestra_ticket
-                increase_ticket_total(value, ticket_count_increase_for(signup.send(column).kind))
-              else
-                value += signup.send(column)
-            end
-          end
+          value_for_item(item, column)
       end
       value
+    end
+
+    def value_for_item(item, column)
+      item.orchestra_signups.each do |signup|
+        case column
+          when :dormitory, :is_late_registration
+            value += 1 if signup.send(column)
+          when :medal, :tag, :tshirt
+            value += item_article(signup, column)
+          when :orchestra_food_ticket, :orchestra_ticket
+            increase_ticket_total(value, ticket_count_increase_for(signup.send(column).kind))
+          else
+            value += signup.send(column)
+        end
+      end
     end
 
     def extra_row
