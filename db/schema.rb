@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170306074905) do
+ActiveRecord::Schema.define(version: 20170325170552) do
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -52,6 +52,15 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
     t.index ["user_id"], name: "index_corteges_on_user_id"
+  end
+
+  create_table "funkis_categories", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.string   "funkis_name", null: false
+    t.string   "description", null: false
+    t.string   "points",      null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "menu_items", force: :cascade do |t|
@@ -166,7 +175,7 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-06 08:06:21', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-22 13:43:55', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
