@@ -6,6 +6,8 @@ class MenuItem < ApplicationRecord
   end
 
   def should_show?(user=nil)
+    return false unless active
+
     user ||= @user
     if menu_item_id.nil? and menu_items.empty? and not display_empty
       return false
