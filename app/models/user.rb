@@ -53,6 +53,18 @@ class User < ActiveRecord::Base
     self[:union] == 'LinTek'
   end
 
+  def update_from_kobra!
+    return if provider != 'cas' or not is_compatible_liu_student?
+
+    if self[:display_name].nil?
+      update_display_name
+    end
+
+    if self[:union].nil? or union_valid_thru.past?
+      update_union
+    end
+  end
+
   private
 
   def update_union
