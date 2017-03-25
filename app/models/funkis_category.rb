@@ -1,0 +1,2 @@
+class FunkisCategory < ApplicationRecord
+end
