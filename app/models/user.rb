@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    if provider == 'cas' and super.nil? and is_compatible_liu_student?
+    if is_compatible_liu_student? and super.nil?
       update_display_name
     end
 
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def union
-    if provider == 'cas' and union_valid_thru.past? and is_compatible_liu_student?
+    if is_compatible_liu_student? and union_valid_thru.past?
       update_union
     end
 
@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   end
 
   def update_from_kobra!
-    return if provider != 'cas' or not is_compatible_liu_student?
+    return unless is_compatible_liu_student?
 
     if self[:display_name].nil?
       update_display_name
@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   private
 
   def update_union
-    if provider == 'cas'
+    if is_liu_student?
       begin
         kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
         response = kobra.get_student(id: nickname, union: true)
@@ -119,6 +119,10 @@ class User < ActiveRecord::Base
   # Kobra doesn't seem to have any records for students with liu ids shorter than 8 characters,
   # from this assumption we avoid this lookup completely and increase performance
   def is_compatible_liu_student?
-    nickname.length >= 8
+    is_liu_student? and nickname.length >= 8
+  end
+
+  def is_liu_student?
+    provider == 'cas'
   end
 end
