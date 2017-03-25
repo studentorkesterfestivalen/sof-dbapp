@@ -82,10 +82,12 @@ class User < ActiveRecord::Base
 
         save!
       rescue Kobra::Client::NotFound
-        puts 'Failed to find student in Kobra, trying again tomorrow'
+        # Will try again tomorrow
+        FaultReport.send("Failed to find student in Kobra (id: #{nickname})")
         self[:union_valid_thru] = DateTime.now.at_end_of_day
       rescue
-        puts 'Failed to update union from Kobra, trying again in 10 minutes'
+        # Will try again in 10 minutes
+        FaultReport.send("Failed to update union from Kobra (id: #{nickname})")
         self[:union_valid_thru] = DateTime.now + 10.minutes
       end
     end
@@ -101,7 +103,7 @@ class User < ActiveRecord::Base
       self[:display_name] = response[:name]
       save!
     rescue
-      puts 'Failed to update name from Kobra'
+      FaultReport.send("Failed to update name from Kobra (id: #{nickname})")
     end
   end
 
