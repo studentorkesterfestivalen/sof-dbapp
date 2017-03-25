@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 20170306074905) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-06 08:06:21', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-22 13:43:55', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

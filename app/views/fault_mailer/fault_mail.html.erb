@@ -1,0 +1,16 @@
+<p>
+  An error has occurred in your application!
+</p>
+
+<p>
+  <b>Error description: </b><%= @report.message %>
+</p>
+
+<p>
+  <b>Error stack trace: </b>
+</p>
+<pre style="color: #555">
+  <%= @report.stack %>
+</pre>
+
+Please resolve this issue to avoid further e-mail notifications.

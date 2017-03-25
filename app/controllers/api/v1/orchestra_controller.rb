@@ -32,7 +32,14 @@ class API::V1::OrchestraController < ApplicationController
     orchestra = Orchestra.find(params[:id])
     require_ownership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
 
-    render :text => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
+    render :plain => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
+  end
+
+  def item_summary
+    orchestras = Orchestra.all
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+
+    render :plain => CSVExport.render_csv(orchestras, Formats::OrchestrasItemSummaryFormat)
   end
 
   def update
