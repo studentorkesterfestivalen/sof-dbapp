@@ -77,7 +77,9 @@ class API::V1::FunkisApplicationController < ApplicationController
         :drivers_license,
         :presale_choice,
         funkis_shift_applications_attributes: [
-            :funkis_shift_id
+            :id,
+            :funkis_shift_id,
+            :_destroy
         ]
     )
   end

@@ -2,13 +2,15 @@ class FunkisApplication < ApplicationRecord
   belongs_to :user, optional: true
   has_many :funkis_shift_applications
 
-  accepts_nested_attributes_for :funkis_shift_applications
+  accepts_nested_attributes_for :funkis_shift_applications, allow_destroy: true
 
   validate :has_valid_presale_option?, :is_not_locked?
+  validates :ssn, presence: true
+  validates :phone, presence: true
+  validates :tshirt_size, presence: true
 
   PRESALE_NONE = 0
   PRESALE_MH = 1
-  PRESALE_UK = 2
 
   def has_owner?(owner)
     user == owner
@@ -58,8 +60,7 @@ class FunkisApplication < ApplicationRecord
 
   def has_valid_presale_option?
     unless presale_choice == PRESALE_NONE or
-           presale_choice == PRESALE_MH or
-           presale_choice == PRESALE_UK
+           presale_choice == PRESALE_MH
       errors[:base] << 'Ogiltigt val av förköp'
     end
   end
