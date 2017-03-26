@@ -17,16 +17,32 @@ class API::V1::UsersController < ApplicationController
                  :updated_at,
                  :permissions
              ],
-             include: [
-                 :case_cortege,
-                 :cortege,
-                 :orchestra,
+             include: {
+                 case_cortege: {},
+                 cortege: {},
+                 orchestra: {},
                  orchestra_signup: {
                      include: [
                          :orchestra
                      ]
+                 },
+                 funkis_application: {
+                     include: [
+                         funkis_shift_applications: {
+                             include: [
+                                 funkis_shift: {
+                                     except: [
+                                         :maximum_workers
+                                     ]
+                                 }
+                             ]
+                         }
+                     ],
+                     methods: [
+                         :steps_completed
+                     ]
                  }
-             ],
+             },
              methods: [
                  :is_lintek_member
              ]

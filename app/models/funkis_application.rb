@@ -29,6 +29,14 @@ class FunkisApplication < ApplicationRecord
     end
   end
 
+  def steps_completed
+    (0..2).each do |step|
+      return step unless ready_for_step?(step + 2)
+    end
+
+    return 3
+  end
+
   private
 
   def information_filled_in?
