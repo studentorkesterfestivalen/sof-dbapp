@@ -10,7 +10,6 @@ class FunkisApplication < ApplicationRecord
   validates :tshirt_size, presence: true
 
   PRESALE_NONE = 0
-  PRESALE_MH = 1
 
   def has_owner?(owner)
     user == owner
@@ -59,8 +58,7 @@ class FunkisApplication < ApplicationRecord
   end
 
   def has_valid_presale_option?
-    unless presale_choice == PRESALE_NONE or
-           presale_choice == PRESALE_MH
+    unless presale_choice == PRESALE_NONE
       errors[:base] << 'Ogiltigt val av förköp'
     end
   end

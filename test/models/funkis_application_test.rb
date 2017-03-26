@@ -13,7 +13,7 @@ class FunkisApplicationTest < ActiveSupport::TestCase
     application.tshirt_size = 'Female XS'
     application.allergies = 'Jordnötter'
     application.drivers_license = true
-    application.presale_choice = FunkisApplication::PRESALE_MH
+    application.presale_choice = FunkisApplication::PRESALE_NONE
 
     assert application.ready_for_step? 2
     assert_not application.ready_for_step? 3

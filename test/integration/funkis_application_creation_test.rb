@@ -9,7 +9,7 @@ class FunkisApplicationCreationTest < AuthenticatedIntegrationTest
             tshirt_size: 'Female XS',
             allergies: 'Jordnötter',
             drivers_license: true,
-            presale_choice: FunkisApplication::PRESALE_MH
+            presale_choice: FunkisApplication::PRESALE_NONE
         }
     }
 
@@ -19,12 +19,12 @@ class FunkisApplicationCreationTest < AuthenticatedIntegrationTest
     get item_url, headers: auth_headers
     application = JSON.parse response.body
 
-    assert_equal '900101-0101',                 application['ssn']
-    assert_equal '013176800',                   application['phone']
-    assert_equal 'Female XS',                   application['tshirt_size']
-    assert_equal 'Jordnötter',                  application['allergies']
-    assert_equal true,                          application['drivers_license']
-    assert_equal FunkisApplication::PRESALE_MH, application['presale_choice']
+    assert_equal '900101-0101',                   application['ssn']
+    assert_equal '013176800',                     application['phone']
+    assert_equal 'Female XS',                     application['tshirt_size']
+    assert_equal 'Jordnötter',                    application['allergies']
+    assert_equal true,                            application['drivers_license']
+    assert_equal FunkisApplication::PRESALE_NONE, application['presale_choice']
 
     put item_url, headers: auth_headers, params: {
         item: {
