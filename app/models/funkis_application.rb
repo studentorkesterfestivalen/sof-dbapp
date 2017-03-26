@@ -11,7 +11,6 @@ class FunkisApplication < ApplicationRecord
 
   PRESALE_NONE = 0
   PRESALE_MH = 1
-  PRESALE_UK = 2
 
   def has_owner?(owner)
     user == owner
@@ -61,8 +60,7 @@ class FunkisApplication < ApplicationRecord
 
   def has_valid_presale_option?
     unless presale_choice == PRESALE_NONE or
-           presale_choice == PRESALE_MH or
-           presale_choice == PRESALE_UK
+           presale_choice == PRESALE_MH
       errors[:base] << 'Ogiltigt val av förköp'
     end
   end
