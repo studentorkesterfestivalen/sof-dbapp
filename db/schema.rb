@@ -107,15 +107,15 @@ ActiveRecord::Schema.define(version: 20170326134919) do
   end
 
   create_table "menu_items", force: :cascade do |t|
-    t.string   "title",                                null: false
-    t.boolean  "active",               default: false, null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.string   "title",                               null: false
+    t.boolean  "active",               default: true, null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "menu_item_id"
     t.string   "category"
-    t.integer  "required_permissions", default: 0,     null: false
-    t.boolean  "display_empty",        default: true,  null: false
-    t.string   "href",                 default: "#",   null: false
+    t.integer  "required_permissions", default: 0,    null: false
+    t.boolean  "display_empty",        default: true, null: false
+    t.string   "href",                 default: "#",  null: false
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
   end
 
@@ -218,7 +218,7 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-22 13:43:55', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-26 13:19:32', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

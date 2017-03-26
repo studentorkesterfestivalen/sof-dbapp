@@ -13,6 +13,9 @@ Rails.application.routes.draw do
         member do
           get 'all_signups', action: 'all_signups'
         end
+        collection do
+          get 'item_summary', action: 'item_summary'
+        end
       end
       resources :orchestra_signup do
         collection do
@@ -24,6 +27,7 @@ Rails.application.routes.draw do
       resources :cortege
       resources :case_cortege
       resources :funkis
+      resources :funkis_application
 
       get 'user', to: 'users#show'
     end

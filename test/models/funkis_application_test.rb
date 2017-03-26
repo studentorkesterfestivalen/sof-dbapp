@@ -34,5 +34,8 @@ class FunkisApplicationTest < ActiveSupport::TestCase
 
     assert application.ready_for_step? 4
     assert application.save
+
+    # Ensure already completed application cannot be updated
+    assert_not application.save
   end
 end

@@ -10,12 +10,7 @@ class API::V1::CortegeController < ApplicationController
   end
 
   def create
-    # 2017-02-27
-    # Added to 'close' application period
-    # Remove the lines below to open application again
-    unless Rails.env.test?
-      raise 'Application period is over.'
-    end
+    disable_feature from: '2017-02-27'
 
     unless current_user.cortege.nil?
       raise 'Cannot create another cortege application'
