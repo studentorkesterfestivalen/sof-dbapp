@@ -2,7 +2,7 @@ class FunkisApplication < ApplicationRecord
   belongs_to :user, optional: true
   has_many :funkis_shift_applications
 
-  accepts_nested_attributes_for :funkis_shift_applications
+  accepts_nested_attributes_for :funkis_shift_applications, allow_destroy: true
 
   validate :has_valid_presale_option?, :is_not_locked?
   validates :ssn, presence: true
