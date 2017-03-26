@@ -5,13 +5,20 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
-  name: First category
-  funkis_name: First category
-  description: This category is the first
-  points: 50
+  day: Thursday
+  time: 10:00 - 12:00
+  maximum_workers: 10
+  points: 100
+  funkis_category_id: one
 
 two:
-  name: Second category
-  funkis_name: Second category
-  description: This category is the second
-  points: 100
+  day: Thursday
+  time: 12:00 - 14:00
+  maximum_workers: 5
+  funkis_category_id: one
+
+one:
+  day: Friday
+  time: 08:00 - 12:00
+  maximum_workers: 3
+  funkis_category_id: two

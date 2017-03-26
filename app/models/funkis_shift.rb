@@ -1,0 +1,2 @@
+class FunkisShift < ApplicationRecord
+end
