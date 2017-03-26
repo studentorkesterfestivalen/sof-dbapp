@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       resources :cortege
       resources :case_cortege
       resources :funkis
+      resources :funkis_application
 
       get 'user', to: 'users#show'
     end

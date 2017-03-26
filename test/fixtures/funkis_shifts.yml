@@ -17,7 +17,7 @@ two:
   maximum_workers: 5
   funkis_category_id: one
 
-one:
+three:
   day: Friday
   time: 08:00 - 12:00
   maximum_workers: 3
