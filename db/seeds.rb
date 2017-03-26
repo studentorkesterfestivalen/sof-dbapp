@@ -19,6 +19,11 @@ test_menu_items = [
         #['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
         ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
     ]],
+    ['Jobba på SOF', '#', true, 'funkis', 0, true, [
+        ['Förmåner', '/funkis', true, '', 0, true, []],
+        ['Funkiskategorier', '/funkis/categories', true, '', 0, true, []],
+        ['Anmälan', '/funkis/application', true, '', 0, true, []]
+    ]],
     ['Kontakt', '#', true, 'contact', 0, true, [
         ['Press', '/contact/press', true, '', 0, true, []],
         ['Funkis', '/contact/funkis', true, '', 0, true, []],
@@ -54,7 +59,7 @@ test_menu_items.each { |c| create_menu_item *c }
 
 funkis_categories = [
     ['Mästerkatt', 'Insatsputte',
-     'Anser du dig vara en räddare i nöden? Insatsfunkisarna är där de behövs under festivalen och de klarar allt från att möta besökare i entrén till att utfordra dem med mat och dryck.',
+     'Anser du dig vara en räddare i nöden? Insatsfunkisarna är där de behövs under festivalen och de klarar allt från att möta besökare i entrén till att utfordra dem med mat och dryck. OBS: De pass markerade med en stjärna ger 100p.',
     '50/100 p', [
             {
                 day: 'Torsdag',
@@ -508,7 +513,20 @@ def create_funkis_category(name, funkis_name, description, points, shifts)
   )
 end
 
-FunkisCategory.delete_all
-FunkisShift.delete_all
-funkis_categories.each { |c| create_funkis_category *c }
+
+# THIS MUST ONLY BE DONE ONCE ON THE PRODUCTION DATABASE
+
+if funkis_categories.count == 0
+  FunkisCategory.delete_all
+  FunkisShift.delete_all
+  funkis_categories.each { |c| create_funkis_category *c }
+end
+
+if ActiveFunkisShiftLimit.count == 0
+  ActiveFunkisShiftLimit.delete_all
+  ActiveFunkisShiftLimit.create!(
+      active_limit: 0
+  )
+end
+
 

@@ -1,6 +1,6 @@
 class API::V1::FunkisController < ApplicationController
   def index
-    render :json => FunkisCategory.all, include: [:funkis_shift]
+    render :json => FunkisCategory.all, methods: [:available_shifts]
   end
 
   def create
