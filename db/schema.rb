@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326095931) do
+ActiveRecord::Schema.define(version: 20170326114755) do
+
+  create_table "active_funkis_shift_limits", force: :cascade do |t|
+    t.integer  "active_limit", default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -87,13 +93,15 @@ ActiveRecord::Schema.define(version: 20170326095931) do
   end
 
   create_table "funkis_shifts", force: :cascade do |t|
-    t.string   "day",                null: false
-    t.string   "time",               null: false
-    t.integer  "maximum_workers",    null: false
+    t.string   "day",                            null: false
+    t.string   "time",                           null: false
     t.integer  "points"
     t.integer  "funkis_category_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "red_limit",          default: 0, null: false
+    t.integer  "yellow_limit",       default: 0, null: false
+    t.integer  "green_limit",        default: 0, null: false
     t.index ["funkis_category_id"], name: "index_funkis_shifts_on_funkis_category_id"
   end
 
@@ -209,7 +217,7 @@ ActiveRecord::Schema.define(version: 20170326095931) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-26 10:35:24', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-22 13:43:55', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
