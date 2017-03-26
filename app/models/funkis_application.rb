@@ -5,6 +5,9 @@ class FunkisApplication < ApplicationRecord
   accepts_nested_attributes_for :funkis_shift_applications
 
   validate :has_valid_presale_option?, :is_not_locked?
+  validates :ssn, presence: true
+  validates :phone, presence: true
+  validates :tshirt_size, presence: true
 
   PRESALE_NONE = 0
   PRESALE_MH = 1
