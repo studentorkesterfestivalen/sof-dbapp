@@ -2,10 +2,6 @@ class FunkisShift < ApplicationRecord
   belongs_to :funkis_category, optional: true
   has_many :funkis_shift_applications
 
-  def applications
-    funkis_shift_applications.size
-  end
-
   def available?
     limit = ActiveFunkisShiftLimit.take[:active_limit]
 

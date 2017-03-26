@@ -516,7 +516,7 @@ end
 
 # THIS MUST ONLY BE DONE ONCE ON THE PRODUCTION DATABASE
 
-if funkis_categories.count == 0
+if FunkisCategory.count == 0
   FunkisCategory.delete_all
   FunkisShift.delete_all
   funkis_categories.each { |c| create_funkis_category *c }
