@@ -37,6 +37,10 @@ class FunkisApplication < ApplicationRecord
     return 3
   end
 
+  def completed?
+    terms_agreed?
+  end
+
   private
 
   def information_filled_in?

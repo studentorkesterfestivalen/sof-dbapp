@@ -12,6 +12,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     application.user = current_user
 
     application.save!
+    send_email_on_completion(application)
 
     redirect_to api_v1_funkis_application_url(application)
   end
@@ -38,6 +39,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     require_ownership application
 
     if application.update(application_params)
+      send_email_on_completion(application)
       redirect_to api_v1_funkis_application_url(application)
     else
       head :bad_request
@@ -49,6 +51,12 @@ class API::V1::FunkisApplicationController < ApplicationController
   end
 
   private
+
+  def send_email_on_completion(application)
+    if application.completed?
+      InformationMailer.funkis_confirmation(application).deliver_now
+    end
+  end
 
   def application_params
     if params[:item] and params[:item][:terms_agreed]

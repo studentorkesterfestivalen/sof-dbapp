@@ -57,6 +57,11 @@ class FunkisApplicationCreationTest < AuthenticatedIntegrationTest
     # Terms should be agreed
     assert application['terms_agreed_at'] <= DateTime.now
 
+    # Verify that a confirmation e-mail was sent
+    mail = ActionMailer::Base.deliveries.last
+    assert_equal 'no-reply@sof17.se', mail['from'].to_s
+    assert_equal 'test@sof17.se',     mail['to'].to_s
+
     put item_url, headers: auth_headers, params: {
         item: {
             ssn: '990101-9999'
