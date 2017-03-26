@@ -1,5 +1,10 @@
 class FunkisApplication < ApplicationRecord
   has_many :funkis_shift_applications
+  validate :has_valid_presale_option?
+
+  PRESALE_NONE = 0
+  PRESALE_MH = 1
+  PRESALE_UK = 2
 
   def ready_for_step?(step)
     case step
@@ -29,5 +34,13 @@ class FunkisApplication < ApplicationRecord
 
   def terms_agreed?
     not terms_agreed_at.nil?
+  end
+
+  def has_valid_presale_option?
+    unless presale_choice == PRESALE_NONE or
+           presale_choice == PRESALE_MH or
+           presale_choice == PRESALE_UK
+      errors[:base] << 'Ogiltigt val av förköp'
+    end
   end
 end
