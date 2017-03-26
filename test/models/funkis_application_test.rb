@@ -6,9 +6,7 @@ class FunkisApplicationTest < ActiveSupport::TestCase
 
     assert application.ready_for_step? 1
     assert_not application.ready_for_step? 2
-    assert_raises do
-      application.save
-    end
+    assert_not application.save
 
     application.ssn = '900101-0101'
     application.phone = '013176800'
