@@ -7,18 +7,18 @@
 one:
   day: Thursday
   time: 10:00 - 12:00
-  maximum_workers: 10
+  red_limit: 10
   points: 100
   funkis_category_id: one
 
 two:
   day: Thursday
   time: 12:00 - 14:00
-  maximum_workers: 5
+  red_limit: 5
   funkis_category_id: one
 
 three:
   day: Friday
   time: 08:00 - 12:00
-  maximum_workers: 3
+  red_limit: 3
   funkis_category_id: two
