@@ -13,38 +13,41 @@ class API::V1::UsersController < ApplicationController
     if params[:id].nil?
       render json: current_user,
              except: [
-                 :created_at,
-                 :updated_at,
-                 :permissions
+               :created_at,
+               :updated_at,
+               :permissions
              ],
              include: {
-                 case_cortege: {},
-                 cortege: {},
-                 orchestra: {},
-                 orchestra_signup: {
+               case_cortege: {},
+               cortege: {},
+               orchestra: {},
+               orchestra_signup: {
+                 include: [
+                   :orchestra
+                 ]
+               },
+               funkis_application: {
+                 include: [
+                   funkis_shift_applications: {
                      include: [
-                         :orchestra
+                       funkis_shift: {
+                         include: [
+                           :funkis_category
+                         ],
+                         except: [
+                           :maximum_workers
+                         ]
+                       }
                      ]
-                 },
-                 funkis_application: {
-                     include: [
-                         funkis_shift_applications: {
-                             include: [
-                                 funkis_shift: {
-                                     except: [
-                                         :maximum_workers
-                                     ]
-                                 }
-                             ]
-                         }
-                     ],
-                     methods: [
-                         :steps_completed
-                     ]
-                 }
+                   }
+                 ],
+                 methods: [
+                   :steps_completed
+                 ]
+               }
              },
              methods: [
-                 :is_lintek_member
+               :is_lintek_member
              ]
     else
       require_permission Permission::LIST_USERS
