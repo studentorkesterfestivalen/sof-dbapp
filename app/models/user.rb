@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    if provider == 'cas' and super.nil? and is_compatible_liu_student?
+    if is_compatible_liu_student? and super.nil?
       update_display_name
     end
 
@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   end
 
   def union
-    if provider == 'cas' and union_valid_thru.past? and is_compatible_liu_student?
+    if is_compatible_liu_student? and union_valid_thru.past?
       update_union
     end
 
@@ -54,10 +54,22 @@ class User < ActiveRecord::Base
     self[:union] == 'LinTek'
   end
 
+  def update_from_kobra!
+    return unless is_compatible_liu_student?
+
+    if self[:display_name].nil?
+      update_display_name
+    end
+
+    if self[:union].nil? or union_valid_thru.past?
+      update_union
+    end
+  end
+
   private
 
   def update_union
-    if provider == 'cas'
+    if is_liu_student?
       begin
         kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
         response = kobra.get_student(id: nickname, union: true)
@@ -71,10 +83,12 @@ class User < ActiveRecord::Base
 
         save!
       rescue Kobra::Client::NotFound
-        puts 'Failed to find student in Kobra, trying again tomorrow'
+        # Will try again tomorrow
+        FaultReport.send("Failed to find student in Kobra (id: #{nickname})")
         self[:union_valid_thru] = DateTime.now.at_end_of_day
       rescue
-        puts 'Failed to update union from Kobra, trying again in 10 minutes'
+        # Will try again in 10 minutes
+        FaultReport.send("Failed to update union from Kobra (id: #{nickname})")
         self[:union_valid_thru] = DateTime.now + 10.minutes
       end
     end
@@ -90,7 +104,7 @@ class User < ActiveRecord::Base
       self[:display_name] = response[:name]
       save!
     rescue
-      puts 'Failed to update name from Kobra'
+      FaultReport.send("Failed to update name from Kobra (id: #{nickname})")
     end
   end
 
@@ -106,6 +120,10 @@ class User < ActiveRecord::Base
   # Kobra doesn't seem to have any records for students with liu ids shorter than 8 characters,
   # from this assumption we avoid this lookup completely and increase performance
   def is_compatible_liu_student?
-    nickname.length >= 8
+    is_liu_student? and nickname.length >= 8
+  end
+
+  def is_liu_student?
+    provider == 'cas'
   end
 end

@@ -2,8 +2,6 @@
 
 one:
   title: MyString
-  active: false
 
 two:
   title: MyString
-  active: false

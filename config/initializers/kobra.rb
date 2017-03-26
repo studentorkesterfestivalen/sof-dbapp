@@ -1,16 +1,19 @@
+require 'kobra'
+
 # Configuration for Kobra integration
 Rails.application.config.kobra_api_key = ENV.fetch('KOBRA_API_KEY') {''}
 
-# Ensure Kobra integration is working before starting the server
-if ENV['DISABLE_KOBRA_CHECK'].nil?
-  require 'kobra'
+# Arbitrary LiU student used to verify Kobra functionality
+TEST_STUDENT = 'patsl736'
 
-  puts 'Verifying Kobra API key...'
 
+begin
   kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
-  kobra.get_student(id: 'patsl736', union: true)
-
-  puts 'Kobra check passed'
-else
-  puts 'WARNING: Kobra check disabled'
+  kobra.get_student(id: TEST_STUDENT, union: true)
+rescue Kobra::Client::AuthError
+  # API key is invalid, please configure another one as this is a permanent issue
+  FaultReport.send('Failed to authenticate with Kobra')
+rescue
+  # Unable to communicate with Kobra at the moment, this could very well be a temporary issue
+  FaultReport.send('Failed to connect to Kobra')
 end
