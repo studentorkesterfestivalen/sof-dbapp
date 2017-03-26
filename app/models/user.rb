@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_one :orchestra_signup
   has_one :cortege
   has_one :case_cortege
+  has_one :funkis_application
 
   validate :liu_accounts_must_use_cas
 
