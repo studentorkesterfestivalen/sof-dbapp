@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326114755) do
+ActiveRecord::Schema.define(version: 20170326134919) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -93,15 +93,16 @@ ActiveRecord::Schema.define(version: 20170326114755) do
   end
 
   create_table "funkis_shifts", force: :cascade do |t|
-    t.string   "day",                            null: false
-    t.string   "time",                           null: false
+    t.string   "day",                             null: false
+    t.string   "time",                            null: false
     t.integer  "points"
     t.integer  "funkis_category_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "red_limit",          default: 0, null: false
-    t.integer  "yellow_limit",       default: 0, null: false
-    t.integer  "green_limit",        default: 0, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "red_limit",          default: 0,  null: false
+    t.integer  "yellow_limit",       default: 0,  null: false
+    t.integer  "green_limit",        default: 0,  null: false
+    t.string   "date",               default: "", null: false
     t.index ["funkis_category_id"], name: "index_funkis_shifts_on_funkis_category_id"
   end
 
