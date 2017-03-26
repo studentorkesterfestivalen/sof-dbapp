@@ -3,6 +3,6 @@ class FunkisCategory < ApplicationRecord
   accepts_nested_attributes_for :funkis_shifts
 
   def available_shifts
-    funkis_shifts.select { |p| p.available?}
+    funkis_shifts.select { |p| p.available? }
   end
 end

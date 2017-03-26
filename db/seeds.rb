@@ -217,7 +217,7 @@ funkis_categories = [
          {
              day: 'Söndag',
              date: '14/5',
-             time: '07:00-15:00',
+             time: '07:00-13:00',
              points: 50,
              red_limit: 2,
              yellow_limit: 2,
@@ -226,7 +226,7 @@ funkis_categories = [
          {
              day: 'Söndag',
              date: '14/5',
-             time: '15:00-19:00',
+             time: '13:00-19:00',
              points: 50,
              red_limit: 2,
              yellow_limit: 2,
