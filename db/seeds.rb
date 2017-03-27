@@ -58,7 +58,7 @@ test_menu_items.each { |c| create_menu_item *c }
 
 
 funkis_categories = [
-    ['Mästerkatt', 'Insatsputte',
+    ['Mästerkatt', 'Insatsfunkis',
      'Anser du dig vara en räddare i nöden? Insatsfunkisarna är där de behövs under festivalen och de klarar allt från att möta besökare i entrén till att utfordra dem med mat och dryck. OBS: De pass markerade med en stjärna ger 100p.',
     '50/100 p', [
             {
