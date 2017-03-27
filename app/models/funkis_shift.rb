@@ -13,4 +13,9 @@ class FunkisShift < ApplicationRecord
       funkis_shift_applications.count < green_limit
     end
   end
+
+  # Used by the controller to return the value without a questionmark in the key
+  def available
+    available?
+  end
 end
