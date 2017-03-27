@@ -16,8 +16,8 @@ test_menu_items = [
     ['Kårtege', '#', true, 'cortege', 0, true, [
         ['Om Kårtegen', '/cortege', true, '', 0, true, []],
         ['Om Casekårtege', '/case_cortege', true, '', 0, true, []],
-        #['Kårtegeanmälan', '/cortege/interest', true, '', 0, true, []],
-        ['Casekårtegeanmälan', '/case_cortege/new', true, '', 0, true, []],
+        ['Kårtegeanmälan', '/cortege/interest', false, '', 0, true, []],
+        ['Casekårtegeanmälan', '/case_cortege/new', false, '', 0, true, []],
     ]],
     ['Jobba på SOF', '#', true, 'funkis', 0, true, [
         ['Förmåner', '/funkis', true, '', 0, true, []],
@@ -58,7 +58,7 @@ test_menu_items.each { |c| create_menu_item *c }
 
 
 funkis_categories = [
-    ['Mästerkatt', 'Insatsputte',
+    ['Mästerkatt', 'Insatsfunkis',
      'Anser du dig vara en räddare i nöden? Insatsfunkisarna är där de behövs under festivalen och de klarar allt från att möta besökare i entrén till att utfordra dem med mat och dryck. OBS: De pass markerade med en stjärna ger 100p.',
     '50/100 p', [
             {
@@ -518,14 +518,15 @@ end
 # Still enabled on development and test so that its easy to test stuff.
 
 if Rails.env.development? or Rails.env.test?
-    FunkisCategory.delete_all
-    FunkisShift.delete_all
-    funkis_categories.each { |c| create_funkis_category *c }
+  FunkisApplication.delete_all
+  FunkisCategory.delete_all
+  FunkisShift.delete_all
+  funkis_categories.each { |c| create_funkis_category *c }
 
-    ActiveFunkisShiftLimit.delete_all
-    ActiveFunkisShiftLimit.create!(
-        active_limit: 0
-    )
+  ActiveFunkisShiftLimit.delete_all
+  ActiveFunkisShiftLimit.create!(
+      active_limit: 0
+  )
 end
 
 
