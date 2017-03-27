@@ -1,5 +1,12 @@
 class API::V1::FunkisController < ApplicationController
   def index
+
+    # If all shifts are taken for the current limit, raise the limit
+    all_shifts = FunkisShift.all
+    unless all_shifts.any? { |x| x.available? }
+      ActiveFunkisShiftLimit.raise_limit
+    end
+
     render :json => FunkisCategory.all, methods: [:available_shifts]
   end
 

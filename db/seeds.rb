@@ -515,18 +515,17 @@ end
 
 
 # THIS MUST ONLY BE DONE ONCE ON THE PRODUCTION DATABASE
+# Still enabled on development and test so that its easy to test stuff.
 
-if FunkisCategory.count == 0
-  FunkisCategory.delete_all
-  FunkisShift.delete_all
-  funkis_categories.each { |c| create_funkis_category *c }
-end
+if Rails.env.development? or Rails.env.test?
+    FunkisCategory.delete_all
+    FunkisShift.delete_all
+    funkis_categories.each { |c| create_funkis_category *c }
 
-if ActiveFunkisShiftLimit.count == 0
-  ActiveFunkisShiftLimit.delete_all
-  ActiveFunkisShiftLimit.create!(
-      active_limit: 0
-  )
+    ActiveFunkisShiftLimit.delete_all
+    ActiveFunkisShiftLimit.create!(
+        active_limit: 0
+    )
 end
 
 

@@ -3,11 +3,11 @@ class FunkisShift < ApplicationRecord
   has_many :funkis_shift_applications
 
   def available?
-    limit = ActiveFunkisShiftLimit.take[:active_limit]
+    limit = ActiveFunkisShiftLimit.current
 
-    if limit == 0
+    if limit == 'red'
       funkis_shift_applications.count < red_limit
-    elsif limit == 1
+    elsif limit == 'yellow'
       funkis_shift_applications.count < yellow_limit
     else
       funkis_shift_applications.count < green_limit
