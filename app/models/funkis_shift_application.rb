@@ -1,6 +1,6 @@
 class FunkisShiftApplication < ApplicationRecord
   belongs_to :funkis_shift
-  belongs_to :funkis_application
+  belongs_to :funkis_application, optional: true
 
   validate :does_not_exceed_limit
 

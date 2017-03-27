@@ -42,6 +42,7 @@ class API::V1::FunkisApplicationController < ApplicationController
       send_email_on_completion(application)
       redirect_to api_v1_funkis_application_url(application)
     else
+      remove_unavailable_shifts application
       head :bad_request
     end
   end
@@ -55,6 +56,14 @@ class API::V1::FunkisApplicationController < ApplicationController
   def send_email_on_completion(application)
     if application.completed?
       InformationMailer.funkis_confirmation(application).deliver_now
+    end
+  end
+
+  def remove_unavailable_shifts(application)
+    application.funkis_shift_applications.each do |shift|
+      unless shift.funkis_shift.available?
+        shift.destroy
+      end
     end
   end
 
