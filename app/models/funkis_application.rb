@@ -4,7 +4,7 @@ class FunkisApplication < ApplicationRecord
 
   accepts_nested_attributes_for :funkis_shift_applications, allow_destroy: true
 
-  validate :has_valid_presale_option?, :is_not_locked?
+  validate :has_valid_presale_option?, :is_not_locked?, :completed_with_available_shifts?
   validates :ssn, presence: true
   validates :phone, presence: true
   validates :tshirt_size, presence: true
@@ -66,6 +66,12 @@ class FunkisApplication < ApplicationRecord
   def is_not_locked?
     unless terms_agreed_at_was.nil?
       errors[:base] << 'Anmälan redan gjord'
+    end
+  end
+
+  def completed_with_available_shifts?
+    if terms_agreed? and funkis_shift_applications.any? {|x| not x.funkis_shift.available?}
+      errors[:base] << 'Ett eller fler pass är fulla'
     end
   end
 end

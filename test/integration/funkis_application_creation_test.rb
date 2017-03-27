@@ -31,6 +31,9 @@ class FunkisApplicationCreationTest < AuthenticatedIntegrationTest
             funkis_shift_applications_attributes: [
                 {
                     funkis_shift_id: funkis_shifts(:one).id
+                },
+                {
+                    funkis_shift_id: funkis_shifts(:four).id
                 }
             ]
         }
@@ -41,7 +44,38 @@ class FunkisApplicationCreationTest < AuthenticatedIntegrationTest
     get redirected_url, headers: auth_headers
     application = JSON.parse response.body
 
-    assert_equal 'Thursday', application['funkis_shift_applications'].first['funkis_shift']['day']
+    assert_equal 'Thursday', application['funkis_shift_applications'][0]['funkis_shift']['day']
+    assert_equal 'Friday',  application['funkis_shift_applications'][1]['funkis_shift']['day']
+
+    # Remove one shift, keep the shift with limit=1
+    put item_url, headers: auth_headers, params: {
+        item: {
+            funkis_shift_applications_attributes: [
+                {
+                    iter: 1,
+                    id: application['funkis_shift_applications'][0]['id'],
+                    _destroy: 1
+                },
+                {
+                    iter: 1,
+                    id: application['funkis_shift_applications'][1]['id'],
+                    _destroy: 1
+                },
+                {
+                    iter: 1,
+                    'funkis_shift_id': funkis_shifts(:four).id
+                }
+            ]
+        }
+    }
+
+    assert_response :redirect
+
+    get redirected_url, headers: auth_headers
+    application = JSON.parse response.body
+
+    assert_equal 1, application['funkis_shift_applications'].count
+    assert_equal 'Friday', application['funkis_shift_applications'][0]['funkis_shift']['day']
 
     put item_url, headers: auth_headers, params: {
         item: {

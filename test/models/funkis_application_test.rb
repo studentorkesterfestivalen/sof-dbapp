@@ -37,28 +37,30 @@ class FunkisApplicationTest < ActiveSupport::TestCase
     assert_not application.save
   end
 
-  test 'shift limit' do
-    application = prepare_application
-    assert application.save
+  test 'application creation when two users want the same last shift' do
+    first = prepare_application
+    second = prepare_application
+    assert first.save
+    assert second.save
 
-    work_shift = funkis_shifts(:three)
-
-    # Fill up first limit
-    (1..work_shift.red_limit).each do
-      shift = FunkisShiftApplication.new
-      shift.funkis_shift = funkis_shifts(:three)
-      application.funkis_shift_applications.push shift
-
-      assert application.save
-    end
-
-    # Attempt to exceed limit
+    # Both user selects same shift with limit=1
     shift = FunkisShiftApplication.new
-    shift.funkis_shift = funkis_shifts(:three)
-    application.funkis_shift_applications.push shift
+    shift.funkis_shift = funkis_shifts(:four)
+    first.funkis_shift_applications.push shift
+    assert first.save
 
-    # ...and expect to fail
-    assert_not application.save
+    shift = FunkisShiftApplication.new
+    shift.funkis_shift = funkis_shifts(:four)
+    second.funkis_shift_applications.push shift
+    assert second.save
+
+    # First user completes signup successfully
+    first.terms_agreed_at = DateTime.now
+    assert first.save
+
+    # Second user is unable to complete signup
+    second.terms_agreed_at = DateTime.now
+    assert_not second.save
   end
 
   private

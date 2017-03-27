@@ -6,16 +6,23 @@ class FunkisShift < ApplicationRecord
     limit = ActiveFunkisShiftLimit.current
 
     if limit == 'red'
-      funkis_shift_applications.count < red_limit
+      completed_applications_count < red_limit
     elsif limit == 'yellow'
-      funkis_shift_applications.count < yellow_limit
+      completed_applications_count < yellow_limit
     else
-      funkis_shift_applications.count < green_limit
+      completed_applications_count < green_limit
     end
   end
 
   # Used by the controller to return the value without a questionmark in the key
   def available
     available?
+  end
+
+  private
+
+  def completed_applications_count
+    completed_applications = funkis_shift_applications.all.select {|x| x.funkis_application.completed?}
+    completed_applications.count
   end
 end
