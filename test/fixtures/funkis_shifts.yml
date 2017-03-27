@@ -22,3 +22,9 @@ three:
   time: 08:00 - 12:00
   red_limit: 3
   funkis_category_id: two
+
+four:
+  day: Friday
+  time: 08:00 - 12:00
+  red_limit: 1
+  funkis_category_id: two
