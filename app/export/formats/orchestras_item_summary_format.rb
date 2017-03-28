@@ -2,7 +2,11 @@ module Formats
   class OrchestrasItemSummaryFormat
     def initialize
       @total = {
-          :dormitory => 0,
+          :dormitory => {
+              :thursday => 0,
+              :friday => 0,
+              :saturday => 0
+          },
           :medal => 0,
           :tag => 0,
           :tshirt => 0,
@@ -18,14 +22,14 @@ module Formats
               :saturday => 0
           },
           :consecutive_10 => 0,
-          :attended_25 => 0
+          :attended_25 => 0,
       }
     end
 
     def column_names
       {
           :name => 'Orkester',
-          :dormitory => 'Sovsal',
+          :dormitory => 'Sovsalsdagar',
           :medal => 'Medaljer',
           :tag => 'Märken',
           :tshirt => 'T-shirt',
@@ -33,7 +37,8 @@ module Formats
           :orchestra_food_ticket => 'Matbiljetter',
           :is_late_registration => 'Sen anmälan',
           :consecutive_10 => '10 år i rad',
-          :attended_25 => '25:e året'
+          :attended_25 => '25:e året',
+          :user_id => 'Kontaktperson'
       }
     end
 
@@ -45,7 +50,7 @@ module Formats
 
     def format_value(column, value)
       case column
-        when :orchestra_ticket, :orchestra_food_ticket
+        when :orchestra_ticket, :orchestra_food_ticket, :dormitory
           total_ticket_str(value)
         else
           value
@@ -56,13 +61,15 @@ module Formats
       case column
         when :name
           item.send(column)
+        when :user_id
+          User.where(id: item.send(column)).pluck('email')[0]
         else
           value_for_item(item, column)
       end
     end
 
     def value_for_item(item, column)
-      if column == :orchestra_ticket || column == :orchestra_food_ticket
+      if column == :orchestra_ticket || column == :orchestra_food_ticket || column == :dormitory
         value = {
             :thursday => 0,
             :friday => 0,
@@ -74,12 +81,16 @@ module Formats
 
       item.orchestra_signups.each do |signup|
         case column
-          when :dormitory, :is_late_registration, :consecutive_10, :attended_25
+          when :is_late_registration, :consecutive_10, :attended_25
             value += 1 if signup.send(column)
           when :medal, :tag, :tshirt
             value += item_article(signup, column)
           when :orchestra_food_ticket, :orchestra_ticket
-            increase_ticket_total(value, ticket_count_increase_for(signup.send(column).kind))
+              increase_ticket_total(value, ticket_count_increase_for(signup.send(column).kind))
+          when :dormitory
+            if signup.send(column)
+              increase_ticket_total(value, ticket_count_increase_for(signup.send(:orchestra_ticket).kind))
+            end
           else
             value += signup.send(column)
         end
@@ -94,7 +105,6 @@ module Formats
     private
 
     def increase_total(column, value)
-      puts "Value: #{value}"
       if @total.has_key? column
         if value.is_a? Numeric
           @total[column] += value
@@ -110,7 +120,7 @@ module Formats
       case col
         when :name
           'TOTALT'
-        when :orchestra_ticket, :orchestra_food_ticket
+        when :orchestra_ticket, :orchestra_food_ticket, :dormitory
           total_ticket_str @total[col]
         else
           @total[col]
