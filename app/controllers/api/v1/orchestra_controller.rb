@@ -42,6 +42,13 @@ class API::V1::OrchestraController < ApplicationController
     render :plain => CSVExport.render_csv(orchestras, Formats::OrchestrasItemSummaryFormat)
   end
 
+  def extra_performances
+    orchestra_signups = OrchestraSignup.where.not(other_performances: ['', nil])
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+
+    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraPerformanceFormat)
+  end
+
   def update
     orchestra = Orchestra.find(params[:id])
     require_ownership orchestra

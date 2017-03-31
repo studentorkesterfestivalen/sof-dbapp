@@ -16,6 +16,9 @@ Rails.application.routes.draw do
         collection do
           get 'item_summary', action: 'item_summary'
         end
+        collection do
+          get 'extra_performances', action: 'extra_performances'
+        end
       end
       resources :orchestra_signup do
         collection do
