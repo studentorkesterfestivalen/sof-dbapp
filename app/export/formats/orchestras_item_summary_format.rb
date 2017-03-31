@@ -41,7 +41,7 @@ module Formats
           :user_id => 'Kontaktperson'
       }
     end
-    #
+
     def data_for(item, column)
       value = value_for(item, column)
       increase_total(column, value)
