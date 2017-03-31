@@ -43,8 +43,8 @@ class API::V1::OrchestraController < ApplicationController
   end
 
   def extra_performances
-    orchestra_signups = OrchestraSignup.where.not(other_performances: ['', nil])
-    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+    orchestra_signups = OrchestraSignup.where.not(other_performances: ['', nil]).order(:orchestra_id)
+     require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraPerformanceFormat)
   end
