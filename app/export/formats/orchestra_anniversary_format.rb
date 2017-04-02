@@ -5,7 +5,7 @@ module Formats
           :user_id => 'Orkestermedlem',
           :orchestra_id => 'Orkester',
           :email => 'Mailadress',
-          :consecutive_10 => '10 år irad',
+          :consecutive_10 => '10 år i rad',
           :attended_25 => '25e året'
       }
     end
