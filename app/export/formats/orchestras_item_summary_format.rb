@@ -23,6 +23,13 @@ module Formats
           },
           :consecutive_10 => 0,
           :attended_25 => 0,
+          :instrument_size => {
+              :none => 0,
+              :very_small => 0,
+              :small => 0,
+              :medium => 0,
+              :large => 0
+          }
       }
     end
 
@@ -38,7 +45,8 @@ module Formats
           :is_late_registration => 'Sen anmälan',
           :consecutive_10 => '10 år i rad',
           :attended_25 => '25:e året',
-          :user_id => 'Kontaktperson'
+          :user_id => 'Kontaktperson',
+          :instrument_size => 'Instrumentstorlek'
       }
     end
 
@@ -52,6 +60,8 @@ module Formats
       case column
         when :orchestra_ticket, :orchestra_food_ticket, :dormitory
           total_ticket_str(value)
+        when :instrument_size
+          total_instrument_str(value)
         else
           value
       end
@@ -75,10 +85,22 @@ module Formats
             :friday => 0,
             :saturday => 0
         }
+      elsif column == :instrument_size
+        value = {
+            :none => 0,
+            :very_small => 0,
+            :small => 0,
+            :medium => 0,
+            :large => 0
+        }
       else
         value = 0
       end
 
+      # Note, this is very bad way to loop through it.
+      # This makes us loop through all signups once for each column instead of
+      # looping once and handling all columns at once.
+      # We could loop once and increase the total accordingly instead.
       item.orchestra_signups.each do |signup|
         case column
           when :is_late_registration, :consecutive_10, :attended_25
@@ -86,11 +108,13 @@ module Formats
           when :medal, :tag, :tshirt
             value += item_article(signup, column)
           when :orchestra_food_ticket, :orchestra_ticket
-              increase_ticket_total(value, ticket_count_increase_for(signup.send(column).kind))
+            increase_hash_total(value, ticket_count_increase_for(signup.send(column).kind))
           when :dormitory
             if signup.send(column)
-              increase_ticket_total(value, ticket_count_increase_for(signup.send(:orchestra_ticket).kind))
+              increase_hash_total(value, ticket_count_increase_for(signup.send(:orchestra_ticket).kind))
             end
+          when :instrument_size
+            increase_hash_total(value, instrument_size_increase_for(signup.send(column)))
           else
             value += signup.send(column)
         end
@@ -109,7 +133,7 @@ module Formats
         if value.is_a? Numeric
           @total[column] += value
         elsif value.is_a? Hash
-          increase_ticket_total(@total[column], value)
+          increase_hash_total(@total[column], value)
         elsif value
           @total[column] += 1
         end
@@ -122,12 +146,14 @@ module Formats
           'TOTALT'
         when :orchestra_ticket, :orchestra_food_ticket, :dormitory
           total_ticket_str @total[col]
+        when :instrument_size
+          total_instrument_str @total[col]
         else
           @total[col]
       end
     end
 
-    def increase_ticket_total(total_field, increments)
+    def increase_hash_total(total_field, increments)
       increments.each { |k,v| total_field[k] += v }
     end
 
@@ -183,12 +209,38 @@ module Formats
       increments[kind]
     end
 
+    def instrument_size_increase_for(kind)
+      increments = {
+          0 => {
+              :none => 1
+          },
+          1 => {
+              :very_small => 1
+          },
+          2 => {
+              :small => 1
+          },
+          3 => {
+              :medium => 1
+          },
+          4 => {
+              :large => 1
+          }
+      }
+
+      increments[kind]
+    end
+
     def yes_no(value)
       value ? 'Ja' : 'Nej'
     end
 
     def total_ticket_str(total_field)
       "Torsdag: #{total_field[:thursday]}, Fredag: #{total_field[:friday]}, Lördag: #{total_field[:saturday]}"
+    end
+
+    def total_instrument_str(total_field)
+      "Inget: #{total_field[:none]}, Väldigt litet: #{total_field[:very_small]}, Litet: #{total_field[:small]}, Mellan: #{total_field[:medium]}, Stort: #{total_field[:large]}"
     end
   end
 end
