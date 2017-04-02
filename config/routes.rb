@@ -19,6 +19,9 @@ Rails.application.routes.draw do
         collection do
           get 'extra_performances', action: 'extra_performances'
         end
+        collection do
+          get 'anniversary', action: 'anniversary'
+        end
       end
       resources :orchestra_signup do
         collection do
