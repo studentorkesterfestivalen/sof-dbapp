@@ -63,6 +63,21 @@ class FunkisApplicationTest < ActiveSupport::TestCase
     assert_not second.save
   end
 
+  test 'destroying applications remove their shift applications' do
+    application = prepare_application
+
+    shift = FunkisShiftApplication.new
+    shift.funkis_shift = funkis_shifts(:one)
+    application.funkis_shift_applications.push shift
+    assert application.save
+
+    assert_equal 1, FunkisShiftApplication.count
+
+    application.destroy!
+
+    assert_equal 0, FunkisShiftApplication.count
+  end
+
   private
 
   def prepare_application

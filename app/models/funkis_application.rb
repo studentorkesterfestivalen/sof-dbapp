@@ -1,6 +1,6 @@
 class FunkisApplication < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :funkis_shift_applications
+  has_many :funkis_shift_applications, dependent: :destroy
 
   accepts_nested_attributes_for :funkis_shift_applications, allow_destroy: true
 
