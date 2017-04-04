@@ -47,8 +47,13 @@ class API::V1::FunkisApplicationController < ApplicationController
     end
   end
 
-  def delete
-    raise 'Not implemented'
+  def destroy
+    require_permission Permission::ALL
+
+    application = FunkisApplication.find(params[:id])
+    application.destroy!
+
+    head :no_content
   end
 
   private
