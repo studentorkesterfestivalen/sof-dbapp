@@ -19,10 +19,8 @@ class FunkisShift < ApplicationRecord
     available?
   end
 
-  private
-
   def completed_applications_count
-    completed_applications = funkis_shift_applications.all.select {|x| x.funkis_application.completed?}
+    completed_applications = funkis_shift_applications.select {|x| x.funkis_application.completed?}
     completed_applications.count
   end
 end

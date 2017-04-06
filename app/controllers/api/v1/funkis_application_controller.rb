@@ -4,7 +4,16 @@ class API::V1::FunkisApplicationController < ApplicationController
   include ViewPermissionConcern
 
   def index
-    raise 'Not implemented'
+    require_permission Permission::LIST_FUNKIS_APPLICATIONS
+
+    categories = FunkisCategory.includes(funkis_shifts: [:funkis_shift_applications])
+    render json: categories, include: {
+      funkis_shifts: {
+          methods: [
+              :completed_applications_count
+          ]
+      }
+    }
   end
 
   def create
