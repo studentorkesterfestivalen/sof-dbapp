@@ -335,7 +335,7 @@ module Formats
     end
 
     def total_tshirt_str(total_field)
-      "Dam: XS: #{total_field[:womenxs]}, S: #{total_field[:womens]}, M: #{total_field[:womenm]}, L: #{total_field[:womenl]}, XL: #{total_field[:womenxl]}, XXL: #{total_field[:womenxxl]}, XXXL: #{total_field[:womenxxxl]} -- Herr: XS: #{total_field[:manxs]}, S: #{total_field[:mans]}, M: #{total_field[:manm]}, L: #{total_field[:manl]}, XL: #{total_field[:manxl]}, XXL: #{total_field[:manxxl]}, XXXL: #{total_field[:manxxxl]}"
+      "Dam/Herr: XS: #{total_field[:womenxs]}/#{total_field[:manxs]}, S: #{total_field[:womens]}/#{total_field[:mans]}, M: #{total_field[:womenm]}/#{total_field[:manm]}, L: #{total_field[:womenl]}/#{total_field[:manl]}, XL: #{total_field[:womenxl]}/#{total_field[:manxl]}, XXL: #{total_field[:womenxxl]}/#{total_field[:manxxl]}, XXXL: #{total_field[:womenxxxl]}/#{total_field[:manxxxl]}"
     end
   end
 end
