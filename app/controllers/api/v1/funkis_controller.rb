@@ -7,7 +7,7 @@ class API::V1::FunkisController < ApplicationController
       ActiveFunkisShiftLimit.raise_limit
     end
 
-    render :json => FunkisCategory.all, include: {
+    render :json => FunkisCategory.all.order(:id), include: {
         funkis_shifts: {
             methods: [:available]
         }

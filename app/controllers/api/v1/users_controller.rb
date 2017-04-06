@@ -53,7 +53,7 @@ class API::V1::UsersController < ApplicationController
       require_permission Permission::LIST_USERS
 
       user = User.find(params[:id])
-      render json: user
+      render json: user, include: [:funkis_application]
     end
   end
 

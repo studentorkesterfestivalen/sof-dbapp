@@ -13,7 +13,7 @@ class FunkisApplicationTest < ActiveSupport::TestCase
     application.tshirt_size = 'Female XS'
     application.allergies = 'Jordnötter'
     application.drivers_license = true
-    application.presale_choice = FunkisApplication::PRESALE_NONE
+    application.presale_choice = FunkisApplication::PRESALE_MH
 
     assert application.ready_for_step? 2
     assert_not application.ready_for_step? 3
@@ -65,6 +65,21 @@ class FunkisApplicationTest < ActiveSupport::TestCase
     # Second user is unable to complete signup
     second.terms_agreed_at = DateTime.now
     assert_not second.save
+  end
+
+  test 'destroying applications remove their shift applications' do
+    application = prepare_application
+
+    shift = FunkisShiftApplication.new
+    shift.funkis_shift = funkis_shifts(:one)
+    application.funkis_shift_applications.push shift
+    assert application.save
+
+    assert_equal 1, FunkisShiftApplication.count
+
+    application.destroy!
+
+    assert_equal 0, FunkisShiftApplication.count
   end
 
   private
