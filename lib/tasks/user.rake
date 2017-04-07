@@ -7,7 +7,7 @@ namespace :user do
 
     if ARGV[1]
       puts "Trying to find user with uid: #{ARGV[1]}"
-      user = User.where('confirmation_token IS NOT NULL', uid: ARGV[1])
+      user = User.where(uid: ARGV[1]).where.not(confirmation_token: nil).first
       if user
         puts "Resending confirmation mail to #{ARGV[1]}"
         user.send_confirmation_instructions
