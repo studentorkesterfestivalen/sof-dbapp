@@ -54,6 +54,10 @@ class FunkisApplicationTest < ActiveSupport::TestCase
     second.funkis_shift_applications.push shift
     assert second.save
 
+    # Reload attributes and associations in applications from database (more similar to real use)
+    first.reload
+    second.reload
+
     # First user completes signup successfully
     first.terms_agreed_at = DateTime.now
     assert first.save

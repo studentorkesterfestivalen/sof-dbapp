@@ -36,7 +36,8 @@ test_menu_items = [
         ['Hantera användare', '/manage/users', true, '', Permission::LIST_USERS, true, []],
         ['Hantera orkestrar', '/manage/orchestras', true, '', Permission::LIST_ORCHESTRA_SIGNUPS, true, []],
         ['Hantera kårteger', '/manage/corteges', true, '', Permission::LIST_CORTEGE_APPLICATIONS, true, []],
-        ['Hantera casekårteger', '/manage/case_corteges', true, '', Permission::LIST_CORTEGE_APPLICATIONS, true, []]
+        ['Hantera casekårteger', '/manage/case_corteges', true, '', Permission::LIST_CORTEGE_APPLICATIONS, true, []],
+        ['Funkis-statistik', '/manage/funkis', true, '', Permission::LIST_FUNKIS_APPLICATIONS, true, []]
     ]]
 ]
 
