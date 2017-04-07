@@ -274,52 +274,40 @@ module Formats
     end
 
     def tshirt_increase_for(kind)
-      increments = {
-          'Dam XS' => {
-              :womenxs => 1
-          },
-          'Dam S' => {
-              :womens => 1
-          },
-          'Dam M' => {
-              :womenm => 1
-          },
-          'Dam L' => {
-              :womenl => 1
-          },
-          'Dam XL' => {
-              :womenxl => 1
-          },
-          'Dam XXL' => {
-              :womenxxl => 1
-          },
-          'Dam XXXL' => {
-              :womenxxxl => 1
-          },
-          'Herr XS' => {
-              :manxs => 1
-          },
-          'Herr S' => {
-              :mans => 1
-          },
-          'Herr M' => {
-              :manm => 1
-          },
-          'Herr L' => {
-              :manl => 1
-          },
-          'Herr XL' => {
-              :manxl => 1
-          },
-          'Herr XXL' => {
-              :manxxl => 1
-          },
-          'Herr XXXL' => {
-              :manxxxl => 1
-          }
-      }
+      case kind
+        when 'Dam XS', 'Female XS'
+          {womenxs: 1}
+        when 'Dam S', 'Female S'
+          {womens: 1}
+        when 'Dam M', 'Female M'
+          {womenm: 1}
+        when 'Dam L', 'Female L'
+          {womenl: 1}
+        when 'Dam XL', 'Female XL'
+          {womenxl: 1}
+        when 'Dam XXL', 'Female XXL'
+          {womenxxl: 1}
+        when 'Dam XXXL', 'Female XXXL'
+          {womenxxxl: 1}
 
-      increments[kind]
+        when 'Herr XS', 'Male XS'
+          {manxs: 1}
+        when 'Herr S', 'Male S'
+          {mans: 1}
+        when 'Herr M', 'Male M'
+          {manm: 1}
+        when 'Herr L', 'Male L'
+          {manl: 1}
+        when 'Herr XL', 'Male XL'
+          {manxl: 1}
+        when 'Herr XXL', 'Male XXL'
+          {manxxl: 1}
+        when 'Herr XXXL', 'Male XXXL'
+          {manxxxl: 1}
+        else
+          FaultReport.send("Found unknown t-shirt size: #{kind}")
+          {}
+      end
     end
 
     def yes_no(value)
