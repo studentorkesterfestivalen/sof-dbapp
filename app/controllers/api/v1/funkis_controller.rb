@@ -14,6 +14,10 @@ class API::V1::FunkisController < ApplicationController
     }
   end
 
+  def all_applications
+    funkis_applications = FunkisShift.all.order(:funkis_category_id)
+  end
+
   def create
     raise 'Not implemented'
   end
