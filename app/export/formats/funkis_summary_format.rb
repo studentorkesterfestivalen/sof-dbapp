@@ -4,28 +4,31 @@ module Formats
       {
           :name => 'Kategori',
           :funkis_name => 'Funkisnamn',
-          :user_id => 'Orkestermedlem',
-          :orchestra_id => 'Orkester',
-          :email => 'Mailadress',
-          :consecutive_10 => '10 år i rad',
-          :attended_25 => '25e året'
+          :points => 'Poäng',
+          :date => 'Datum',
+          :day => 'Dag',
+          :time => 'Tid',
+          :red_limit => 'Röd gräns',
+          :yellow_limit => 'Gul gräns',
+          :green_limit => 'Grön gräns',
+          :applicatans => 'Funkisar',
       }
     end
 
-    def data_for(item, column)3
+    def data_for(item, column)
       value_for(item, column)
     end
 
     def value_for(item, column)
       case column
-        when :orchestra_id
-          Orchestra.where(id: item.send(column)).pluck('name')[0]
-        when :user_id
-          User.where(id: item.user_id).pluck('display_name')[0]
-        when :email
-          User.where(id: item.user_id).pluck('email')[0]
+        when :name
+          FunkisCategory.where(:name => item.send(column)).pluck('name').first
+        when :funkis_name
+
+        when :points
+
         else
-          yes_no(item.send(column))
+          false
       end
     end
 

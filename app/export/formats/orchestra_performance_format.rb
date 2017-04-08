@@ -16,9 +16,9 @@ module Formats
     def value_for(item, column)
       case column
         when :orchestra_id
-          Orchestra.where(id: item.send(column)).pluck('name')[0]
+          Orchestra.where(id: item.send(column)).pluck(:name).first
         when :user_id
-          User.where(id: item.user_id).pluck('display_name')[0]
+          User.where(id: item.user_id).pluck(:display_name).first
         else
           item.send(column)
       end
