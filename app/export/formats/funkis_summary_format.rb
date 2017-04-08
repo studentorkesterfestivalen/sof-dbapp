@@ -2,6 +2,8 @@ module Formats
   class FunkisSummaryFormat
     def column_names
       {
+          :name => 'Kategori',
+          :funkis_name => 'Funkisnamn',
           :user_id => 'Orkestermedlem',
           :orchestra_id => 'Orkester',
           :email => 'Mailadress',
@@ -10,7 +12,7 @@ module Formats
       }
     end
 
-    def data_for(item, column)
+    def data_for(item, column)3
       value_for(item, column)
     end
 
