@@ -32,7 +32,28 @@ class API::V1::OrchestraController < ApplicationController
     orchestra = Orchestra.find(params[:id])
     require_ownership_or_permission orchestra, Permission::LIST_ORCHESTRA_SIGNUPS
 
-    render :text => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
+    render :plain => CSVExport.render_csv(orchestra.orchestra_signups, Formats::OrchestraLeaderFormat)
+  end
+
+  def item_summary
+    orchestras = Orchestra.all
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+
+    render :plain => CSVExport.render_csv(orchestras, Formats::OrchestrasItemSummaryFormat)
+  end
+
+  def extra_performances
+    orchestra_signups = OrchestraSignup.where.not(other_performances: ['', nil]).order(:orchestra_id)
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+
+    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraPerformanceFormat)
+  end
+
+  def anniversary
+    orchestra_signups = OrchestraSignup.where.not(consecutive_10: [false, nil]).or(OrchestraSignup.where.not(attended_25: [false, nil])).order(:orchestra_id)
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+
+    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraAnniversaryFormat)
   end
 
   def update
