@@ -65,12 +65,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     head :no_content
   end
 
-  def export_applications_statistics
-    require_permission Permission::LIST_FUNKIS_APPLICATIONS
 
-    funkis_shifts = FunkisShift.all.order(:funkis_category_id)
-    render :plain => CSVExport.render_csv(funkis_shifts, Formats::FunkisSummaryFormat)
-  end
 
   private
 

@@ -11,7 +11,7 @@ module Formats
           :red_limit => 'Röd gräns',
           :yellow_limit => 'Gul gräns',
           :green_limit => 'Grön gräns',
-          :applicatans => 'Funkisar',
+          :applicants => 'Anmälda Funkisar',
       }
     end
 
@@ -22,13 +22,13 @@ module Formats
     def value_for(item, column)
       case column
         when :name
-          FunkisCategory.where(:name => item.send(column)).pluck('name').first
+          item.funkis_category.name
         when :funkis_name
-
-        when :points
-
+          item.funkis_category.funkis_name
+        when :applicants
+          'temp'
         else
-          false
+          item.send(column)
       end
     end
 
