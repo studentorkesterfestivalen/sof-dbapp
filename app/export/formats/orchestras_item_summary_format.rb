@@ -9,7 +9,23 @@ module Formats
           },
           :medal => 0,
           :tag => 0,
-          :tshirt => 0,
+          :tshirt => {
+              :womenxs => 0,
+              :womens => 0,
+              :womenm => 0,
+              :womenl => 0,
+              :womenxl => 0,
+              :womenxxl => 0,
+              :womenxxxl => 0,
+
+              :manxs => 0,
+              :mans => 0,
+              :manm => 0,
+              :manl => 0,
+              :manxl => 0,
+              :manxxl => 0,
+              :manxxxl => 0
+          },
           :is_late_registration => 0,
           :orchestra_ticket => {
               :thursday => 0,
@@ -62,6 +78,8 @@ module Formats
           total_ticket_str(value)
         when :instrument_size
           total_instrument_str(value)
+        when :tshirt
+          total_tshirt_str(value)
         else
           value
       end
@@ -93,6 +111,24 @@ module Formats
             :medium => 0,
             :large => 0
         }
+      elsif column == :tshirt
+        value = {
+            :womenxs => 0,
+            :womens => 0,
+            :womenm => 0,
+            :womenl => 0,
+            :womenxl => 0,
+            :womenxxl => 0,
+            :womenxxxl => 0,
+
+            :manxs => 0,
+            :mans => 0,
+            :manm => 0,
+            :manl => 0,
+            :manxl => 0,
+            :manxxl => 0,
+            :manxxxl => 0
+        }
       else
         value = 0
       end
@@ -105,7 +141,7 @@ module Formats
         case column
           when :is_late_registration, :consecutive_10, :attended_25
             value += 1 if signup.send(column)
-          when :medal, :tag, :tshirt
+          when :medal, :tag
             value += item_article(signup, column)
           when :orchestra_food_ticket, :orchestra_ticket
             increase_hash_total(value, ticket_count_increase_for(signup.send(column).kind))
@@ -115,6 +151,10 @@ module Formats
             end
           when :instrument_size
             increase_hash_total(value, instrument_size_increase_for(signup.send(column)))
+          when :tshirt
+            signup.orchestra_articles.where(kind: 1).each do |article|
+              increase_hash_total(value, tshirt_increase_for(article.data))
+            end
           else
             value += signup.send(column)
         end
@@ -148,6 +188,8 @@ module Formats
           total_ticket_str @total[col]
         when :instrument_size
           total_instrument_str @total[col]
+        when :tshirt
+          total_tshirt_str @total[col]
         else
           @total[col]
       end
@@ -231,6 +273,43 @@ module Formats
       increments[kind]
     end
 
+    def tshirt_increase_for(kind)
+      case kind
+        when 'Dam XS', 'Female XS'
+          {womenxs: 1}
+        when 'Dam S', 'Female S'
+          {womens: 1}
+        when 'Dam M', 'Female M'
+          {womenm: 1}
+        when 'Dam L', 'Female L'
+          {womenl: 1}
+        when 'Dam XL', 'Female XL'
+          {womenxl: 1}
+        when 'Dam XXL', 'Female XXL'
+          {womenxxl: 1}
+        when 'Dam XXXL', 'Female XXXL'
+          {womenxxxl: 1}
+
+        when 'Herr XS', 'Male XS'
+          {manxs: 1}
+        when 'Herr S', 'Male S'
+          {mans: 1}
+        when 'Herr M', 'Male M'
+          {manm: 1}
+        when 'Herr L', 'Male L'
+          {manl: 1}
+        when 'Herr XL', 'Male XL'
+          {manxl: 1}
+        when 'Herr XXL', 'Male XXL'
+          {manxxl: 1}
+        when 'Herr XXXL', 'Male XXXL'
+          {manxxxl: 1}
+        else
+          FaultReport.send("Found unknown t-shirt size: #{kind}")
+          {}
+      end
+    end
+
     def yes_no(value)
       value ? 'Ja' : 'Nej'
     end
@@ -241,6 +320,10 @@ module Formats
 
     def total_instrument_str(total_field)
       "Inget: #{total_field[:none]}, Väldigt litet: #{total_field[:very_small]}, Litet: #{total_field[:small]}, Mellan: #{total_field[:medium]}, Stort: #{total_field[:large]}"
+    end
+
+    def total_tshirt_str(total_field)
+      "Dam/Herr: XS: #{total_field[:womenxs]}/#{total_field[:manxs]}, S: #{total_field[:womens]}/#{total_field[:mans]}, M: #{total_field[:womenm]}/#{total_field[:manm]}, L: #{total_field[:womenl]}/#{total_field[:manl]}, XL: #{total_field[:womenxl]}/#{total_field[:manxl]}, XXL: #{total_field[:womenxxl]}/#{total_field[:manxxl]}, XXXL: #{total_field[:womenxxxl]}/#{total_field[:manxxxl]}"
     end
   end
 end
