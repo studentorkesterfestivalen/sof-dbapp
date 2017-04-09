@@ -67,6 +67,8 @@ class API::V1::FunkisApplicationController < ApplicationController
     head :no_content
   end
 
+
+
   private
 
   def send_email_on_completion(application)

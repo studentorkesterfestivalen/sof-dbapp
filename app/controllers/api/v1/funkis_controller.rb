@@ -1,4 +1,5 @@
 class API::V1::FunkisController < ApplicationController
+
   def index
 
     # If all shifts are taken for the current limit, raise the limit
