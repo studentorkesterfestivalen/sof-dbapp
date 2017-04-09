@@ -1,4 +1,5 @@
-class FunkisShiftController < ApplicationController
+class API::V1::FunkisShiftController < ApplicationController
+  include ViewPermissionConcern
 
   def export_applications
     require_permission Permission::LIST_FUNKIS_APPLICATIONS
