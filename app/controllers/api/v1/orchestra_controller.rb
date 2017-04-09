@@ -36,23 +36,23 @@ class API::V1::OrchestraController < ApplicationController
   end
 
   def item_summary
-    orchestras = Orchestra.all
     require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
+    orchestras = Orchestra.all
     render :plain => CSVExport.render_csv(orchestras, Formats::OrchestrasItemSummaryFormat)
   end
 
   def extra_performances
-    orchestra_signups = OrchestraSignup.where.not(other_performances: ['', nil]).order(:orchestra_id)
     require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
+    orchestra_signups = OrchestraSignup.where.not(other_performances: ['', nil]).order(:orchestra_id)
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraPerformanceFormat)
   end
 
   def anniversary
-    orchestra_signups = OrchestraSignup.where.not(consecutive_10: [false, nil]).or(OrchestraSignup.where.not(attended_25: [false, nil])).order(:orchestra_id)
     require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
+    orchestra_signups = OrchestraSignup.where.not(consecutive_10: [false, nil]).or(OrchestraSignup.where.not(attended_25: [false, nil])).order(:orchestra_id)
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraAnniversaryFormat)
   end
 
