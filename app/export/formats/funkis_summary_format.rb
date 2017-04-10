@@ -34,13 +34,9 @@ module Formats
         when :funkis_name
           item.funkis_category.funkis_name
         when :total_applications
-          item.funkis_shift_applications.count
+          total_agreed_applications item
         when :applicants
-          applicants = ''
-          item.funkis_shift_applications.each do |shift_application|
-            applicants += format_applicant get_applicant(shift_application)
-          end
-          applicants
+          get_all_applicants item
         else
           item.send(column)
       end
@@ -50,23 +46,43 @@ module Formats
       value ? 'Ja' : 'Nej'
     end
 
+    def total_agreed_applications(item)
+      counter = 0
+      item.funkis_shift_applications.each do |shift_application|
+        application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
+        if application.terms_agreed_at.not.nil?
+          counter += 1
+        end
+      end
+      counter
+    end
+
+    def get_all_applicants(item)
+      applicants = ''
+      item.funkis_shift_applications.each do |shift_application|
+        application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
+        if application.terms_agreed_at.not.nil?
+          applicants += format_applicant get_applicant(application)
+        end
+      end
+      applicants
+    end
+
     def format_applicant(applicant)
       "#{applicant[:name]}, #{applicant[:email]}, #{applicant[:phone]}, T-shirt: #{applicant[:tshirt]}, Körkort: #{applicant[:drivers_license]}, Hoben: #{applicant[:presale_choice]}, Allergier: #{applicant[:allergies]} \n"
     end
 
 
-    def get_applicant(shift_application)
-      applicant_application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
-      applicant = User.where(:id => applicant_application.user_id).first
-
+    def get_applicant(application)
+      applicant = User.where(:id => application.user_id).first
       {
           :name => applicant.display_name,
           :email => applicant.email,
-          :phone => applicant_application.phone,
-          :tshirt => applicant_application.tshirt_size,
-          :drivers_license => yes_no(applicant_application.drivers_license),
-          :presale_choice => yes_no(applicant_application.presale_choice),
-          :allergies => applicant_application.allergies,
+          :phone => application.phone,
+          :tshirt => application.tshirt_size,
+          :drivers_license => yes_no(application.drivers_license),
+          :presale_choice => yes_no(application.presale_choice),
+          :allergies => application.allergies,
       }
     end
   end
