@@ -50,7 +50,7 @@ module Formats
       counter = 0
       item.funkis_shift_applications.each do |shift_application|
         application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
-        if application.terms_agreed_at.not.nil?
+        if application.terms_agreed_at.present?
           counter += 1
         end
       end
@@ -61,7 +61,7 @@ module Formats
       applicants = ''
       item.funkis_shift_applications.each do |shift_application|
         application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
-        if application.terms_agreed_at.not.nil?
+        if application.terms_agreed_at.present?
           applicants += format_applicant get_applicant(application)
         end
       end
