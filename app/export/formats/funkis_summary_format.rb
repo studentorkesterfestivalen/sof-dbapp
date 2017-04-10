@@ -34,23 +34,9 @@ module Formats
         when :funkis_name
           item.funkis_category.funkis_name
         when :total_applications
-          counter = 0
-          item.funkis_shift_applications.each do |shift_application|
-            application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
-            if application.terms_agreed_at.not.nil?
-              counter += 1
-            end
-          end
-          counter
+          total_agreed_applications item
         when :applicants
-          applicants = ''
-          item.funkis_shift_applications.each do |shift_application|
-            application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
-            if application.terms_agreed_at.not.nil?
-              applicants += format_applicant get_applicant(application)
-            end
-          end
-          applicants
+          get_all_applicants item
         else
           item.send(column)
       end
@@ -58,6 +44,28 @@ module Formats
 
     def yes_no(value)
       value ? 'Ja' : 'Nej'
+    end
+
+    def total_agreed_applications(item)
+      counter = 0
+      item.funkis_shift_applications.each do |shift_application|
+        application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
+        if application.terms_agreed_at.not.nil?
+          counter += 1
+        end
+      end
+      counter
+    end
+
+    def get_all_applicants(item)
+      applicants = ''
+      item.funkis_shift_applications.each do |shift_application|
+        application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
+        if application.terms_agreed_at.not.nil?
+          applicants += format_applicant get_applicant(application)
+        end
+      end
+      applicants
     end
 
     def format_applicant(applicant)
