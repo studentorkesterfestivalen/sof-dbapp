@@ -34,7 +34,14 @@ module Formats
         when :funkis_name
           item.funkis_category.funkis_name
         when :total_applications
-          item.funkis_shift_applications.count
+          counter = 0
+          item.funkis_shift_applications.each do |shift_application|
+            application = FunkisApplication.where(:id => shift_application.funkis_application_id).first
+            if application.terms_agreed_at.not.nil?
+              counter += 1
+            end
+          end
+          counter
         when :applicants
           applicants = ''
           item.funkis_shift_applications.each do |shift_application|
