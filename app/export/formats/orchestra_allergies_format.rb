@@ -35,8 +35,6 @@ module Formats
     end
 
     def value_for(item, column)
-
-
       case column
         when :orchestra_id
           Orchestra.where(id: item.orchestra_id).pluck(:name).first
@@ -74,9 +72,15 @@ module Formats
         'x'
       elsif column == :shellfish and shellfish
         'x'
+      elsif column == :fish and fish
+        'x'
+      elsif column == :peanuts and peanuts
+        'x'
+      elsif column == :other and other.present?
+        other
+      else
+        nil
       end
-
     end
-
   end
 end
