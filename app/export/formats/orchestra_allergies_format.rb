@@ -43,24 +43,19 @@ module Formats
     def value_for(item, column)
       case column
         when :orchestra_id
-          Orchestra.where(id: item.orchestra_id).pluck(:name).first
+          item.orchestra.name
         when :user_id
-          User.where(id: item.user_id).pluck(:display_name).first
+          item.user.display_name
         when :other
           item.special_diets.select { |diet| not column_names.values.include? diet.name }
         else
-          handle_allergy(item, column)
+          has_allergy(item, column)
       end
     end
 
     def increase_total(column, value)
       if value.present?
-        case column
-          when :orchestra_id, :user_id
-            nil
-          else
-            @total[column] += 1
-        end
+        @total[column] += 1
       end
     end
 
@@ -89,7 +84,7 @@ module Formats
       end
     end
 
-    def handle_allergy(item, column)
+    def has_allergy(item, column)
       item.special_diets.any? { |diet| diet.name == column_names[column] }
     end
   end
