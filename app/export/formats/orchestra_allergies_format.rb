@@ -34,53 +34,61 @@ module Formats
       format_value(column, value)
     end
 
+    def extra_row
+      column_names.keys.map { |column| total_value_for(column) }
+    end
+
+    private
+
     def value_for(item, column)
       case column
         when :orchestra_id
           Orchestra.where(id: item.orchestra_id).pluck(:name).first
         when :user_id
           User.where(id: item.user_id).pluck(:display_name).first
+        when :other
+          special_diet_found = item.special_diets.select { |diet| not column_names.values.include? diet.name }
+          special_diet_found.join(', ')
         else
-          get_allergy(item, column)
+          handle_allergy(item, column)
       end
     end
 
-    def extra_row
-      column_names.keys.map { |col| total_value_for(col) }
+    def increase_total(column, value)
+      if value.present?
+        case column
+          when :orchestra_id, :user_id
+            nil
+          else
+            @total[column] += 1
+        end
+      end
     end
 
-    private
-
-    def get_allergy(item, column)
-      allergies = item.special_diets.name
-      vegetarian = allergies.slice! 'Vegetarian'
-      vegan = allergies.slice! 'Vegan'
-      lactos = allergies.slice! 'Laktos'
-      gluten = allergies.slice! 'Gluten'
-      shellfish = allergies.slice! 'Skaldjur'
-      fish = allergies.slice! 'Fisk'
-      peanuts = allergies.slice! 'Jordnötter'
-      other = allergies
-
-      if column == :vegetarian and vegetarian
-        'x'
-      elsif column == :vegan and vegan
-        'x'
-      elsif column == :lactos and lactos
-        'x'
-      elsif column == :gluten and gluten
-        'x'
-      elsif column == :shellfish and shellfish
-        'x'
-      elsif column == :fish and fish
-        'x'
-      elsif column == :peanuts and peanuts
-        'x'
-      elsif column == :other and other.present?
-        other
-      else
-        nil
+    def format_value(column, value)
+      case column
+        when :orchestra_id, :user_id, :other
+          value
+        else
+          if value.present?
+            'x'
+          end
       end
+    end
+
+    def total_value_for(column)
+      case column
+        when :orchestra_id
+          'TOTALT'
+        when :user_id
+          nil
+        else
+          @total[column]
+      end
+    end
+
+    def handle_allergy(item, column)
+      item.special_diets.any? { |diet| diet.name == column_names[column] }
     end
   end
 end
