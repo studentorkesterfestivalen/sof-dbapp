@@ -5,28 +5,19 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :menu
       resources :pages do
-        collection do
-          get 'find(/:category)(/:page)', action: 'find'
-        end
+        get 'find(/:category)(/:page)', action: 'find', on: :collection
       end
       resources :orchestra do
-        member do
-          get 'all_signups', action: 'all_signups'
-        end
+        get 'all_signups', action: 'all_signups', on: :member
         collection do
           get 'item_summary', action: 'item_summary'
-        end
-        collection do
           get 'extra_performances', action: 'extra_performances'
-        end
-        collection do
           get 'anniversary', action: 'anniversary'
+          get 'allergies', action: 'allergies'
         end
       end
       resources :orchestra_signup do
-        collection do
-          get 'verify', action: 'verify_code'
-        end
+        get 'verify', action: 'verify_code', on: :collection
       end
       resources :article
       resources :users
