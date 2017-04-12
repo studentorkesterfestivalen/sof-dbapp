@@ -33,6 +33,9 @@ Rails.application.routes.draw do
       resources :cortege
       resources :case_cortege
       resources :funkis
+      resources :funkis_shift do
+        get 'export_applications', on: :collection
+      end
       resources :funkis_application
 
       get 'user', to: 'users#show'
