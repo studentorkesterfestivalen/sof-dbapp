@@ -55,7 +55,7 @@ module Formats
 
     def increase_total(column, value)
       if value.present?
-        unless :orchestra_id or :user_id
+        unless column == :orchestra_id or column == :user_id
             @total[column] += 1
         end
       end
