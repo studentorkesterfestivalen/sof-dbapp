@@ -59,7 +59,7 @@ class API::V1::OrchestraController < ApplicationController
   def allergies
     require_permission Permission::LIST_ORCHESTRA_SIGNUPS
 
-    orchestra_signups = OrchestraSignup.joins(:special_diets).uniq.all.order(:orchestra_id).includes(:special_diets)
+    orchestra_signups = OrchestraSignup.order(:orchestra_id).includes(:special_diets).all
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraAllergiesFormat)
   end
 

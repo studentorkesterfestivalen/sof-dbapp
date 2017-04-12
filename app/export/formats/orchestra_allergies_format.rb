@@ -17,8 +17,8 @@ module Formats
       {
           :orchestra_id => 'Orkester',
           :user_id => 'Namn',
-          :vegetarian => 'Vegetarian',
-          :vegan => 'Vegan',
+          :vegetarian => 'Vegetariskt',
+          :vegan => 'Vegansk',
           :lactos => 'Laktos',
           :gluten => 'Gluten',
           :shellfish => 'Skaldjur',
@@ -47,8 +47,7 @@ module Formats
         when :user_id
           User.where(id: item.user_id).pluck(:display_name).first
         when :other
-          special_diet_found = item.special_diets.select { |diet| not column_names.values.include? diet.name }
-          special_diet_found.join(', ')
+          item.special_diets.select { |diet| not column_names.values.include? diet.name }
         else
           handle_allergy(item, column)
       end
@@ -67,8 +66,11 @@ module Formats
 
     def format_value(column, value)
       case column
-        when :orchestra_id, :user_id, :other
+        when :orchestra_id, :user_id
           value
+        when :other
+          value.map! { |diet| diet.name }
+          value.join(', ')
         else
           if value.present?
             'x'
