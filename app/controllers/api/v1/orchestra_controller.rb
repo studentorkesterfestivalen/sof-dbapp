@@ -56,6 +56,13 @@ class API::V1::OrchestraController < ApplicationController
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraAnniversaryFormat)
   end
 
+  def allergies
+    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+
+    orchestra_signups = OrchestraSignup.order(:orchestra_id).includes(:special_diets).all
+    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraAllergiesFormat)
+  end
+
   def update
     orchestra = Orchestra.find(params[:id])
     require_ownership orchestra
