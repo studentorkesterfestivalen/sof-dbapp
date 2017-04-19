@@ -19,7 +19,7 @@ class MenuItem < ApplicationRecord
     if user.nil?
       required_permissions == 0
     else
-      user.has_permission? required_permissions
+      user.has_admin_permission? required_permissions
     end
   end
 

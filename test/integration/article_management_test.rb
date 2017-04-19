@@ -15,7 +15,7 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'enabled and disabled articles can be listed by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+    current_user.permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     get '/api/v1/article', headers: auth_headers
@@ -40,7 +40,7 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'articles can be created by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+    current_user.permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     post '/api/v1/article', headers: auth_headers, params: {item: dummy_article}
@@ -51,7 +51,7 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'articles can be modified by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+    current_user.permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     put '/api/v1/article/1', headers: auth_headers, params: {item: {name: 'Shirt'}}
@@ -65,7 +65,7 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'articles can be deleted by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+    current_user.permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     delete '/api/v1/article/1', headers: auth_headers

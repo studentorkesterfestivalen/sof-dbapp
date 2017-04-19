@@ -1,4 +1,4 @@
-module Permission
+module AdminPermission
   ALL                          = 1 << 0
   LIST_ORCHESTRA_SIGNUPS       = 1 << 1
   MODIFY_ARTICLES              = 1 << 2

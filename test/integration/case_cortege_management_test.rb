@@ -8,7 +8,7 @@ class CaseCortegeManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with permissions can list all case corteges' do
-    current_user.permissions |= Permission::LIST_CORTEGE_APPLICATIONS
+    current_user.permissions |= AdminPermission::LIST_CORTEGE_APPLICATIONS
     current_user.save!
 
     get '/api/v1/case_cortege', headers: auth_headers
@@ -22,7 +22,7 @@ class CaseCortegeManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with permissions can view another case cortege' do
-    current_user.permissions |= Permission::LIST_CORTEGE_APPLICATIONS
+    current_user.permissions |= AdminPermission::LIST_CORTEGE_APPLICATIONS
     current_user.save!
 
     get '/api/v1/case_cortege/2', headers: auth_headers
@@ -30,7 +30,7 @@ class CaseCortegeManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with permissions can update the approval status' do
-    current_user.permissions |= Permission::APPROVE_CORTEGE_APPLICATIONS
+    current_user.permissions |= AdminPermission::APPROVE_CORTEGE_APPLICATIONS
     current_user.save!
 
     put '/api/v1/case_cortege/1', headers: auth_headers, params: {item: {status: 'approved', approved: true}}
@@ -44,7 +44,7 @@ class CaseCortegeManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with approval permissions can not update other columns' do
-    current_user.permissions |= Permission::LIST_CORTEGE_APPLICATIONS | Permission::APPROVE_CORTEGE_APPLICATIONS
+    current_user.permissions |= AdminPermission::LIST_CORTEGE_APPLICATIONS | AdminPermission::APPROVE_CORTEGE_APPLICATIONS
     current_user.save!
 
     # Make sure there is an existing user with id=2
@@ -62,7 +62,7 @@ class CaseCortegeManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with approval permissions can update other columns for their own cortege' do
-    current_user.permissions |= Permission::LIST_CORTEGE_APPLICATIONS | Permission::APPROVE_CORTEGE_APPLICATIONS
+    current_user.permissions |= AdminPermission::LIST_CORTEGE_APPLICATIONS | AdminPermission::APPROVE_CORTEGE_APPLICATIONS
     current_user.save!
 
     put '/api/v1/case_cortege/1', headers: auth_headers, params: {item: {group_name: 'New group name', approved: true}}

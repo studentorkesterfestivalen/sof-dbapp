@@ -1,6 +1,6 @@
 module ViewPermissionConcern
   def require_permission(permission)
-    if current_user.nil? or not current_user.has_permission?(permission)
+    if current_user.nil? or not current_user.has_admin_permission?(permission)
       raise 'Missing permission for view'
     end
   end
@@ -22,8 +22,8 @@ module ViewPermissionConcern
       raise 'Not logged in'
     end
 
-    unless model.has_member?(current_user) or current_user.has_permission?(permissions)
-      raise 'Is not member of model or lacks required permissions'
+    unless model.has_member?(current_user) or current_user.has_admin_permission?(permissions)
+      raise 'Is not member of model or lacks required admin permissions'
     end
   end
 
@@ -32,8 +32,8 @@ module ViewPermissionConcern
       raise 'Not logged in'
     end
 
-    unless model.has_owner?(current_user) or current_user.has_permission?(permissions)
-      raise 'Is not owner of model or lacks required permissions'
+    unless model.has_owner?(current_user) or current_user.has_admin_permission?(permissions)
+      raise 'Is not owner of model or lacks required admin permissions'
     end
   end
 end
