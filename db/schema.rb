@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170303235553) do
+ActiveRecord::Schema.define(version: 20170419143701) do
+
+  create_table "active_funkis_shift_limits", force: :cascade do |t|
+    t.integer  "active_limit", default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
   create_table "available_articles", force: :cascade do |t|
     t.string   "name"
@@ -79,16 +85,62 @@ ActiveRecord::Schema.define(version: 20170303235553) do
     t.index ["user_id"], name: "index_corteges_on_user_id"
   end
 
+  create_table "funkis_applications", force: :cascade do |t|
+    t.string   "ssn",                             null: false
+    t.string   "phone",                           null: false
+    t.string   "tshirt_size",                     null: false
+    t.text     "allergies",       default: "",    null: false
+    t.boolean  "drivers_license", default: false, null: false
+    t.integer  "presale_choice",  default: 0,     null: false
+    t.datetime "terms_agreed_at"
+    t.integer  "user_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.index ["user_id"], name: "index_funkis_applications_on_user_id"
+  end
+
+  create_table "funkis_categories", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.string   "funkis_name", null: false
+    t.string   "description", null: false
+    t.string   "points",      null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "funkis_shift_applications", force: :cascade do |t|
+    t.integer  "funkis_application_id"
+    t.integer  "funkis_shift_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["funkis_application_id"], name: "index_funkis_shift_applications_on_funkis_application_id"
+    t.index ["funkis_shift_id"], name: "index_funkis_shift_applications_on_funkis_shift_id"
+  end
+
+  create_table "funkis_shifts", force: :cascade do |t|
+    t.string   "day",                             null: false
+    t.string   "time",                            null: false
+    t.integer  "points"
+    t.integer  "funkis_category_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "red_limit",          default: 0,  null: false
+    t.integer  "yellow_limit",       default: 0,  null: false
+    t.integer  "green_limit",        default: 0,  null: false
+    t.string   "date",               default: "", null: false
+    t.index ["funkis_category_id"], name: "index_funkis_shifts_on_funkis_category_id"
+  end
+
   create_table "menu_items", force: :cascade do |t|
-    t.string   "title",                                null: false
-    t.boolean  "active",               default: false, null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.string   "title",                               null: false
+    t.boolean  "active",               default: true, null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "menu_item_id"
     t.string   "category"
-    t.integer  "required_permissions", default: 0,     null: false
-    t.boolean  "display_empty",        default: true,  null: false
-    t.string   "href",                 default: "#",   null: false
+    t.integer  "required_permissions", default: 0,    null: false
+    t.boolean  "display_empty",        default: true, null: false
+    t.string   "href",                 default: "#",  null: false
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
   end
 
@@ -116,11 +168,12 @@ ActiveRecord::Schema.define(version: 20170303235553) do
     t.boolean  "consecutive_10"
     t.boolean  "attended_25"
     t.integer  "instrument_size"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.integer  "orchestra_id"
     t.integer  "user_id"
     t.text     "other_performances"
+    t.boolean  "is_late_registration", default: false, null: false
     t.index ["orchestra_id"], name: "index_orchestra_signups_on_orchestra_id"
     t.index ["user_id"], name: "index_orchestra_signups_on_user_id"
   end
@@ -219,8 +272,9 @@ ActiveRecord::Schema.define(version: 20170303235553) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-05 10:42:15', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-22 13:43:55', null: false
     t.string   "display_name"
+    t.integer  "usergroup",              limit: 8
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
