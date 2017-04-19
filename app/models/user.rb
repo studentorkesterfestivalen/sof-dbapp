@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   end
 
   def has_admin_permission?(permission)
-    includes_permission?(permissions, permission) or includes_permission?(permissions, AdminPermission::ALL)
+    includes_permission?(admin_permissions, permission) or includes_permission?(admin_permissions, AdminPermission::ALL)
   end
 
   def has_owner?(owner)
