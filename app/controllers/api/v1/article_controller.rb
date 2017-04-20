@@ -12,7 +12,7 @@ class API::V1::ArticleController < ApplicationController
   end
 
   def create
-    require_permission AdminPermission::MODIFY_ARTICLES
+    require_admin_permission AdminPermission::MODIFY_ARTICLES
 
     article = AvailableArticle.new(item_params)
     article.save!
@@ -27,7 +27,7 @@ class API::V1::ArticleController < ApplicationController
   end
 
   def update
-    require_permission AdminPermission::MODIFY_ARTICLES
+    require_admin_permission AdminPermission::MODIFY_ARTICLES
 
     article = AvailableArticle.find(params[:id])
     if article.update(item_params)
@@ -38,7 +38,7 @@ class API::V1::ArticleController < ApplicationController
   end
 
   def destroy
-    require_permission AdminPermission::MODIFY_ARTICLES
+    require_admin_permission AdminPermission::MODIFY_ARTICLES
 
     if OrchestraArticle.where(kind: params[:id]).any?
       raise 'Unable to remove article with remaining references'

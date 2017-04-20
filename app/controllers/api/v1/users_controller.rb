@@ -4,7 +4,7 @@ class API::V1::UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission AdminPermission::LIST_USERS
+    require_admin_permission AdminPermission::LIST_USERS
 
     render :json => User.all
   end
@@ -32,7 +32,7 @@ class API::V1::UsersController < ApplicationController
                  :shopping_cart_count
              ]
     else
-      require_permission AdminPermission::LIST_USERS
+      require_admin_permission AdminPermission::LIST_USERS
 
       user = User.find(params[:id])
       render json: user
@@ -68,7 +68,7 @@ class API::V1::UsersController < ApplicationController
       raise 'Cannot delete current user, use auth endpoint instead'
     end
 
-    require_permission AdminPermission::DELETE_USERS
+    require_admin_permission AdminPermission::DELETE_USERS
     user.destroy
 
     head :no_content
@@ -83,7 +83,7 @@ class API::V1::UsersController < ApplicationController
   end
 
   def user_admin_params
-    require_permission AdminPermission::MODIFY_USERS
+    require_admin_permission AdminPermission::MODIFY_USERS
 
     params.require(:user).permit(
         :display_name,

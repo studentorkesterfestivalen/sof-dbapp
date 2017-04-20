@@ -1,5 +1,5 @@
 module ViewPermissionConcern
-  def require_permission(permission)
+  def require_admin_permission(permission)
     if current_user.nil? or not current_user.has_admin_permission?(permission)
       raise 'Missing permission for view'
     end
@@ -17,7 +17,7 @@ module ViewPermissionConcern
     end
   end
 
-  def require_membership_or_permission(model, permissions)
+  def require_membership_or_admin_permission(model, permissions)
     if current_user.nil?
       raise 'Not logged in'
     end
@@ -27,7 +27,7 @@ module ViewPermissionConcern
     end
   end
 
-  def require_ownership_or_permission(model, permissions)
+  def require_ownership_or_admin_permission(model, permissions)
     if current_user.nil?
       raise 'Not logged in'
     end

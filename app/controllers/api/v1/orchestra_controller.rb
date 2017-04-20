@@ -4,7 +4,7 @@ class API::V1::OrchestraController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
+    require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => Orchestra.all, include: [:user]
   end
@@ -23,7 +23,7 @@ class API::V1::OrchestraController < ApplicationController
 
   def show
     orchestra = Orchestra.find(params[:id])
-    require_ownership_or_permission orchestra, AdminPermission::LIST_ORCHESTRA_SIGNUPS
+    require_ownership_or_admin_permission orchestra, AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}]
   end
