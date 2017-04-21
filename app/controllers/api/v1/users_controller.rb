@@ -46,6 +46,7 @@ class API::V1::UsersController < ApplicationController
   def update
     user = User.find(params[:id])
     if current_user.has_admin_permission? AdminPermission::MODIFY_USERS
+      # Only allows a admin to update a users display_name and permissions
       if user.update(user_admin_params)
         redirect_to api_v1_user_url(user)
       else
@@ -53,7 +54,7 @@ class API::V1::UsersController < ApplicationController
       end
     else
       require_ownership user
-
+      # Only allows user to update his display_name
       if user.update(user_params)
         redirect_to '/api/v1/user'
       else
@@ -90,4 +91,5 @@ class API::V1::UsersController < ApplicationController
         :permissions
     )
   end
+
 end

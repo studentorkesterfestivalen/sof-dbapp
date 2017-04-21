@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_one :cortege
   has_one :case_cortege
   has_one :cart
+  has_one :cortege_membership
 
   validate :liu_accounts_must_use_cas
 
