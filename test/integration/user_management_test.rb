@@ -69,21 +69,21 @@ class UserManagementTest < AuthenticatedIntegrationTest
     current_user.save!
 
     new_user = create_user 'foo@sof17.se'
-    put "/api/v1/users/#{new_user.id}", headers: auth_headers, params: {user:{permissions: AdminPermission::DELETE_USERS}}
+    put "/api/v1/users/#{new_user.id}", headers: auth_headers, params: {user:{admin_permissions: AdminPermission::DELETE_USERS}}
     assert_response :redirect
 
     get redirected_url, headers: auth_headers
     user = JSON.parse response.body
 
-    assert_equal AdminPermission::DELETE_USERS, user['permissions']
+    assert_equal AdminPermission::DELETE_USERS, user['admin_permissions']
 
-    put '/api/v1/users/1', headers: auth_headers, params: {user:{permissions: AdminPermission::ALL}}
+    put '/api/v1/users/1', headers: auth_headers, params: {user:{admin_permissions: AdminPermission::ALL}}
     assert_response :redirect
 
     get redirected_url, headers: auth_headers
     user = JSON.parse response.body
 
-    assert_equal AdminPermission::ALL, user['permissions']
+    assert_equal AdminPermission::ALL, user['admin_permissions']
   end
 
   test 'normal users cannot delete their own accounts' do

@@ -1,7 +1,7 @@
 class CortegeMembership < ApplicationRecord
   belongs_to :user
-  belongs_to :case_cortege
-  belongs_to :cortege
+  belongs_to :case_cortege, required: false
+  belongs_to :cortege, required: false
 
 
   def add_cortege_membership(user, cortege)
