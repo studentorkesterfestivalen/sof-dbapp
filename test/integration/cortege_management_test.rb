@@ -74,4 +74,5 @@ class CortegeManagementTest < AuthenticatedIntegrationTest
     assert_equal 'New name', cortege['name']
     assert cortege['approved']
   end
+  
 end

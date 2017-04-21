@@ -11,7 +11,7 @@ class UserManagementTest < AuthenticatedIntegrationTest
       get '/api/v1/users/1', headers: auth_headers
     }
 
-    current_user.permissions |= AdminPermission::LIST_USERS
+    current_user.admin_permissions |= AdminPermission::LIST_USERS
     current_user.save!
 
     get '/api/v1/users/1', headers: auth_headers
@@ -25,7 +25,7 @@ class UserManagementTest < AuthenticatedIntegrationTest
       get "/api/v1/users/#{new_user.id}", headers: auth_headers
     }
 
-    current_user.permissions |= AdminPermission::LIST_USERS
+    current_user.admin_permissions |= AdminPermission::LIST_USERS
     current_user.save!
 
     get "/api/v1/users/#{new_user.id}", headers: auth_headers
@@ -37,7 +37,7 @@ class UserManagementTest < AuthenticatedIntegrationTest
       get '/api/v1/users', headers: auth_headers
     }
 
-    current_user.permissions |= AdminPermission::LIST_USERS
+    current_user.admin_permissions |= AdminPermission::LIST_USERS
     current_user.save!
 
     get '/api/v1/users', headers: auth_headers
@@ -65,7 +65,7 @@ class UserManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with permission can grant themselves and other users permissions' do
-    current_user.permissions |= AdminPermission::LIST_USERS | AdminPermission::MODIFY_USERS
+    current_user.admin_permissions |= AdminPermission::LIST_USERS | AdminPermission::MODIFY_USERS
     current_user.save!
 
     new_user = create_user 'foo@sof17.se'
@@ -106,7 +106,7 @@ class UserManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with admin_permissions can delete other accounts' do
-    current_user.permissions |= AdminPermission::DELETE_USERS
+    current_user.admin_permissions |= AdminPermission::DELETE_USERS
     current_user.save!
 
     new_user = create_user 'foo@sof17.se'

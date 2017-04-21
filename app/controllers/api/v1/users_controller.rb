@@ -88,7 +88,7 @@ class API::V1::UsersController < ApplicationController
 
     params.require(:user).permit(
         :display_name,
-        :permissions
+        :admin_permiss/ions
     )
   end
 

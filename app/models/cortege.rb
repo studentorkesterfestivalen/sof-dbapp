@@ -9,5 +9,4 @@ class Cortege < ApplicationRecord
   def has_member?(member)
     members.include?(member)
   end
-
 end

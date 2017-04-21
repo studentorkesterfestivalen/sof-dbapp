@@ -12,12 +12,14 @@ class API::V1::UserGroupsController < ApplicationController
   end
 
   def update
-    if params.has_key? :cortege
-      make_user_cortege_member cortege_params
+    if params.has_key? :all
+      raise 'Not implemented'
+    elsif params.has_key? :cortege
+      modify_cortege_membership cortege_params, true
     elsif params.has_key? :case_cortege
-      make_user_case_cortege_member case_cortege_params
+      modify_case_cortege_membership case_cortege_params, true
     elsif params.has_key? :sof_org
-      make_user_sof_org_member sof_org_params
+      raise 'Not implemented'
     else
       raise 'Invalid params'
     end
@@ -28,12 +30,24 @@ class API::V1::UserGroupsController < ApplicationController
   end
 
   def destroy
-    raise 'Not implemented'
+    if params.has_key? :cortege
+      modify_cortege_membership cortege_params, false
+    elsif params.has_key? :case_cortege
+      modify_case_cortege_membership case_cortege_params, false
+    else
+      raise 'Invalid params'
+    end
   end
 
 
 
   private
+
+  def all_groups_params
+    params.require(:all).permit(
+        :email
+    )
+  end
 
   def sof_org_params
     params.require(:sof_org).permit(
@@ -54,49 +68,47 @@ class API::V1::UserGroupsController < ApplicationController
   end
 
   def make_user_sof_org_member(params)
+    require_admin_permission AdminPermission::ALL
 
-  end
+    user = User.find_by email: params[:sof_org][:email]
 
-  def make_user_cortege_member(params)
-    cortege = Cortege.find(params[:user][:cortege_id])
-    require_ownership_or_admin_permission cortege, AdminPermission::ALL
-
-
-    user = User.find_by email: params[:cortege][:email]
-
-    if cortege.has_member?(user)
-      raise 'User is already a member of this cortege'
-    elsif user.present?
-      CortegeMembership.create(
-          user_id: user.user_id,
-          cortege_id: params[:user][:cortege_id]
-      )
-
-      user.usergroup += UserGroupPermissions::CORTEGE_MEMBER
-      user.save
+    if user.present?
+      user.usergroup |= UserGroupPermissions::SOF_ORGANISATION
     else
       raise "User doesn't exist"
     end
   end
 
-  def make_user_case_cortege_member(params)
+  def modify_cortege_membership(params, add)
+    cortege = Cortege.find(params[:user][:cortege_id])
+    require_ownership_or_admin_permission cortege, AdminPermission::ALL
+
+    user = User.find_by email: params[:cortege][:email]
+    unless user.present?
+      raise "User doesn't exist"
+    end
+
+    if add
+      CortegeMembership.add_cortege_membership(user, cortege)
+    else
+      CortegeMembership.remove_cortege_membership(user, cortege)
+    end
+  end
+
+
+  def modify_case_cortege_membership(params, add)
     case_cortege = CaseCortege.find(params[:user][:case_cortege_id])
     require_ownership_or_admin_permission case_cortege, AdminPermission::ALL
 
     user = User.find_by email: params[:case_cortege][:email]
-
-    if case_cortege.has_member?(user)
-      raise 'User is already a member of this cortege'
-    elsif user.present?
-      CortegeMembership.create(
-          user_id: user_id,
-          case_cortege_id: params[:user][:case_cortege_id]
-      )
-
-      user.usergroup += UserGroupPermissions::CORTEGE_MEMBER
-      user.save
-    else
+    unless user.present?
       raise "User doesn't exist"
+    end
+
+    if add
+      CortegeMembership.add_case_cortege_membership(user, case_cortege)
+    else
+      CortegeMembership.remove_case_cortege_membership(user, case_cortege)
     end
   end
 end
