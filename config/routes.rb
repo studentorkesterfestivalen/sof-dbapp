@@ -34,6 +34,7 @@ Rails.application.routes.draw do
         get 'export_applications', on: :collection
       end
       resources :funkis_application
+      resources :cortege_membership
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'
