@@ -17,6 +17,8 @@ class Cart < ApplicationRecord
   def create_order_item(cart_item)
     item = OrderItem.new
     item.product = cart_item.product
+    item.user = user
+    item.owner = user
     item
   end
 end

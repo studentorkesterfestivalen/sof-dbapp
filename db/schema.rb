@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170420142643) do
+ActiveRecord::Schema.define(version: 20170421154934) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -215,7 +215,9 @@ ActiveRecord::Schema.define(version: 20170420142643) do
     t.integer  "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "owner_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["owner_id"], name: "index_order_items_on_owner_id"
     t.index ["user_id"], name: "index_order_items_on_user_id"
   end
 

@@ -5,7 +5,7 @@ class API::V1::PaymentController < ApplicationController
 
   def charge
     order = current_user.cart.create_order
-    created_charge = create_charge!
+    created_charge = create_charge!(order)
     order.complete! created_charge
 
     head :no_content
@@ -15,7 +15,7 @@ class API::V1::PaymentController < ApplicationController
 
   private
 
-  def create_charge!
+  def create_charge!(order)
     customer = Stripe::Customer.create(
         :email => current_user.email,
         :source => params[:stripe_token],
