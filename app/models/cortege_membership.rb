@@ -3,3 +3,5 @@ class CortegeMembership < ApplicationRecord
   belongs_to :case_cortege
   belongs_to :cortege
 end
+
+

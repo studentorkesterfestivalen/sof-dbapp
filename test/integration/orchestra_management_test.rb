@@ -8,7 +8,7 @@ class OrchestraManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with permissions can list all orchestras' do
-    current_user.permissions |= AdminPermission::LIST_ORCHESTRA_SIGNUPS
+    current_user.admin_permissions |= AdminPermission::LIST_ORCHESTRA_SIGNUPS
     current_user.save!
 
     get '/api/v1/orchestra', headers: auth_headers
@@ -22,7 +22,7 @@ class OrchestraManagementTest < AuthenticatedIntegrationTest
   end
 
   test 'users with permissions can list all orchestra signups' do
-    current_user.permissions |= AdminPermission::LIST_ORCHESTRA_SIGNUPS
+    current_user.admin_permissions |= AdminPermission::LIST_ORCHESTRA_SIGNUPS
     current_user.save!
 
     get '/api/v1/orchestra_signup', headers: auth_headers

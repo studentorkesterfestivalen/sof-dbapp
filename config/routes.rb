@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       resources :case_cortege
       resources :payments
       resources :shopping_product
+      resources :user_groups
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'

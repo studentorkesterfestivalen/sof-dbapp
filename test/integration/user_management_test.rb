@@ -105,7 +105,7 @@ class UserManagementTest < AuthenticatedIntegrationTest
     assert_not_nil User.find_by_id(new_user.id)
   end
 
-  test 'users with permissions can delete other accounts' do
+  test 'users with admin_permissions can delete other accounts' do
     current_user.permissions |= AdminPermission::DELETE_USERS
     current_user.save!
 
