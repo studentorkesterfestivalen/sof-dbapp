@@ -1,17 +1,17 @@
-class API::V1::UserGroupsController < ApplicationController
+class API::V1::CortegeMembershipController < ApplicationController
   include ViewPermissionConcern
 
   def index
     require_admin_permission AdminPermission::ALL
 
-    render :json => UserGroupPermissions
+    render :json => CortegeMembership.all
   end
 
   def create
     raise 'Not implemented'
   end
 
-  def update
+  def modify_membership
     if params.has_key? :all
       raise 'Not implemented'
     elsif params.has_key? :cortege

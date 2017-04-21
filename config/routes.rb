@@ -25,12 +25,16 @@ Rails.application.routes.draw do
       resources :case_cortege
       resources :payments
       resources :shopping_product
-      resources :user_groups
+      resources :user_groups do
+        post 'modify_membership', action: 'modify_membership', on: :member
+      end
+
       resources :funkis
       resources :funkis_shift do
         get 'export_applications', on: :collection
       end
       resources :funkis_application
+      resources :cortege_membership
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'
