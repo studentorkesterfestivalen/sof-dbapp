@@ -36,4 +36,17 @@ module ViewPermissionConcern
       raise 'Is not owner of model or lacks required admin permissions'
     end
   end
+
+  def disable_feature(from: nil)
+    # Disabled features should not affect automated tests
+    return if Rails.env.test?
+
+    # Allow setting a date for when the feature should be automatically disabled
+    return if from and Date.parse(from) > Date.today
+
+    # Always allow administrators to access the feature
+    if current_user.nil? or not current_user.has_permission?(Permission::ALL)
+      raise 'Feature disabled'
+    end
+  end
 end

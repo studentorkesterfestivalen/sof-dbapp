@@ -10,6 +10,8 @@ class API::V1::CortegeController < ApplicationController
   end
 
   def create
+    disable_feature from: '2017-02-27'
+
     unless current_user.cortege.nil?
       raise 'Cannot create another cortege application'
     end

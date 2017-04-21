@@ -5,15 +5,19 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :menu
       resources :pages do
+        get 'find(/:category)(/:page)', action: 'find', on: :collection
+      end
+      resources :orchestra do
+        get 'all_signups', action: 'all_signups', on: :member
         collection do
-          get 'find(/:category)(/:page)', action: 'find'
+          get 'item_summary', action: 'item_summary'
+          get 'extra_performances', action: 'extra_performances'
+          get 'anniversary', action: 'anniversary'
+          get 'allergies', action: 'allergies'
         end
       end
-      resources :orchestra
       resources :orchestra_signup do
-        collection do
-          get 'verify', action: 'verify_code'
-        end
+        get 'verify', action: 'verify_code', on: :collection
       end
       resources :article
       resources :users
@@ -22,6 +26,11 @@ Rails.application.routes.draw do
       resources :payments
       resources :shopping_product
       resources :user_groups
+      resources :funkis
+      resources :funkis_shift do
+        get 'export_applications', on: :collection
+      end
+      resources :funkis_application
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'

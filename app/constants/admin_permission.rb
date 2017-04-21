@@ -7,4 +7,5 @@ module AdminPermission
   DELETE_USERS                 = 1 << 5
   LIST_CORTEGE_APPLICATIONS    = 1 << 6
   APPROVE_CORTEGE_APPLICATIONS = 1 << 7
+  LIST_FUNKIS_APPLICATIONS     = 1 << 8
 end

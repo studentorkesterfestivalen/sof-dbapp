@@ -24,3 +24,4 @@ en:
   errors:
     messages:
       must_use_cas: "Log in using the LiU-login instead"
+  welcome_to_sof: "welcome to SOF!"

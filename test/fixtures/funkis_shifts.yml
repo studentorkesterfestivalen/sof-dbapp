@@ -1,0 +1,30 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one:
+  day: Thursday
+  time: 10:00 - 12:00
+  red_limit: 10
+  points: 100
+  funkis_category_id: one
+
+two:
+  day: Thursday
+  time: 12:00 - 14:00
+  red_limit: 5
+  funkis_category_id: one
+
+three:
+  day: Friday
+  time: 08:00 - 12:00
+  red_limit: 3
+  funkis_category_id: two
+
+four:
+  day: Friday
+  time: 08:00 - 12:00
+  red_limit: 1
+  funkis_category_id: two

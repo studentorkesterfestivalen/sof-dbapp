@@ -22,6 +22,11 @@ class API::V1::OrchestraSignupController < ApplicationController
     signup = OrchestraSignup.new(item_params)
     signup.user = current_user
     signup.orchestra = orchestra
+
+    if OrchestraSignup.include_late_registration_fee?
+      signup.is_late_registration = true
+    end
+
     signup.save!
 
     redirect_to api_v1_orchestra_signup_url(signup)
