@@ -60,4 +60,8 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
   config.include Warden::Test::Helpers
+
+  config.before(:suite) do
+    FactoryGirl.find_definitions
+  end
 end

@@ -3,11 +3,8 @@ require 'rails_helper'
 RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
 
   describe 'GET #index' do
-
-
     before do
-      login_with create( :user )
-
+      login_with create( :admin )
       get :index
     end
 
@@ -15,8 +12,8 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it 'response with json containing all cortege_memberships' do
-      expect { JSON.parse(response.body).with_indifferent_access }.not_to raise_exception
+    it 'responds with json' do
+      expect { JSON.parse(response.body) }.not_to raise_exception
     end
   end
 end

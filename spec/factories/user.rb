@@ -8,17 +8,17 @@ end
 FactoryGirl.define do
   factory :user, :class => 'User' do
     email
-    password '123456'
-    password_confirmation '123456'
-    user.admin_permissions 0
+    password 'password123'
+    password_confirmation 'password123'
+    admin_permissions 0
   end
 end
 
 FactoryGirl.define do
   factory :admin, :class => 'User' do
     email
-    password 'password'
-    password_confirmation 'password'
+    password 'password123'
+    password_confirmation 'password123'
     admin_permissions 1
     end
 end
