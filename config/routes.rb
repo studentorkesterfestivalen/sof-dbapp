@@ -39,6 +39,10 @@ Rails.application.routes.draw do
         delete '/item/:id', to: 'shopping_cart#delete_item'
       end
 
+      scope '/store' do
+        post '/charge', to: 'payment#charge'
+      end
+
       get 'user', to: 'users#show'
     end
   end

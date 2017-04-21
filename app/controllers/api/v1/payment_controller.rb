@@ -3,35 +3,29 @@ class API::V1::PaymentController < ApplicationController
 
   before_action :authenticate_user!
 
-  def new
-  end
+  def charge
+    order = current_user.cart.create_order
+    created_charge = create_charge!
+    order.complete! created_charge
 
-  def create
-    customer = Stripe::Customer.create(
-        :email => params[:email],
-        :source => params[:token],
-    )
-
-    # TODO
-    #@order_id = create_order()
-    @order_id = 1
-
-    charge(customer, @order_id, params[:amount])
-  end
-
-  def charge(customer, order_id, amount)
-    current_charge = Stripe::Charge.create(
-        :customer => customer.id,
-        :amount => amount, # amount in öre SEK
-        :description => params[:description],
-        :metadata => {'order_id' => order_id},
-        :currency => 'sek',
-    )
-    # TODO
-    #complete_order(order_id)
-
+    head :no_content
   rescue Stripe::CardError => e
     raise e.message
-    #redirect_to new_payment_path
+  end
+
+  private
+
+  def create_charge!
+    customer = Stripe::Customer.create(
+        :email => current_user.email,
+        :source => params[:stripe_token],
+    )
+
+    Stripe::Charge.create(
+        :customer => customer.id,
+        :amount => order.total_cost,
+        :description => 'Köp på www.sof17.se',
+        :currency => 'sek',
+    )
   end
 end
