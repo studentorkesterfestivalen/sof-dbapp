@@ -13,20 +13,39 @@ class API::V1::UsersController < ApplicationController
     if params[:id].nil?
       render json: current_user,
              except: [
-                 :created_at,
-                 :updated_at,
-                 :permissions
+               :created_at,
+               :updated_at,
+               :permissions
              ],
-             include: [
-                 :case_cortege,
-                 :cortege,
-                 :orchestra,
-                 orchestra_signup: {
+             include: {
+               case_cortege: {},
+               cortege: {},
+               orchestra: {},
+               orchestra_signup: {
+                 include: [
+                   :orchestra
+                 ]
+               },
+               funkis_application: {
+                 include: [
+                   funkis_shift_applications: {
                      include: [
-                         :orchestra
+                       funkis_shift: {
+                         include: [
+                           :funkis_category
+                         ],
+                         except: [
+                           :maximum_workers
+                         ]
+                       }
                      ]
-                 }
-             ],
+                   }
+                 ],
+                 methods: [
+                   :steps_completed
+                 ]
+               }
+             },
              methods: [
                  :is_lintek_member,
                  :shopping_cart_count
@@ -35,7 +54,7 @@ class API::V1::UsersController < ApplicationController
       require_admin_permission AdminPermission::LIST_USERS
 
       user = User.find(params[:id])
-      render json: user
+      render json: user, include: [:funkis_application]
     end
   end
 
