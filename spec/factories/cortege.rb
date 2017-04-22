@@ -19,5 +19,16 @@ FactoryGirl.define do
     cortege_type 0
     idea 'nonsense'
     user
+
+    factory :cortege_with_members do
+      transient do
+        users_count 5
+      end
+
+      after(:create) do |cortege, evaluator|
+        create_list(:user, evaluator.users_count, cortege: cortege)
+      end
+    end
+
   end
 end

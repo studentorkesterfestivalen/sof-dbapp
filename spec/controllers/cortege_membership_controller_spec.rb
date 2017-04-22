@@ -19,8 +19,8 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
 
   describe 'POST :create' do
     before do
-      @user = create ( :user_with_cortege )
-      login_with @user
+      @logged_in_user = create ( :user_with_cortege )
+      login_with @logged_in_user
 
       @user_to_add = create ( :user )
       @another_user_with_cortege = create ( :user_with_cortege )
@@ -28,39 +28,13 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
 
     let(:valid_params) {{
         :cortege_membership => {
-            :cortege_id => @user.cortege.id
+            :cortege_id => @logged_in_user.cortege.id
         },
         :user => {
             :email => @user_to_add.email
         }
     }}
 
-    let(:invalid_params_add_self) {{
-        :cortege_membership => {
-            :cortege_id => @user.cortege.id
-        },
-        :user => {
-            :email => @user.email
-        }
-    }}
-
-    let(:invalid_params_non_existent_user) {{
-        :cortege_membership => {
-            :cortege_id => @user.cortege.id
-        },
-        :user => {
-            :email => 'nouser@sof17.se'
-        }
-    }}
-
-    let(:invalid_params_others_cortege) {{
-        :cortege_membership => {
-            :cortege_id => @another_user_with_cortege.cortege.id,
-        },
-        :user => {
-            :email => @user.email
-        }
-    }}
 
     context 'with valid params' do
       let(:create_membership) {
@@ -75,6 +49,33 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
         expect(create_membership).to have_http_status :success
       end
     end
+
+    let(:invalid_params_add_self) {{
+        :cortege_membership => {
+            :cortege_id => @logged_in_user.cortege.id
+        },
+        :user => {
+            :email => @logged_in_user.email
+        }
+    }}
+
+    let(:invalid_params_non_existent_user) {{
+        :cortege_membership => {
+            :cortege_id => @logged_in_user.cortege.id
+        },
+        :user => {
+            :email => 'nouser@sof17.se'
+        }
+    }}
+
+    let(:invalid_params_others_cortege) {{
+        :cortege_membership => {
+            :cortege_id => @another_user_with_cortege.cortege.id,
+        },
+        :user => {
+            :email => @user_to_add.email
+        }
+    }}
 
     context 'with invalid params' do
       let(:create_membership_for_self) {
@@ -104,8 +105,17 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
       it 'returns http failure' do
         expect(create_membership_for_self).to have_http_status 400
         expect(create_membership_for_non_existent_user).to have_http_status 400
-        expect(create_membership_for_other_cortege).to have_http_status 400
+        expect(create_membership_for_other_cortege).to have_http_status 403
       end
+    end
+  end
+
+  describe 'DELETE :destroy' do
+    before do
+      @logged_in_user = create ( :user_with_cortege )
+      login_with  @logged_in_user
+
+      @cortege = create ( :cortege_with_members )
     end
   end
 end
