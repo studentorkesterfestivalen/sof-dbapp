@@ -9,23 +9,23 @@ class API::V1::CortegeMembershipController < ApplicationController
 
   def create
     user = User.find_by email: user_params[:email]
-    unless user.present?
+    if user.present? and user != current_user
+      if cortege_membership_params[:case_cortege_id].present?
+        case_cortege = CaseCortege.find_by id: cortege_membership_params[:case_cortege_id]
+        require_ownership_or_admin_permission case_cortege, AdminPermission::ALL
+      else
+        cortege = Cortege.find_by id: cortege_membership_params[:cortege_id]
+        require_ownership_or_admin_permission cortege, AdminPermission::ALL
+      end
+
+      membership = CortegeMembership.new(cortege_membership_params)
+      membership.user_id = user.id
+      membership.save!
+
+      render :status => '200', :json => {:message => 'Membership created'}.to_json
+    else
       render :status => '400', :json => {:status => 'User does not exist'}.to_json
     end
-
-    if cortege_membership_params[:case_cortege_id].present?
-      case_cortege = CaseCortege.find_by id: cortege_membership_params[:case_cortege_id]
-      require_ownership_or_admin_permission case_cortege, AdminPermission::ALL
-    else
-      cortege = Cortege.find_by id: cortege_membership_params[:cortege_id]
-      require_ownership_or_admin_permission cortege, AdminPermission::ALL
-    end
-
-    membership = CortegeMembership.new(cortege_membership_params)
-    membership.user_id = user.id
-    membership.save!
-
-    render :status => '200', :json => {:message => 'Membership created'}.to_json
   end
 
   def show
