@@ -16,4 +16,14 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
       expect { JSON.parse(response.body) }.not_to raise_exception
     end
   end
+
+  describe 'POST #create' do
+    before do
+      login_with create ( :user )
+    end
+
+    it 'returns http success' do
+      expect(response).to have_http_status(:success)
+    end
+  end
 end

@@ -8,7 +8,24 @@ class API::V1::CortegeMembershipController < ApplicationController
   end
 
   def create
-    raise 'Not implemented'
+    user = User.find_by email: user_params[:email]
+    unless user.present?
+      render :status => '400', :json => {:status => 'User does not exist'}.to_json
+    end
+
+    if cortege_membership_params[:case_cortege_id].present?
+      case_cortege = CaseCortege.find_by id: cortege_membership_params[:case_cortege_id]
+      require_ownership_or_admin_permission case_cortege, AdminPermission::ALL
+    else
+      cortege = Cortege.find_by id: cortege_membership_params[:cortege_id]
+      require_ownership_or_admin_permission cortege, AdminPermission::ALL
+    end
+
+    membership = CortegeMembership.new(cortege_membership_params)
+    membership.user_id = user.id
+    membership.save!
+
+    render :status => '200', :json => {:message => 'Membership created'}.to_json
   end
 
   def modify_membership
@@ -26,45 +43,28 @@ class API::V1::CortegeMembershipController < ApplicationController
   end
 
   def show
-    raise 'Not implemented'
+    raise 'not implemented'
   end
 
   def destroy
-    if params.has_key? :cortege
-      modify_cortege_membership cortege_params, false
-    elsif params.has_key? :case_cortege
-      modify_case_cortege_membership case_cortege_params, false
-    else
-      raise 'Invalid params'
-    end
+    raise 'not implemented'
   end
 
 
 
   private
 
-  def all_groups_params
-    params.require(:all).permit(
-        :email
-    )
-  end
-
-  def sof_org_params
-    params.require(:sof_org).permit(
-        :email
-    )
-  end
-
-  def cortege_params
-    params.require(:cortege).permit(
+  def cortege_membership_params
+    params.require(:cortege_membership).permit(
         :cortege_id,
-        :email)
+        :case_cortege_id
+    )
   end
 
-  def case_cortege_params
-    params.require(:case_cortege).permit(
-        :case_cortege_id,
-        :email)
+  def user_params
+    params.required(:user).permit(
+        :email
+    )
   end
 
   def make_user_sof_org_member(params)
