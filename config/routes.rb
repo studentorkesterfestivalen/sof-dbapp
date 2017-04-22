@@ -35,6 +35,8 @@ Rails.application.routes.draw do
       end
       resources :funkis_application
       resources :cortege_membership
+      resources :order
+      resources :order_item
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'

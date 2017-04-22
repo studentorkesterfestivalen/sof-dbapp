@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_one :cortege_membership
   has_one :funkis_application
 
+  has_many :orders
   has_many :purchased_items, class_name: OrderItem, foreign_key: :user_id
   has_many :owned_items, class_name: OrderItem, foreign_key: :owner_id
 
