@@ -64,7 +64,6 @@ class User < ActiveRecord::Base
     cart = super
     if cart.nil?
       cart = Cart.new
-      cart.save!
 
       self.cart = cart
       self.save!
