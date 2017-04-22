@@ -22,6 +22,13 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
       login_with create ( :user )
     end
 
+    test_user = create ( :user )
+
+    post :create, {
+      :user => {
+          :user_id => test_user.id,
+      }}
+
     it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
