@@ -5,7 +5,7 @@ class API::V1::ShoppingProductController < ApplicationController
 
   def index
     if current_user.present?
-      if current_user.has_admin_permission? AdminPermission::ALL
+      if current_user.has_admin_permission? AdminPermission::ALL and params[:limit_items].nil?
         products = BaseProduct.all
       else
         enabled_products = BaseProduct.where(enabled: true)
@@ -15,7 +15,11 @@ class API::V1::ShoppingProductController < ApplicationController
       products = BaseProduct.where(enabled: true, required_permissions: 0)
     end
 
-    render :json => products, include: [:products]
+    render :json => products, include: {
+        products: {
+            methods: [:actual_cost]
+        }
+    }
   end
 
   def create
