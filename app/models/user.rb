@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   end
 
   def has_group_permission?(group)
-    includes_permission?(usergroup, group) or includes_permission?(usergroup, UserGroupPermissions::ALL)
+    includes_group_permission?(usergroup, group) or includes_permission?(usergroup, UserGroupPermission::ALL)
   end
 
   def has_owner?(owner)
