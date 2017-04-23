@@ -9,6 +9,11 @@
 
 
 test_menu_items = [
+    ['Butik', '#', true, 'store', 0, true, [
+        ['Handla', '/store', true, '', 0, true, []],
+        ['Mina produkter', '/store/inventory', true, '', 0, true, []],
+        ['Mina ordrar', '/store/orders', true, '', 0, true, []],
+    ]],
     ['Orkester', '#', true, 'orchestra', 0, true, [
         ['Information', '/orchestra', true, '', 0, true, []],
         ['Anmälan', '/orchestra/register', true, '', 0, true, []],
