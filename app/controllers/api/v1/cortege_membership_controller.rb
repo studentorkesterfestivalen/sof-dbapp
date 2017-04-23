@@ -21,14 +21,15 @@ class API::V1::CortegeMembershipController < ApplicationController
 
         membership = CortegeMembership.new(cortege_membership_params)
         membership.user_id = user.id
+        membership.user.usergroup &= UserGroupPermission::CORTEGE_MEMBER
         membership.save!
 
-        render :status => '200', :json => {:message => 'Membership created'}.to_json
+        render :status => '200', :json => {:message => 'Membership created'}
       rescue => error
-        render :status => '403', :json => {:status => error}.to_json
+        render :status => '403', :json => {:status => error}
       end
     else
-      render :status => '400', :json => {:status => 'Assigned user does not exists or is self'}.to_json
+      render :status => '400', :json => {:status => 'Assigned user does not exists or is self'}
     end
   end
 
@@ -37,7 +38,29 @@ class API::V1::CortegeMembershipController < ApplicationController
   end
 
   def destroy
-    raise 'not implemented'
+    membership = CortegeMembership.find(params[:id])
+    cortege = membership.cortege
+    begin
+      require_ownership_or_admin_permission cortege, AdminPermission::ALL
+
+      user = User.find(membership.user_id)
+      user.usergroup &= ~UserGroupPermission::CORTEGE_MEMBER
+      membership.destroy
+
+      render :status => '200', :json => {:message => 'Membership removed.'}
+    rescue => error
+      puts error
+      render :status => '403', :json => {:status => error}
+    end
+  end
+
+  def show_cortege_members
+    cortege = Cortege.find(params[:id])
+    require_ownership_or_admin_permission cortege, AdminPermission::LIST_CORTEGE_APPLICATIONS
+
+    cortege_membership = cortege.cortege_memberships
+
+    render :json => cortege_membership, include: [:user]
   end
 
 
@@ -58,6 +81,13 @@ class API::V1::CortegeMembershipController < ApplicationController
   def user_params
     params.required(:user).permit(
         :email
+    )
+  end
+
+  def item_params
+    params.required(:cortege_membership).permit(
+        :id,
+        :cortege_id
     )
   end
 end

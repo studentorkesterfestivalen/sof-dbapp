@@ -1,4 +1,4 @@
-module UserGroupPermissions
+module UserGroupPermission
   ALL                          = 1 << 0
   SOF_ORGANISATION             = 1 << 1
   ORCHESTRA_MEMBER             = 1 << 2
