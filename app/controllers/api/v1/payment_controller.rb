@@ -7,6 +7,7 @@ class API::V1::PaymentController < ApplicationController
     order = current_user.cart.create_order
     created_charge = create_charge!(order)
     order.complete! created_charge
+    current_user.cart.empty!
 
     redirect_to api_v1_order_url(order)
   rescue Stripe::CardError => e
