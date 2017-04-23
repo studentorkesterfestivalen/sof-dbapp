@@ -20,9 +20,10 @@ class API::V1::CortegeMembershipController < ApplicationController
         end
 
         membership = CortegeMembership.new(cortege_membership_params)
-        membership.user_id = user.id
-        membership.user.usergroup &= UserGroupPermission::CORTEGE_MEMBER
+        membership.user = user
+        membership.user.usergroup |= UserGroupPermission::CORTEGE_MEMBER
         membership.save!
+        membership.user.save!
 
         render :status => '200', :json => {:message => 'Membership created'}
       rescue => error
