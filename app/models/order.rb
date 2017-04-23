@@ -9,7 +9,7 @@ class Order < ApplicationRecord
   end
 
   def amount
-    order_items.sum { |x| x.product.base_product.cost }
+    order_items.sum { |x| x.cost }
   end
 
   def complete!(stripe_charge)

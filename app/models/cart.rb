@@ -19,6 +19,7 @@ class Cart < ApplicationRecord
     item.product = cart_item.product
     item.user = user
     item.owner = user
+    item.cost = cart_item.product.base_product.cost
     item
   end
 end
