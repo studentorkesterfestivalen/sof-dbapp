@@ -8,7 +8,7 @@ class API::V1::PaymentController < ApplicationController
     created_charge = create_charge!(order)
     order.complete! created_charge
 
-    head :no_content
+    redirect_to api_v1_order_url(order)
   rescue Stripe::CardError => e
     raise e.message
   end
