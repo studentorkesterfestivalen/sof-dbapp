@@ -45,7 +45,7 @@ module ViewPermissionConcern
     return if from and Date.parse(from) > Date.today
 
     # Always allow administrators to access the feature
-    if current_user.nil? or not current_user.has_permission?(Permission::ALL)
+    if current_user.nil? or not current_user.has_admin_permission?(AdminPermission::ALL)
       raise 'Feature disabled'
     end
   end

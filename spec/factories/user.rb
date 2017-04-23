@@ -13,9 +13,9 @@ FactoryGirl.define do
       admin_permissions 1
     end
 
-    factory :user_with_cortege do
-      after(:create) do |user|
-        create(:cortege, user: user)
+    trait :with_cortege do
+      after(:create) do |u|
+        u.cortege = create(:cortege, user: u)
       end
     end
   end

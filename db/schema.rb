@@ -289,7 +289,7 @@ ActiveRecord::Schema.define(version: 20170423153539) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-04-23 11:49:09', null: false
+    t.datetime "union_valid_thru",                 default: '2017-04-23 14:40:51', null: false
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
     t.index ["email"], name: "index_users_on_email"

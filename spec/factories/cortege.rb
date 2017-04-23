@@ -20,15 +20,10 @@ FactoryGirl.define do
     idea 'nonsense'
     user
 
-    factory :cortege_with_members do
+    trait :with_members do
       transient do
-        users_count 5
-      end
-
-      after(:create) do |cortege, evaluator|
-        create_list(:user, evaluator.users_count, cortege: cortege)
+        members_count 5
       end
     end
-
   end
 end

@@ -19,11 +19,11 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
 
   describe 'POST :create' do
     before do
-      @logged_in_user = create ( :user_with_cortege )
+      @logged_in_user = create(:user, :with_cortege)
       login_with @logged_in_user
 
       @user_to_add = create ( :user )
-      @another_user_with_cortege = create ( :user_with_cortege )
+      @another_user_with_cortege = create(:user, :with_cortege)
     end
 
     let(:valid_params) {{
@@ -112,10 +112,8 @@ RSpec.describe API::V1::CortegeMembershipController, :type => :controller do
 
   describe 'DELETE :destroy' do
     before do
-      @logged_in_user = create ( :user_with_cortege )
+      @logged_in_user = create(:user, :with_cortege)
       login_with  @logged_in_user
-
-      @cortege = create ( :cortege_with_members )
     end
   end
 end
