@@ -23,7 +23,7 @@ class API::V1::PaymentController < ApplicationController
 
     Stripe::Charge.create(
         :customer => customer.id,
-        :amount => order.total_cost,
+        :amount => order.amount,
         :description => 'Köp på www.sof17.se',
         :currency => 'sek',
     )
