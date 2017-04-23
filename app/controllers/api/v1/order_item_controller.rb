@@ -9,7 +9,11 @@ class API::V1::OrderItemController < ApplicationController
         purchased: current_user.purchased_items
     }
 
-    render :json => items
+    render :json => items, include: {
+        product: {
+            include: [:base_product]
+        }
+    }
   end
 
   def show
