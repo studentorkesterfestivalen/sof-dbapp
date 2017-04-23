@@ -42,6 +42,7 @@ test_menu_items = [
         ['Hantera orkestrar', '/manage/orchestras', true, '', AdminPermission::LIST_ORCHESTRA_SIGNUPS, true, []],
         ['Hantera kårteger', '/manage/corteges', true, '', AdminPermission::LIST_CORTEGE_APPLICATIONS, true, []],
         ['Hantera casekårteger', '/manage/case_corteges', true, '', AdminPermission::LIST_CORTEGE_APPLICATIONS, true, []],
+        ['Hantera produkter', '/manage/products', true, '', AdminPermission::ALL, true, []],
         ['Funkis-statistik', '/manage/funkis', true, '', AdminPermission::LIST_FUNKIS_APPLICATIONS, true, []]
     ]]
 ]

@@ -9,6 +9,9 @@ class API::V1::ShoppingCartController < ApplicationController
                        product: {
                            include: [
                                :base_product
+                           ],
+                           methods: [
+                               :actual_cost
                            ]
                        }
                    ]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170423103529) do
+ActiveRecord::Schema.define(version: 20170423135211) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -31,13 +31,13 @@ ActiveRecord::Schema.define(version: 20170423103529) do
   end
 
   create_table "base_products", force: :cascade do |t|
-    t.string   "name",                                null: false
-    t.text     "description",                         null: false
+    t.string   "name",                                          null: false
+    t.text     "description",                                   null: false
     t.integer  "cost"
-    t.integer  "required_permissions"
-    t.boolean  "enabled",              default: true, null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.integer  "required_permissions", limit: 8, default: 0,    null: false
+    t.boolean  "enabled",                        default: true, null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   create_table "cart_items", force: :cascade do |t|
