@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
     includes_permission?(admin_permissions, permission) or includes_permission?(admin_permissions, AdminPermission::ALL)
   end
 
+  def has_group_permission?(group)
+    includes_permission?(usergroup, group) or includes_permission?(usergroup, UserGroupPermissions::ALL)
+  end
+
   def has_owner?(owner)
     owner == self
   end
