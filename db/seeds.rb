@@ -9,7 +9,7 @@
 
 
 test_menu_items = [
-    ['Butik', '#', enabled_from: '2017-04-24 22:00', children: [
+    ['Butik', '#', enabled_from: '2017-04-23', children: [
         ['Handla', '/store'],
         ['Mina produkter', '/store/inventory'],
         ['Mina ordrar', '/store/orders'],
