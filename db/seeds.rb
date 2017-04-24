@@ -9,52 +9,52 @@
 
 
 test_menu_items = [
-    ['Butik', '#', true, 'store', 0, true, [
-        ['Handla', '/store', true, '', 0, true, []],
-        ['Mina produkter', '/store/inventory', true, '', 0, true, []],
-        ['Mina ordrar', '/store/orders', true, '', 0, true, []],
+    ['Butik', '#', enabled_from: DateTime.parse('2017-04-25'), children: [
+        ['Handla', '/store'],
+        ['Mina produkter', '/store/inventory'],
+        ['Mina ordrar', '/store/orders'],
     ]],
-    ['Orkester', '#', true, 'orchestra', 0, true, [
-        ['Information', '/orchestra', true, '', 0, true, []],
-        ['Anmälan', '/orchestra/register', true, '', 0, true, []],
+    ['Orkester', '#', children: [
+        ['Information', '/orchestra'],
+        ['Anmälan', '/orchestra/register'],
     ]],
-    ['Kårtege', '#', true, 'cortege', 0, true, [
-        ['Om Kårtegen', '/cortege', true, '', 0, true, []],
-        ['Om Casekårtege', '/case_cortege', true, '', 0, true, []],
-        ['Kårtegeanmälan', '/cortege/interest', false, '', 0, true, []],
-        ['Casekårtegeanmälan', '/case_cortege/new', false, '', 0, true, []],
+    ['Kårtege', '#', children: [
+        ['Om Kårtegen', '/cortege'],
+        ['Om Casekårtege', '/case_cortege'],
+        ['Kårtegeanmälan', '/cortege/interest'],
+        ['Casekårtegeanmälan', '/case_cortege/new'],
     ]],
-    ['Jobba på SOF', '#', true, 'funkis', 0, true, [
-        ['Förmåner', '/funkis', true, '', 0, true, []],
-        ['Funkiskategorier', '/funkis/categories', true, '', 0, true, []],
-        #['Anmälan', '/funkis/application', true, '', 0, true, []]
+    ['Jobba på SOF', '#', children: [
+        ['Förmåner', '/funkis'],
+        ['Funkiskategorier', '/funkis/categories'],
+        ['Anmälan', '/funkis/application', enabled_from: DateTime.parse('2017-04-22'), disabled_from: DateTime.parse('2017-05-01')]
     ]],
-    ['Kontakt', '#', true, 'contact', 0, true, [
-        ['Press', '/contact/press', true, '', 0, true, []],
-        ['Funkis', '/contact/funkis', true, '', 0, true, []],
-        ['Orkestrar', '/contact/orchestra', true, '', 0, true, []],
-        ['Kårtege', '/contact/cortege', true, '', 0, true, []],
-        ['Biljetter', '/contact/tickets', true, '', 0, true, []],
-        ['It/Webbsupport', '/contact/it', true, '', 0, true, []]
+    ['Kontakt', '#', children: [
+        ['Press', '/contact/press'],
+        ['Funkis', '/contact/funkis'],
+        ['Orkestrar', '/contact/orchestra'],
+        ['Kårtege', '/contact/cortege'],
+        ['Biljetter', '/contact/tickets'],
+        ['It/Webbsupport', '/contact/it']
     ]],
-    ['Administration', '#', true, 'admin', 0, false, [
-        ['Hantera användare', '/manage/users', true, '', AdminPermission::LIST_USERS, true, []],
-        ['Hantera orkestrar', '/manage/orchestras', true, '', AdminPermission::LIST_ORCHESTRA_SIGNUPS, true, []],
-        ['Hantera kårteger', '/manage/corteges', true, '', AdminPermission::LIST_CORTEGE_APPLICATIONS, true, []],
-        ['Hantera casekårteger', '/manage/case_corteges', true, '', AdminPermission::LIST_CORTEGE_APPLICATIONS, true, []],
-        ['Hantera produkter', '/manage/products', true, '', AdminPermission::ALL, true, []],
-        ['Funkis-statistik', '/manage/funkis', true, '', AdminPermission::LIST_FUNKIS_APPLICATIONS, true, []]
+    ['Administration', '#', display_empty: false, children: [
+        ['Hantera användare', '/manage/users', permissions: AdminPermission::LIST_USERS],
+        ['Hantera orkestrar', '/manage/orchestras', permissions: AdminPermission::LIST_ORCHESTRA_SIGNUPS],
+        ['Hantera kårteger', '/manage/corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
+        ['Hantera casekårteger', '/manage/case_corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
+        ['Hantera produkter', '/manage/products', permissions: AdminPermission::ALL],
+        ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS]
     ]]
 ]
 
-def create_menu_item(title, href, active, category, permissions, display_empty, children)
+def create_menu_item(title, href, permissions: 0, display_empty: true, enabled_from: nil, disabled_from: nil, children: [])
   a = MenuItem.new
   a.title = title
   a.href = href
-  a.active = active
-  a.category = category
   a.required_permissions = permissions
   a.display_empty = display_empty
+  a.enabled_from = enabled_from
+  a.disabled_from = disabled_from
   a.menu_items = children.map { |c| create_menu_item *c }
   a.save
   return a

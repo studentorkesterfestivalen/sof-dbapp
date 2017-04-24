@@ -13,6 +13,14 @@ class MenuItem < ApplicationRecord
       return false
     end
 
+    if enabled_from.present? and Date.today < enabled_from
+      return false
+    end
+
+    if disabled_from.present? and Date.today >= disabled_from
+      return false
+    end
+
     has_sufficient_permissions?(user)
   end
 

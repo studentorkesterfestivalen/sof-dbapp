@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424134334) do
+ActiveRecord::Schema.define(version: 20170424144801) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -156,6 +156,8 @@ ActiveRecord::Schema.define(version: 20170424134334) do
     t.integer  "required_permissions", default: 0,    null: false
     t.boolean  "display_empty",        default: true, null: false
     t.string   "href",                 default: "#",  null: false
+    t.datetime "enabled_from"
+    t.datetime "disabled_from"
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
   end
 
@@ -296,7 +298,7 @@ ActiveRecord::Schema.define(version: 20170424134334) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-04-24 12:22:56', null: false
+    t.datetime "union_valid_thru",                 default: '2017-04-23 11:49:09', null: false
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
     t.integer  "rebate_balance",                   default: 0
