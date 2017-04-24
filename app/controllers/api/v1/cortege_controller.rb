@@ -6,6 +6,8 @@ class API::V1::CortegeController < ApplicationController
   def index
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
 
+    update_paid_flag
+
     render :json => Cortege.all, include: [:user]
   end
 
@@ -63,6 +65,13 @@ class API::V1::CortegeController < ApplicationController
   end
 
   private
+
+  def update_paid_flag
+    corteges = Cortege.all
+    corteges.each do |cortege|
+
+    end
+  end
 
   def item_params
     params.require(:item).permit(
