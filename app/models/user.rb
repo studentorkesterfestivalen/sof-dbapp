@@ -106,9 +106,12 @@ class User < ActiveRecord::Base
         response = kobra.get_student(id: nickname, union: true)
 
         self[:union] = response[:union]
+
         if is_lintek_member
+          self[:usergroup] |= UserGroupPermission::LINTEK_MEMBER
           self[:union_valid_thru] = end_of_fiscal_year
         else
+          self[:usergroup] &= ~UserGroupPermission::LINTEK_MEMBER
           self[:union_valid_thru] = DateTime.now.at_end_of_day
         end
 

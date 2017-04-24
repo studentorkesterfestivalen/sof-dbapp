@@ -11,4 +11,5 @@ module UserGroupPermission
   CORTEGE_FREEBUILD            = 1 << 9
   CORTEGE_MICRO                = 1 << 10
   CORTEGE_MACRO                = 1 << 11
+  LINTEK_MEMBER                = 1 << 12
 end
