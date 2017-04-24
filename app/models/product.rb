@@ -28,7 +28,7 @@ class Product < ApplicationRecord
     if max_num_available == 0
       true
     else
-      current_count = additional_items.count { |x| x.product.id == id }
+      current_count = additional_items.to_a.count { |x| x.product.id == id }
       current_count += OrderItem.where(product_id: id).count
       current_count < max_num_available
     end
