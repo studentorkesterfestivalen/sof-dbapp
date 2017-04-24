@@ -4,7 +4,7 @@ class API::V1::FunkisApplicationController < ApplicationController
   include ViewPermissionConcern
 
   def index
-    require_permission Permission::LIST_FUNKIS_APPLICATIONS
+    require_admin_permission AdminPermission::LIST_FUNKIS_APPLICATIONS
 
     categories = FunkisCategory.includes(funkis_shifts: [:funkis_shift_applications])
     render json: categories, include: {
@@ -23,7 +23,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     application.user = current_user
 
     application.save!
-    send_email_on_completion(application)
+    attempt_to_finalize_application(application)
 
     redirect_to api_v1_funkis_application_url(application)
   end
@@ -50,7 +50,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     require_ownership application
 
     if application.update(application_params)
-      send_email_on_completion(application)
+      attempt_to_finalize_application(application)
       redirect_to api_v1_funkis_application_url(application)
     else
       remove_unavailable_shifts application
@@ -68,11 +68,13 @@ class API::V1::FunkisApplicationController < ApplicationController
   end
 
 
-
   private
 
-  def send_email_on_completion(application)
+  def attempt_to_finalize_application(application)
     if application.completed?
+      current_user.usergroup |= UserGroupPermission::FUNKIS
+      current_user.save!
+
       InformationMailer.funkis_confirmation(application).deliver_now
     end
   end

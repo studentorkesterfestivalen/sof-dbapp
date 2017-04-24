@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170423135211) do
+ActiveRecord::Schema.define(version: 20170424071212) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20170423135211) do
     t.integer  "user_id"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
+    t.boolean  "paid",                           default: false,     null: false
     t.index ["user_id"], name: "index_corteges_on_user_id"
   end
 
