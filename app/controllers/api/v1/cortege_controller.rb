@@ -4,7 +4,9 @@ class API::V1::CortegeController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission Permission::LIST_CORTEGE_APPLICATIONS
+    require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
+
+    update_paid_flag
 
     render :json => Cortege.all, include: [:user]
   end
@@ -25,7 +27,7 @@ class API::V1::CortegeController < ApplicationController
 
   def show
     cortege = Cortege.find(params[:id])
-    require_ownership_or_permission cortege, Permission::LIST_CORTEGE_APPLICATIONS
+    require_ownership_or_admin_permission cortege, AdminPermission::LIST_CORTEGE_APPLICATIONS
 
     render :json => cortege, include: [:user]
   end
@@ -37,7 +39,7 @@ class API::V1::CortegeController < ApplicationController
       params.merge!(item_params.to_h)
     end
 
-    if current_user.has_permission? Permission::APPROVE_CORTEGE_APPLICATIONS
+    if current_user.has_admin_permission? AdminPermission::APPROVE_CORTEGE_APPLICATIONS
       params.merge!(admin_params.to_h)
     end
 
@@ -64,6 +66,21 @@ class API::V1::CortegeController < ApplicationController
 
   private
 
+  def update_paid_flag
+    corteges = Cortege.all
+    corteges.each do |cortege|
+      if cortege.user.present?
+        cortege.user.purchased_items.each do |item|
+          case item.base_product.name
+            when 'Makrobygge', 'Microbygge', 'Fribygge'
+              cortege.paid = true
+              cortege.save
+          end
+        end
+      end
+    end
+  end
+
   def item_params
     params.require(:item).permit(
         :name,
@@ -77,7 +94,7 @@ class API::V1::CortegeController < ApplicationController
   end
 
   def admin_params
-    require_permission Permission::APPROVE_CORTEGE_APPLICATIONS
+    require_admin_permission AdminPermission::APPROVE_CORTEGE_APPLICATIONS
 
     params.require(:item).permit(
         :approved,

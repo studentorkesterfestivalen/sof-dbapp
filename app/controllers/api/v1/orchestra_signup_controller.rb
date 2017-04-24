@@ -4,7 +4,7 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+    require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => OrchestraSignup.all
   end
@@ -34,7 +34,7 @@ class API::V1::OrchestraSignupController < ApplicationController
 
   def show
     signup = OrchestraSignup.find(params[:id])
-    require_membership_or_permission signup, Permission::LIST_ORCHESTRA_SIGNUPS
+    require_membership_or_admin_permission signup, AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => signup, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets], methods: :total_cost
   end

@@ -4,7 +4,7 @@ class API::V1::FunkisApplicationController < ApplicationController
   include ViewPermissionConcern
 
   def index
-    require_permission Permission::LIST_FUNKIS_APPLICATIONS
+    require_admin_permission AdminPermission::LIST_FUNKIS_APPLICATIONS
 
     categories = FunkisCategory.includes(funkis_shifts: [:funkis_shift_applications])
     render json: categories, include: {
@@ -23,7 +23,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     application.user = current_user
 
     application.save!
-    send_email_on_completion(application)
+    attempt_to_finalize_application(application)
 
     redirect_to api_v1_funkis_application_url(application)
   end
@@ -50,7 +50,7 @@ class API::V1::FunkisApplicationController < ApplicationController
     require_ownership application
 
     if application.update(application_params)
-      send_email_on_completion(application)
+      attempt_to_finalize_application(application)
       redirect_to api_v1_funkis_application_url(application)
     else
       remove_unavailable_shifts application
@@ -68,13 +68,46 @@ class API::V1::FunkisApplicationController < ApplicationController
   end
 
 
-
   private
 
-  def send_email_on_completion(application)
+  def attempt_to_finalize_application(application)
     if application.completed?
+      total_points = calculate_accrued_funkis_points application
+      rebate = points_to_rebate total_points
+
+      current_user.usergroup |= UserGroupPermission::FUNKIS
+
+      unless current_user.rebate_given
+        current_user.rebate_balance = rebate
+        current_user.rebate_given = true
+      end
+
+      current_user.save!
+
       InformationMailer.funkis_confirmation(application).deliver_now
     end
+  end
+
+  def points_to_rebate(points)
+    case points
+      when 50
+        60
+      when 100
+        150
+      else
+        240
+    end
+  end
+
+  def calculate_accrued_funkis_points(application)
+    total_points = 0
+    application.funkis_shift_applications.each do |shift_application|
+      total_points += shift_application.funkis_shift.points
+      if total_points > 150
+        total_points = 150
+      end
+    end
+    total_points
   end
 
   def remove_unavailable_shifts(application)

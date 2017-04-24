@@ -12,7 +12,13 @@ class User < ActiveRecord::Base
   has_one :orchestra_signup
   has_one :cortege
   has_one :case_cortege
+  has_one :cart
+  has_one :cortege_membership
   has_one :funkis_application
+
+  has_many :orders
+  has_many :purchased_items, class_name: OrderItem, foreign_key: :user_id
+  has_many :owned_items, class_name: OrderItem, foreign_key: :owner_id
 
   validate :liu_accounts_must_use_cas
 
@@ -22,8 +28,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def has_permission?(permission)
-    includes_permission?(permissions, permission) or includes_permission?(permissions, Permission::ALL)
+  def has_admin_permission?(permission)
+    includes_permission?(admin_permissions, permission) or includes_permission?(admin_permissions, AdminPermission::ALL)
+  end
+
+  def has_group_permission?(group)
+    includes_group_permission?(usergroup, group) or includes_permission?(usergroup, UserGroupPermission::ALL)
   end
 
   def has_owner?(owner)
@@ -54,6 +64,27 @@ class User < ActiveRecord::Base
     self[:union] == 'LinTek'
   end
 
+  def cart
+    cart = super
+    if cart.nil?
+      cart = Cart.new
+
+      self.cart = cart
+      self.save!
+    else
+      # TODO: Refactor out this duration to a class variable
+      if cart.updated_at < DateTime.now - 12.hours
+        cart.empty!
+      end
+    end
+
+    cart
+  end
+
+  def shopping_cart_count
+    cart.cart_items.count
+  end
+
   def update_from_kobra!
     return unless is_compatible_liu_student?
 
@@ -75,9 +106,12 @@ class User < ActiveRecord::Base
         response = kobra.get_student(id: nickname, union: true)
 
         self[:union] = response[:union]
+
         if is_lintek_member
+          self[:usergroup] |= UserGroupPermission::LINTEK_MEMBER
           self[:union_valid_thru] = end_of_fiscal_year
         else
+          self[:usergroup] &= ~UserGroupPermission::LINTEK_MEMBER
           self[:union_valid_thru] = DateTime.now.at_end_of_day
         end
 

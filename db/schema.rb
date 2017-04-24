@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326134919) do
+ActiveRecord::Schema.define(version: 20170424144801) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -30,6 +30,34 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "base_products", force: :cascade do |t|
+    t.string   "name",                                                 null: false
+    t.text     "description",                                          null: false
+    t.integer  "cost"
+    t.integer  "required_permissions",       limit: 8, default: 0,     null: false
+    t.boolean  "enabled",                              default: true,  null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+    t.integer  "required_group_permissions", limit: 8, default: 0,     null: false
+    t.boolean  "giftable",                             default: false, null: false
+    t.integer  "purchase_limit",                       default: 0,     null: false
+  end
+
+  create_table "cart_items", force: :cascade do |t|
+    t.integer  "cart_id"
+    t.integer  "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id"], name: "index_cart_items_on_cart_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
   create_table "case_corteges", force: :cascade do |t|
     t.string   "education",                             null: false
     t.string   "contact_phone",                         null: false
@@ -42,6 +70,17 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.index ["user_id"], name: "index_case_corteges_on_user_id"
+  end
+
+  create_table "cortege_memberships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "cortege_id"
+    t.integer  "case_cortege_id"
+    t.index ["case_cortege_id"], name: "index_cortege_memberships_on_case_cortege_id"
+    t.index ["cortege_id"], name: "index_cortege_memberships_on_cortege_id"
+    t.index ["user_id"], name: "index_cortege_memberships_on_user_id"
   end
 
   create_table "corteges", force: :cascade do |t|
@@ -57,6 +96,7 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.integer  "user_id"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
+    t.boolean  "paid",                           default: false,     null: false
     t.index ["user_id"], name: "index_corteges_on_user_id"
   end
 
@@ -116,6 +156,8 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.integer  "required_permissions", default: 0,    null: false
     t.boolean  "display_empty",        default: true, null: false
     t.string   "href",                 default: "#",  null: false
+    t.datetime "enabled_from"
+    t.datetime "disabled_from"
     t.index ["menu_item_id"], name: "index_menu_items_on_menu_item_id"
   end
 
@@ -173,6 +215,32 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.index ["user_id"], name: "index_orchestras_on_user_id"
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "order_id"
+    t.integer  "product_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "owner_id"
+    t.integer  "gifted_by_id"
+    t.integer  "cost",         default: 0, null: false
+    t.index ["gifted_by_id"], name: "index_order_items_on_gifted_by_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["owner_id"], name: "index_order_items_on_owner_id"
+    t.index ["user_id"], name: "index_order_items_on_user_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string   "payment_method",             null: false
+    t.string   "payment_data"
+    t.integer  "user_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "rebate",         default: 0, null: false
+    t.integer  "funkis_rebate",  default: 0, null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "pages", force: :cascade do |t|
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
@@ -182,6 +250,18 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.text     "content",      default: "",      null: false
     t.boolean  "show_in_menu", default: false,   null: false
     t.string   "image"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "kind"
+    t.integer  "cost"
+    t.boolean  "enabled",           default: true, null: false
+    t.integer  "base_product_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "max_num_available", default: 0,    null: false
+    t.integer  "purchase_limit",    default: 0,    null: false
+    t.index ["base_product_id"], name: "index_products_on_base_product_id"
   end
 
   create_table "special_diets", force: :cascade do |t|
@@ -216,10 +296,13 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.text     "tokens"
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
-    t.integer  "permissions",            limit: 8, default: 0,                     null: false
+    t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-04-23 09:31:52', null: false
+    t.datetime "union_valid_thru",                 default: '2017-04-23 11:49:09', null: false
     t.string   "display_name"
+    t.integer  "usergroup",              limit: 8, default: 0,                     null: false
+    t.integer  "rebate_balance",                   default: 0
+    t.boolean  "rebate_given",                     default: false,                 null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true

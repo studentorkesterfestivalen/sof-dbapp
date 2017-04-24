@@ -23,11 +23,33 @@ Rails.application.routes.draw do
       resources :users
       resources :cortege
       resources :case_cortege
+      resources :payments
+      resources :shopping_product
+      resources :user_groups do
+        post 'modify_membership', action: 'modify_membership', on: :member
+      end
+
       resources :funkis
       resources :funkis_shift do
         get 'export_applications', on: :collection
       end
       resources :funkis_application
+      resources :cortege_membership do
+        get 'cortege/:id', action: 'show_cortege_members', on: :collection
+      end
+      resources :order
+      resources :order_item
+
+      scope '/cart' do
+        get '/', to: 'shopping_cart#show'
+        delete '/', to: 'shopping_cart#clear'
+        put '/item', to: 'shopping_cart#add_item'
+        delete '/item/:id', to: 'shopping_cart#delete_item'
+      end
+
+      scope '/store' do
+        post '/charge', to: 'payment#charge'
+      end
 
       get 'user', to: 'users#show'
     end
