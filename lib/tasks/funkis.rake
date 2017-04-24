@@ -13,27 +13,27 @@ namespace :funkis do
         funkis.save
       end
     end
+  end
 
-    def points_to_rebate(points)
-      case points
-        when 50
-          60
-        when 100
-          150
-        else
-          240
+  def points_to_rebate(points)
+    case points
+      when 50
+        60
+      when 100
+        150
+      else
+        240
+    end
+  end
+
+  def calculate_accrued_funkis_points(application)
+    total_points = 0
+    application.funkis_shift_applications.each do |shift|
+      total_points += shift.funkis_shift.points
+      if total_points > 150
+        total_points = 150
       end
     end
-
-    def calculate_accrued_funkis_points(application)
-      total_points = 0
-      application.funkis_shift_applications.each do |shift|
-        total_points += shift.funkis_shift.points
-        if total_points > 150
-          total_points = 150
-        end
-      end
-      total_points
-    end
+    total_points
   end
 end
