@@ -33,6 +33,12 @@ class Cart < ApplicationRecord
     given_lintek_rebates.sum { |x| LINTEK_REBATES[x] }
   end
 
+  def funkis_rebate
+    order_items = cart_items.map { |x| create_order_item(x) }
+    amount = order_items.sum { |x| x.product.actual_cost } - rebate
+    [amount, user.rebate_balance].min
+  end
+
   def empty!
     cart_items.delete_all
     touch
@@ -43,6 +49,7 @@ class Cart < ApplicationRecord
     order.user = user
     order.rebate = rebate
     order.order_items = cart_items.map { |x| create_order_item(x) }
+    order.update_funkis_rebate
     order
   end
 
