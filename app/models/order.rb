@@ -9,7 +9,7 @@ class Order < ApplicationRecord
   end
 
   def amount
-    order_items.sum { |x| x.cost }
+    order_items.sum { |x| x.cost } - rebate
   end
 
   def complete!(stripe_charge)
