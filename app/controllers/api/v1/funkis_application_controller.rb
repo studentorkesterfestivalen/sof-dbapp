@@ -72,11 +72,42 @@ class API::V1::FunkisApplicationController < ApplicationController
 
   def attempt_to_finalize_application(application)
     if application.completed?
+      total_points = calculate_accrued_funkis_points application
+      rebate = points_to_rebate total_points
+
       current_user.usergroup |= UserGroupPermission::FUNKIS
+
+      unless current_user.rebate_given
+        current_user.rebate_balance = rebate
+        current_user.rebate_given = true
+      end
+
       current_user.save!
 
       InformationMailer.funkis_confirmation(application).deliver_now
     end
+  end
+
+  def points_to_rebate(points)
+    case points
+      when 50
+        60
+      when 100
+        150
+      else
+        240
+    end
+  end
+
+  def calculate_accrued_funkis_points(application)
+    total_points = 0
+    application.funkis_shift_applications.each do |shift|
+      total_points += shift.funkis_shift.points
+      if total_points > 150
+        total_points = 150
+      end
+    end
+    total_points
   end
 
   def remove_unavailable_shifts(application)

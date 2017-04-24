@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424071506) do
+ActiveRecord::Schema.define(version: 20170424094231) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -294,6 +294,8 @@ ActiveRecord::Schema.define(version: 20170424071506) do
     t.datetime "union_valid_thru",                 default: '2017-04-23 14:40:51', null: false
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
+    t.integer  "rebate_balance",                   default: 0
+    t.boolean  "rebate_given",                     default: false,                 null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
