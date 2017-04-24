@@ -16,7 +16,8 @@ class API::V1::ShoppingCartController < ApplicationController
                        }
                    ]
                }
-           ]
+           ],
+           methods: [:rebate, :funkis_rebate]
   end
 
   def clear

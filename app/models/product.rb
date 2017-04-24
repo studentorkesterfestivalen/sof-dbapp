@@ -19,7 +19,7 @@ class Product < ApplicationRecord
     if purchase_limit == 0
       true
     else
-      current_count = (user.purchased_items + additional_items).count { |x| x.product.id == id }
+      current_count = current_count(user, additional_items)
       current_count < purchase_limit
     end
   end
@@ -28,9 +28,13 @@ class Product < ApplicationRecord
     if max_num_available == 0
       true
     else
-      current_count = additional_items.count { |x| x.product.id == id }
+      current_count = additional_items.to_a.count { |x| x.product.id == id }
       current_count += OrderItem.where(product_id: id).count
       current_count < max_num_available
     end
+  end
+
+  def current_count(user, additional_items)
+    (user.purchased_items + additional_items).count { |x| x.product.id == id }
   end
 end
