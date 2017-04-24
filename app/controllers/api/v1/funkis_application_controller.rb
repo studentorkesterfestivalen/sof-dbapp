@@ -101,8 +101,8 @@ class API::V1::FunkisApplicationController < ApplicationController
 
   def calculate_accrued_funkis_points(application)
     total_points = 0
-    application.funkis_shift_applications.each do |shift|
-      total_points += shift.funkis_shift.points
+    application.funkis_shift_applications.each do |shift_application|
+      total_points += shift_application.funkis_shift.points
       if total_points > 150
         total_points = 150
       end
