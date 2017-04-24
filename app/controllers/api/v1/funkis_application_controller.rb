@@ -59,10 +59,17 @@ class API::V1::FunkisApplicationController < ApplicationController
   end
 
   def destroy
-    require_permission Permission::ALL
+    require_admin_permission AdminPermission::ALL
 
     application = FunkisApplication.find(params[:id])
     application.destroy!
+
+    if current_user.rebate_given
+      current_user.rebate_balance = 0
+      current_user.rebate_given = false
+      current_user &= ~UserGroupPermission::FUNKIS
+      current_user.save
+    end
 
     head :no_content
   end
