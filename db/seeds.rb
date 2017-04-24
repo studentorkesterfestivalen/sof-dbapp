@@ -9,7 +9,7 @@
 
 
 test_menu_items = [
-    ['Butik', '#', enabled_from: DateTime.parse('2017-04-25'), children: [
+    ['Butik', '#', enabled_from: '2017-04-25', children: [
         ['Handla', '/store'],
         ['Mina produkter', '/store/inventory'],
         ['Mina ordrar', '/store/orders'],
@@ -21,13 +21,13 @@ test_menu_items = [
     ['Kårtege', '#', children: [
         ['Om Kårtegen', '/cortege'],
         ['Om Casekårtege', '/case_cortege'],
-        ['Kårtegeanmälan', '/cortege/interest'],
-        ['Casekårtegeanmälan', '/case_cortege/new'],
+        ['Kårtegeanmälan', '/cortege/interest', disabled_from: '2017-04-01'],
+        ['Casekårtegeanmälan', '/case_cortege/new', disabled_from: '2017-04-01'],
     ]],
     ['Jobba på SOF', '#', children: [
         ['Förmåner', '/funkis'],
         ['Funkiskategorier', '/funkis/categories'],
-        ['Anmälan', '/funkis/application', enabled_from: DateTime.parse('2017-04-22'), disabled_from: DateTime.parse('2017-05-01')]
+        ['Anmälan', '/funkis/application', enabled_from: '2017-04-22', disabled_from: '2017-05-01']
     ]],
     ['Kontakt', '#', children: [
         ['Press', '/contact/press'],
@@ -53,8 +53,8 @@ def create_menu_item(title, href, permissions: 0, display_empty: true, enabled_f
   a.href = href
   a.required_permissions = permissions
   a.display_empty = display_empty
-  a.enabled_from = enabled_from
-  a.disabled_from = disabled_from
+  a.enabled_from = enabled_from.present? ? DateTime.parse(enabled_from) : nil
+  a.disabled_from = disabled_from.present? ? DateTime.parse(disabled_from) : nil
   a.menu_items = children.map { |c| create_menu_item *c }
   a.save
   return a
