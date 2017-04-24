@@ -11,7 +11,7 @@ class BaseProduct < ApplicationRecord
   end
 
   def is_purchasable?(user, additional_items)
-    below_user_limit?(user, additional_items)
+    below_user_limit?(user, additional_items) && has_sufficient_permissions?(user)
   end
 
   def below_user_limit?(user, additional_items)
@@ -21,5 +21,9 @@ class BaseProduct < ApplicationRecord
       current_count = (user.purchased_items + additional_items).count { |x| x.product.base_product.id == id }
       current_count < purchase_limit
     end
+  end
+
+  def has_sufficient_permissions?(user)
+    user.has_admin_permission?(required_permissions) && user.has_group_permission?(required_group_permissions)
   end
 end
