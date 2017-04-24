@@ -59,7 +59,7 @@ class API::V1::FunkisApplicationController < ApplicationController
   end
 
   def destroy
-    require_permission Permission::ALL
+    require_admin_permission AdminPermission::ALL
 
     application = FunkisApplication.find(params[:id])
     application.destroy!
