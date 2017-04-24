@@ -9,10 +9,10 @@ class API::V1::ShoppingProductController < ApplicationController
         products = BaseProduct.all
       else
         enabled_products = BaseProduct.where(enabled: true)
-        products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions }
+        products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions and current_user.has_group_permission? x.required_group_permissions }
       end
     else
-      products = BaseProduct.where(enabled: true, required_permissions: 0)
+      products = BaseProduct.where(enabled: true, required_permissions: 0, required_group_permissions: 0)
     end
 
     render :json => products, include: {
@@ -58,7 +58,9 @@ class API::V1::ShoppingProductController < ApplicationController
       :description,
       :cost,
       :required_permissions,
+      :required_group_permissions,
       :enabled,
+      :giftable,
       products_attributes: [
           :id,
           :kind,

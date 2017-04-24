@@ -31,13 +31,17 @@ class API::V1::OrderItemController < ApplicationController
   end
 
   def update
+    order_item = OrderItem.find(params[:id])
+    require_ownership_or_admin_permission order_item, AdminPermission::ALL
+
+    unless order_item.product.base_product.giftable
+      raise 'Product is not giftable'
+    end
+
     new_owner = User.find_by email: params[:item][:owner]
     if new_owner.nil?
       raise 'Unable to find user'
     end
-
-    order_item = OrderItem.find(params[:id])
-    require_ownership_or_admin_permission order_item, AdminPermission::ALL
 
     if order_item.update({owner: new_owner, gifted_by: current_user})
       redirect_to api_v1_order_item_url(order_item)
