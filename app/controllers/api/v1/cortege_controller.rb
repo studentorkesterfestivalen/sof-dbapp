@@ -69,7 +69,13 @@ class API::V1::CortegeController < ApplicationController
   def update_paid_flag
     corteges = Cortege.all
     corteges.each do |cortege|
-
+      cortege.user.purchased_items.each do |item|
+        case item.base_product.name
+          when 'Makrobygge', 'Microbygge', 'Fribygge'
+            cortege.paid = true
+            cortege.save
+        end
+      end
     end
   end
 
