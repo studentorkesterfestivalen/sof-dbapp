@@ -27,7 +27,7 @@ test_menu_items = [
     ['Jobba på SOF', '#', children: [
         ['Förmåner', '/funkis'],
         ['Funkiskategorier', '/funkis/categories'],
-        ['Anmälan', '/funkis/application', enabled_from: '2017-04-22', disabled_from: '2017-05-01']
+        ['Anmälan', '/funkis/application', enabled_from: '2017-04-22', disabled_from: '2017-04-29']
     ]],
     ['Kontakt', '#', children: [
         ['Press', '/contact/press'],
