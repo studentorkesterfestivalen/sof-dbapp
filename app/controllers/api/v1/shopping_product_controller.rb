@@ -60,6 +60,7 @@ class API::V1::ShoppingProductController < ApplicationController
       :required_permissions,
       :required_group_permissions,
       :enabled,
+      :giftable,
       products_attributes: [
           :id,
           :kind,
