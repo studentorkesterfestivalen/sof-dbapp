@@ -64,6 +64,13 @@ class API::V1::FunkisApplicationController < ApplicationController
     application = FunkisApplication.find(params[:id])
     application.destroy!
 
+    if current_user.rebate_given
+      current_user.rebate_balance = 0
+      current_user.rebate_given = false
+      current_user &= ~UserGroupPermission::FUNKIS
+      current_user.save
+    end
+
     head :no_content
   end
 
