@@ -71,7 +71,7 @@ class API::V1::CortegeController < ApplicationController
     corteges.each do |cortege|
       if cortege.user.present?
         cortege.user.purchased_items.each do |item|
-          case item.base_product.name
+          case item.product.base_product.name
             when 'Makrobygge', 'Microbygge', 'Fribygge'
               cortege.paid = true
               cortege.save
