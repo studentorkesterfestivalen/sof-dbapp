@@ -6,18 +6,20 @@ class API::V1::ShoppingProductController < ApplicationController
   def index
     if current_user.present?
       if current_user.has_admin_permission? AdminPermission::ALL and params[:limit_items].nil?
-        products = BaseProduct.all
+        products = BaseProduct.includes(:products).all
       else
-        enabled_products = BaseProduct.where(enabled: true)
+        enabled_products = BaseProduct.includes(:products).where(enabled: true)
         products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions and current_user.has_group_permission? x.required_group_permissions }
       end
     else
-      products = BaseProduct.where(enabled: true, required_permissions: 0, required_group_permissions: 0)
+      products = BaseProduct.includes(:products).where(enabled: true, required_permissions: 0, required_group_permissions: 0)
     end
 
-    render :json => products, include: {
+    products.each { |x| x.update_purchasable(current_user) }
+
+    render :json => products, methods: [:purchasable], include: {
         products: {
-            methods: [:actual_cost]
+            methods: [:actual_cost, :purchasable]
         }
     }
   end
@@ -57,6 +59,7 @@ class API::V1::ShoppingProductController < ApplicationController
       :name,
       :description,
       :cost,
+      :purchase_limit,
       :required_permissions,
       :required_group_permissions,
       :enabled,
@@ -66,6 +69,8 @@ class API::V1::ShoppingProductController < ApplicationController
           :kind,
           :cost,
           :enabled,
+          :max_num_available,
+          :purchase_limit,
           :_destroy
       ]
     )
@@ -74,7 +79,7 @@ class API::V1::ShoppingProductController < ApplicationController
       filtered_params[:products_attributes] = [
           {
               kind: nil,
-              cost: 0,
+              cost: nil,
               enabled: true
           }
       ]

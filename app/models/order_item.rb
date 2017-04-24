@@ -11,4 +11,8 @@ class OrderItem < ApplicationRecord
   def has_member?(member)
     member == user or member == owner
   end
+
+  def purchasable?(additional_items)
+    product.base_product.is_purchasable?(user, additional_items) and product.is_purchasable?(user, additional_items)
+  end
 end

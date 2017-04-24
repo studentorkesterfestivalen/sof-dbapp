@@ -18,7 +18,24 @@ class Order < ApplicationRecord
     save!
   end
 
+  def complete_free_checkout!
+    self.payment_method = 'Gratisköp'
+    self.payment_data = 'Gratisköp'
+    save!
+  end
+
   def has_owner?(owner)
     user == owner
+  end
+
+  def purchasable?
+    accepted_items = []
+    order_items.each do |item|
+      if item.purchasable?(accepted_items)
+        accepted_items.push item
+      end
+    end
+
+    accepted_items.length == order_items.length
   end
 end

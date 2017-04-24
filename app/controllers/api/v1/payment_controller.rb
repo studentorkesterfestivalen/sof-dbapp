@@ -5,11 +5,19 @@ class API::V1::PaymentController < ApplicationController
 
   def charge
     order = current_user.cart.create_order
-    created_charge = create_charge!(order)
-    order.complete! created_charge
-    current_user.cart.empty!
+    if order.purchasable?
+      if order.amount == 0
+        order.complete_free_checkout!
+      else
+        created_charge = create_charge!(order)
+        order.complete! created_charge
+      end
+      current_user.cart.empty!
 
-    redirect_to api_v1_order_url(order)
+      redirect_to api_v1_order_url(order)
+    else
+      head :not_acceptable
+    end
   rescue Stripe::CardError => e
     raise e.message
   end
@@ -24,7 +32,7 @@ class API::V1::PaymentController < ApplicationController
 
     Stripe::Charge.create(
         :customer => customer.id,
-        :amount => order.amount,
+        :amount => order.amount_in_ore,
         :description => 'Köp på www.sof17.se',
         :currency => 'sek',
     )
