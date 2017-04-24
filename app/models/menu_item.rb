@@ -13,6 +13,18 @@ class MenuItem < ApplicationRecord
       return false
     end
 
+    if enabled_from.present? and Date.today < enabled_from
+      unless user.present? and user.has_admin_permission? AdminPermission::ALL
+        return false
+      end
+    end
+
+    if disabled_from.present? and Date.today >= disabled_from
+      unless user.present? and user.has_admin_permission? AdminPermission::ALL
+        return false
+      end
+    end
+
     has_sufficient_permissions?(user)
   end
 
