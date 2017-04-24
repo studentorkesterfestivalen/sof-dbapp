@@ -63,44 +63,47 @@ end
 MenuItem.delete_all
 test_menu_items.each { |c| create_menu_item *c }
 
-BaseProduct.delete_all
-Product.delete_all
+# Only seed in development if empty product database to avoid order and cart problems
+if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
+  BaseProduct.delete_all
+  Product.delete_all
 
-weekend_ticket = BaseProduct.create(
-  id: 1,
-  name: 'Helhelgsbiljett',
-  description: 'En biljett som räcker en hel helg',
-  cost: 5000
-)
-
-weekend_ticket.products.push(
-  Product.create
-)
-
-single_day_ticket = BaseProduct.create(
-  id: 2,
-  name: 'Dagsbiljett',
-  description: 'En biljett som räcker en dag',
-  cost: 2000
-)
-
-single_day_ticket.products.push(
-  Product.create(
-    kind: 'Torsdag'
+  weekend_ticket = BaseProduct.create(
+    id: 1,
+    name: 'Helhelgsbiljett',
+    description: 'En biljett som räcker en hel helg',
+    cost: 5000
   )
-)
 
-single_day_ticket.products.push(
-  Product.create(
-    kind: 'Fredag'
+  weekend_ticket.products.push(
+    Product.create
   )
-)
 
-single_day_ticket.products.push(
-  Product.create(
-    kind: 'Lördag'
+  single_day_ticket = BaseProduct.create(
+    id: 2,
+    name: 'Dagsbiljett',
+    description: 'En biljett som räcker en dag',
+    cost: 2000
   )
-)
+
+  single_day_ticket.products.push(
+    Product.create(
+      kind: 'Torsdag'
+    )
+  )
+
+  single_day_ticket.products.push(
+    Product.create(
+      kind: 'Fredag'
+    )
+  )
+
+  single_day_ticket.products.push(
+    Product.create(
+      kind: 'Lördag'
+    )
+  )
+end
 
 funkis_categories = [
     ['Mästerkatt', 'Insatsfunkis',
