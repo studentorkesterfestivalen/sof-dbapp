@@ -104,8 +104,10 @@ class API::V1::FunkisApplicationController < ApplicationController
         60
       when 100
         150
-      else
+      when 150
         240
+      else
+        0
     end
   end
 
