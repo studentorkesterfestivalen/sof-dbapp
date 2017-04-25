@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326134919) do
+ActiveRecord::Schema.define(version: 20170423130525) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -42,6 +42,16 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.index ["user_id"], name: "index_case_corteges_on_user_id"
+  end
+
+  create_table "cortege_lineups", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "cortege_type"
+    t.integer  "order"
   end
 
   create_table "corteges", force: :cascade do |t|
@@ -218,7 +228,7 @@ ActiveRecord::Schema.define(version: 20170326134919) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "permissions",            limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-03-22 13:43:55', null: false
+    t.datetime "union_valid_thru",                 default: '2017-03-22 13:04:50', null: false
     t.string   "display_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
