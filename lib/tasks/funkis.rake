@@ -19,8 +19,8 @@ namespace :funkis do
     funkisar = User.where.not(rebate_given: nil).includes(:funkis_application).where.not(funkis_applications: { terms_agreed_at: nil})
 
     funkisar.each do |funkis|
-      funkis.funkis_shift_applications.each do |application|
-        if name_is_zazu application.funkis_shift.funkis_category
+      funkis.funkis_applications.each do |application|
+        if name_is_zazu application.funkis_shift_application.funkis_shift.funkis_category
           if funkis.rebate_given
             funkis.rebate_balance = 0
             funkis.save
@@ -31,11 +31,7 @@ namespace :funkis do
   end
 
   def name_is_zazu category
-    if category.name == 'Zazu'
-      true
-    else
-      false
-    end
+    category.name == 'Zazu'
   end
 
   def points_to_rebate(points)
