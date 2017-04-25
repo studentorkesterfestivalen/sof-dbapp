@@ -19,7 +19,7 @@ namespace :funkis do
     funkisar = User.where.not(rebate_given: nil).includes(:funkis_application).where.not(funkis_applications: { terms_agreed_at: nil})
 
     funkisar.each do |funkis|
-      funkis.funkis_applications.each do |application|
+      funkis.funkis_application.each do |application|
         if name_is_zazu application.funkis_shift_application.funkis_shift.funkis_category
           if funkis.rebate_given
             funkis.rebate_balance = 0
