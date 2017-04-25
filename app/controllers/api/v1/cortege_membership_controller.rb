@@ -8,7 +8,7 @@ class API::V1::CortegeMembershipController < ApplicationController
   end
 
   def create
-    user = User.find_by email: user_params[:email]
+    user = User.find_by email: user_params[:email].downcase
     if user.present? and user != current_user
       begin
         if is_case_cortege_membership?
