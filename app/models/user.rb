@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    if is_compatible_liu_student? and super.nil?
+    if is_liu_student? and super.nil?
       update_display_name
     end
 
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
   end
 
   def union
-    if is_compatible_liu_student? and union_valid_thru.past?
+    if is_liu_student? and union_valid_thru.past?
       update_union
     end
 
@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
   end
 
   def update_from_kobra!
-    return unless is_compatible_liu_student?
+    return unless is_liu_student?
 
     if self[:display_name].nil?
       update_display_name
@@ -149,12 +149,6 @@ class User < ActiveRecord::Base
     else
       DateTime.new(now.year, 6, 30)
     end
-  end
-
-  # Kobra doesn't seem to have any records for students with liu ids shorter than 8 characters,
-  # from this assumption we avoid this lookup completely and increase performance
-  def is_compatible_liu_student?
-    is_liu_student? and nickname.length >= 8
   end
 
   def is_liu_student?
