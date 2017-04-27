@@ -61,4 +61,17 @@ namespace :assign_usergroups do
       end
     end
   end
+
+  task orchestra_members: :environment do
+    User.find_each do |u|
+      if u.orchestra_signup.present?
+        u.usergroup |= UserGroupPermission::ORCHESTRA_MEMBER
+        u.save!
+      end
+      if u.orchestra.present?
+        u.usergroup |= UserGroupPermission::ORCHESTRA_LEADER | UserGroupPermission::ORCHESTRA_MEMBER
+        u.save!
+      end
+    end
+  end
 end
