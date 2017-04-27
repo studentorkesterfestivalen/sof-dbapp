@@ -15,7 +15,7 @@ class Cart < ApplicationRecord
       given_lintek_rebates = Set.new
 
       items.each do |item|
-        if item.product.base_product.name == 'Dagsbiljett' or item.product.base_product.name == 'Helhelgsbiljett'
+        if item.product.base_product.name == 'Dagsbiljett' or item.product.base_product.name == 'Endagsbiljett' or item.product.base_product.name == 'Helhelgsbiljett'
           if item.product.current_count(user, [])
             case item.product.kind
               when 'Torsdag'
