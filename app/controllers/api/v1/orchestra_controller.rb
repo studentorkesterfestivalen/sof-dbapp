@@ -16,7 +16,9 @@ class API::V1::OrchestraController < ApplicationController
 
     orchestra = Orchestra.new(item_params)
     orchestra.user = current_user
+    orchestra.user.usergroup |= UserGroupPermission::ORCHESTRA_LEADER | UserGroupPermission::ORCHESTRA_MEMBER
     orchestra.save!
+    orchestra.user.save!
 
     redirect_to api_v1_orchestra_url(orchestra)
   end
