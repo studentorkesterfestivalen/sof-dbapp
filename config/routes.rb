@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       resources :funkis_application
       resources :cortege_membership do
         get 'cortege/:id', action: 'show_cortege_members', on: :collection
+        get 'case_cortege/:id', action: 'show_case_cortege_members', on: :collection
       end
       resources :order
       resources :order_item
