@@ -6,10 +6,8 @@ class API::V1::CortegeLineupsController < ApplicationController
   end
 
   def create
-    puts(" DBAPP create --------------------------------------------------------------")
     cortege = CortegeLineup.new(item_params)
     cortege.save!
-    #redirect_to api_v1_cortege_lineup_url()
   end
 
   def show
@@ -38,10 +36,11 @@ class API::V1::CortegeLineupsController < ApplicationController
 
   def item_params
     params.require(:item).permit(
-        :name,
-        :description,
-        :image,
-        :cortege_type
+      :name,
+      :description,
+      :image,
+      :cortege_type,
+      :order
     )
   end
 
