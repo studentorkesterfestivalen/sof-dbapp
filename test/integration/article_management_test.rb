@@ -14,8 +14,8 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
     articles.each { |article| assert article['enabled'] }
   end
 
-  test 'enabled and disabled articles can be listed by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+  test 'enabled and disabled articles can be listed by users with admin_permissions' do
+    current_user.admin_permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     get '/api/v1/article', headers: auth_headers
@@ -25,7 +25,7 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
     assert articles.any? { |article| !article['enabled'] }
   end
 
-  test 'users without permissions cannot create, modify or delete articles' do
+  test 'users without admin_permissions cannot create, modify or delete articles' do
     assert_raises (Exception) {
       post '/api/v1/article', headers: auth_headers, params: {item: dummy_article}
     }
@@ -39,8 +39,8 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
     }
   end
 
-  test 'articles can be created by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+  test 'articles can be created by users with admin_permissions' do
+    current_user.admin_permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     post '/api/v1/article', headers: auth_headers, params: {item: dummy_article}
@@ -50,8 +50,8 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
     assert_response :success
   end
 
-  test 'articles can be modified by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+  test 'articles can be modified by users with admin_permissions' do
+    current_user.admin_permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     put '/api/v1/article/1', headers: auth_headers, params: {item: {name: 'Shirt'}}
@@ -64,8 +64,8 @@ class ArticleManagementTest < AuthenticatedIntegrationTest
     assert_equal 'Shirt', article['name']
   end
 
-  test 'articles can be deleted by users with permissions' do
-    current_user.permissions |= Permission::MODIFY_ARTICLES
+  test 'articles can be deleted by users with admin_permissions' do
+    current_user.admin_permissions |= AdminPermission::MODIFY_ARTICLES
     current_user.save!
 
     delete '/api/v1/article/1', headers: auth_headers

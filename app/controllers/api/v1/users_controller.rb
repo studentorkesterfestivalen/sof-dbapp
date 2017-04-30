@@ -4,7 +4,7 @@ class API::V1::UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission Permission::LIST_USERS
+    require_admin_permission AdminPermission::LIST_USERS
 
     render :json => User.all
   end
@@ -47,10 +47,11 @@ class API::V1::UsersController < ApplicationController
                }
              },
              methods: [
-               :is_lintek_member
+                 :is_lintek_member,
+                 :shopping_cart_count
              ]
     else
-      require_permission Permission::LIST_USERS
+      require_admin_permission AdminPermission::LIST_USERS
 
       user = User.find(params[:id])
       render json: user, include: [:funkis_application]
@@ -63,7 +64,8 @@ class API::V1::UsersController < ApplicationController
 
   def update
     user = User.find(params[:id])
-    if current_user.has_permission? Permission::MODIFY_USERS
+    if current_user.has_admin_permission? AdminPermission::MODIFY_USERS
+      # Only allows a admin to update a users display_name and permissions
       if user.update(user_admin_params)
         redirect_to api_v1_user_url(user)
       else
@@ -71,7 +73,7 @@ class API::V1::UsersController < ApplicationController
       end
     else
       require_ownership user
-
+      # Only allows user to update his display_name
       if user.update(user_params)
         redirect_to '/api/v1/user'
       else
@@ -86,7 +88,7 @@ class API::V1::UsersController < ApplicationController
       raise 'Cannot delete current user, use auth endpoint instead'
     end
 
-    require_permission Permission::DELETE_USERS
+    require_admin_permission AdminPermission::DELETE_USERS
     user.destroy
 
     head :no_content
@@ -101,11 +103,13 @@ class API::V1::UsersController < ApplicationController
   end
 
   def user_admin_params
-    require_permission Permission::MODIFY_USERS
+    require_admin_permission AdminPermission::MODIFY_USERS
 
     params.require(:user).permit(
         :display_name,
-        :permissions
+        :admin_permissions,
+        :usergroup
     )
   end
+
 end

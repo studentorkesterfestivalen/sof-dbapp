@@ -25,6 +25,9 @@ gem 'puma', '~> 3.0'
 # Kobra integration to verify student union membership
 gem 'kobra_client', git: 'https://github.com/studentorkesterfestivalen/kobra_client.git'
 
+# Stripe payments API
+gem 'stripe'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -37,6 +40,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'rspec-rails'
+  gem 'guard-rspec'
+  gem 'factory_girl_rails'
 end
 
 group :test do

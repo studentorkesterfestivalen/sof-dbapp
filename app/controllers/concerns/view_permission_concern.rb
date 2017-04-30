@@ -1,6 +1,6 @@
 module ViewPermissionConcern
-  def require_permission(permission)
-    if current_user.nil? or not current_user.has_permission?(permission)
+  def require_admin_permission(permission)
+    if current_user.nil? or not current_user.has_admin_permission?(permission)
       raise 'Missing permission for view'
     end
   end
@@ -17,23 +17,23 @@ module ViewPermissionConcern
     end
   end
 
-  def require_membership_or_permission(model, permissions)
+  def require_membership_or_admin_permission(model, permissions)
     if current_user.nil?
       raise 'Not logged in'
     end
 
-    unless model.has_member?(current_user) or current_user.has_permission?(permissions)
-      raise 'Is not member of model or lacks required permissions'
+    unless model.has_member?(current_user) or current_user.has_admin_permission?(permissions)
+      raise 'Is not member of model or lacks required admin permissions'
     end
   end
 
-  def require_ownership_or_permission(model, permissions)
+  def require_ownership_or_admin_permission(model, permissions)
     if current_user.nil?
       raise 'Not logged in'
     end
 
-    unless model.has_owner?(current_user) or current_user.has_permission?(permissions)
-      raise 'Is not owner of model or lacks required permissions'
+    unless model.has_owner?(current_user) or current_user.has_admin_permission?(permissions)
+      raise 'Is not owner of model or lacks required admin permissions'
     end
   end
 
@@ -45,7 +45,7 @@ module ViewPermissionConcern
     return if from and Date.parse(from) > Date.today
 
     # Always allow administrators to access the feature
-    if current_user.nil? or not current_user.has_permission?(Permission::ALL)
+    if current_user.nil? or not current_user.has_admin_permission?(AdminPermission::ALL)
       raise 'Feature disabled'
     end
   end

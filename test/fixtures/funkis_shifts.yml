@@ -15,16 +15,19 @@ two:
   day: Thursday
   time: 12:00 - 14:00
   red_limit: 5
+  points: 100
   funkis_category_id: one
 
 three:
   day: Friday
   time: 08:00 - 12:00
   red_limit: 3
+  points: 100
   funkis_category_id: two
 
 four:
   day: Friday
   time: 08:00 - 12:00
   red_limit: 1
+  points: 100
   funkis_category_id: two

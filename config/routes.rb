@@ -5,39 +5,56 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :menu
       resources :pages do
-        collection do
-          get 'find(/:category)(/:page)', action: 'find'
-        end
+        get 'find(/:category)(/:page)', action: 'find', on: :collection
       end
       resources :orchestra do
-        member do
-          get 'all_signups', action: 'all_signups'
-        end
+        get 'all_signups', action: 'all_signups', on: :member
         collection do
           get 'item_summary', action: 'item_summary'
-        end
-        collection do
           get 'extra_performances', action: 'extra_performances'
-        end
-        collection do
           get 'anniversary', action: 'anniversary'
+          get 'allergies', action: 'allergies'
         end
       end
       resources :orchestra_signup do
-        collection do
-          get 'verify', action: 'verify_code'
-        end
+        get 'verify', action: 'verify_code', on: :collection
       end
       resources :article
       resources :users
       resources :cortege
       resources :case_cortege
+      resources :payments
+      resources :shopping_product
+      resources :user_groups do
+        post 'modify_membership', action: 'modify_membership', on: :member
+      end
+
       resources :funkis
       resources :funkis_shift do
         get 'export_applications', on: :collection
       end
       resources :funkis_application
+
       resources :cortege_lineups
+
+      resources :cortege_membership do
+        get 'cortege/:id', action: 'show_cortege_members', on: :collection
+        get 'case_cortege/:id', action: 'show_case_cortege_members', on: :collection
+      end
+      resources :order
+      resources :order_item
+
+      scope '/cart' do
+        get '/', to: 'shopping_cart#show'
+        delete '/', to: 'shopping_cart#clear'
+        put '/item', to: 'shopping_cart#add_item'
+        delete '/item/:id', to: 'shopping_cart#delete_item'
+      end
+
+      scope '/store' do
+        post '/charge', to: 'payment#charge'
+      end
+
 
       get 'user', to: 'users#show'
     end

@@ -4,7 +4,7 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission Permission::LIST_ORCHESTRA_SIGNUPS
+    require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => OrchestraSignup.all
   end
@@ -22,19 +22,21 @@ class API::V1::OrchestraSignupController < ApplicationController
     signup = OrchestraSignup.new(item_params)
     signup.user = current_user
     signup.orchestra = orchestra
+    signup.user.usergroup |= UserGroupPermission::ORCHESTRA_MEMBER
 
     if OrchestraSignup.include_late_registration_fee?
       signup.is_late_registration = true
     end
 
     signup.save!
+    signup.user.save!
 
     redirect_to api_v1_orchestra_signup_url(signup)
   end
 
   def show
     signup = OrchestraSignup.find(params[:id])
-    require_membership_or_permission signup, Permission::LIST_ORCHESTRA_SIGNUPS
+    require_membership_or_admin_permission signup, AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => signup, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets], methods: :total_cost
   end

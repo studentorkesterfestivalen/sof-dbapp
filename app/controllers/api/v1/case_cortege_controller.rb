@@ -4,7 +4,7 @@ class API::V1::CaseCortegeController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_permission Permission::LIST_CORTEGE_APPLICATIONS
+    require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
 
     render :json => CaseCortege.all, include: [:user]
   end
@@ -23,7 +23,7 @@ class API::V1::CaseCortegeController < ApplicationController
 
   def show
     cortege = CaseCortege.find(params[:id])
-    require_ownership_or_permission cortege, Permission::LIST_CORTEGE_APPLICATIONS
+    require_ownership_or_admin_permission cortege, AdminPermission::LIST_CORTEGE_APPLICATIONS
 
     render :json => cortege, include: [:user]
   end
@@ -35,7 +35,7 @@ class API::V1::CaseCortegeController < ApplicationController
       params.merge!(item_params.to_h)
     end
 
-    if current_user.has_permission? Permission::APPROVE_CORTEGE_APPLICATIONS
+    if current_user.has_admin_permission? AdminPermission::APPROVE_CORTEGE_APPLICATIONS
       params.merge!(admin_params.to_h)
     end
 
@@ -73,7 +73,7 @@ class API::V1::CaseCortegeController < ApplicationController
   end
 
   def admin_params
-    require_permission Permission::APPROVE_CORTEGE_APPLICATIONS
+    require_admin_permission AdminPermission::APPROVE_CORTEGE_APPLICATIONS
 
     params.require(:item).permit(
         :approved,
