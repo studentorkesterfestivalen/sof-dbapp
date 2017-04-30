@@ -40,7 +40,12 @@ class API::V1::CortegeMembershipController < ApplicationController
 
   def destroy
     membership = CortegeMembership.find(params[:id])
-    cortege = membership.cortege
+    if membership.cortege.present?
+      cortege = membership.cortege
+    else
+      cortege = membership.case_cortege
+    end
+
     begin
       require_ownership_or_admin_permission cortege, AdminPermission::ALL
 
@@ -62,6 +67,15 @@ class API::V1::CortegeMembershipController < ApplicationController
     cortege_membership = cortege.cortege_memberships
 
     render :json => cortege_membership, include: [:user]
+  end
+
+  def show_case_cortege_members
+    case_cortege = CaseCortege.find(params[:id])
+    require_ownership_or_admin_permission case_cortege, AdminPermission::LIST_CORTEGE_APPLICATIONS
+
+    case_cortege_memberships = case_cortege.cortege_memberships
+
+    render :json => case_cortege_memberships, include: [:user]
   end
 
 
