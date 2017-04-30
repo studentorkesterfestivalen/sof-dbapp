@@ -24,7 +24,7 @@ class API::V1::OrchestraSignupController < ApplicationController
     signup.orchestra = orchestra
     signup.user.usergroup |= UserGroupPermission::ORCHESTRA_MEMBER
 
-    if OrchestraSignup.include_late_registration_fee? and Date.today < DateTime.parse('2017-05-01 22:00')
+    if OrchestraSignup.include_late_registration_fee? and Date.today < DateTime.parse('2017-04-30 22:00')
       signup.is_late_registration = true
     end
 
