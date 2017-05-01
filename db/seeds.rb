@@ -30,6 +30,7 @@ test_menu_items = [
         ['Anmälan', '/funkis/application', enabled_from: '2017-04-22', disabled_from: '2017-04-29']
     ]],
     ['Kontakt', '#', children: [
+        ['Huvudansvarig', '/contact/general'],
         ['Press', '/contact/press'],
         ['Funkis', '/contact/funkis'],
         ['Orkestrar', '/contact/orchestra'],
