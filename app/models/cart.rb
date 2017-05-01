@@ -16,7 +16,7 @@ class Cart < ApplicationRecord
 
       items.each do |item|
         if item.product.base_product.name == 'Dagsbiljett' or item.product.base_product.name == 'Endagsbiljett' or item.product.base_product.name == 'Helhelgsbiljett'
-          if item.product.current_count(user, [])
+          if item.product.current_count(user, []) == 0
             case item.product.kind
               when 'Torsdag'
                 given_lintek_rebates << :thursday
