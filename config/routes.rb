@@ -39,7 +39,9 @@ Rails.application.routes.draw do
         get 'case_cortege/:id', action: 'show_case_cortege_members', on: :collection
       end
       resources :order
-      resources :order_item
+      resources :order_item do
+        get 'all_items', action: 'all_items', on: :collection
+      end
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'

@@ -8,4 +8,5 @@ module AdminPermission
   LIST_CORTEGE_APPLICATIONS    = 1 << 6
   APPROVE_CORTEGE_APPLICATIONS = 1 << 7
   LIST_FUNKIS_APPLICATIONS     = 1 << 8
+  ANALYST                      = 1 << 9
 end

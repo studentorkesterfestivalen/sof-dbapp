@@ -49,4 +49,14 @@ class API::V1::OrderItemController < ApplicationController
       raise 'Unable to change owner'
     end
   end
+
+  def all_items
+    require_admin_permission AdminPermission::ANALYST
+
+    render :json => OrderItem.all, include: {
+        product: {
+            include: [:base_product]
+        }
+    }
+  end
 end
