@@ -18,8 +18,6 @@ class API::V1::CortegeLineupsController < ApplicationController
 
   def update
     cortege = CortegeLineup.find(params[:id])
-    puts("UPDATE --------------------------------------")
-    puts(cortege["order"])
     if cortege.update(item_params)
       redirect_to api_v1_cortege_lineups_url(cortege)
     else
