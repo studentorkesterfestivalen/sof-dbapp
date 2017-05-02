@@ -14,6 +14,7 @@ test_menu_items = [
         ['Mina produkter', '/store/inventory'],
         ['Mina ordrar', '/store/orders'],
     ]],
+    ['Frågor & Svar', '/faq'],
     ['Orkester', '#', children: [
         ['Information', '/orchestra'],
         ['Anmälan', '/orchestra/register'],

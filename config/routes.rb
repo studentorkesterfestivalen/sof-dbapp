@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       resources :base_product do
         get 'statistics', action: 'statistics', on: :collection
       end
+      resource :faq
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'

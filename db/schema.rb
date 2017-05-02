@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424144801) do
+ActiveRecord::Schema.define(version: 20170502164649) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -98,6 +98,21 @@ ActiveRecord::Schema.define(version: 20170424144801) do
     t.datetime "updated_at",                                         null: false
     t.boolean  "paid",                           default: false,     null: false
     t.index ["user_id"], name: "index_corteges_on_user_id"
+  end
+
+  create_table "faq_groups", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.string   "question"
+    t.text     "answer"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "faq_group_id"
+    t.index ["faq_group_id"], name: "index_faqs_on_faq_group_id"
   end
 
   create_table "funkis_applications", force: :cascade do |t|
@@ -298,7 +313,7 @@ ActiveRecord::Schema.define(version: 20170424144801) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-04-28 16:12:15', null: false
+    t.datetime "union_valid_thru",                 default: '2017-05-02 16:48:11', null: false
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
     t.integer  "rebate_balance",                   default: 0
