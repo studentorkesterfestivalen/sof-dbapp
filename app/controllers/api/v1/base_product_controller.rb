@@ -5,7 +5,7 @@ class API::V1::BaseProductController < ApplicationController
   def statistics
     require_admin_permission AdminPermission::ANALYST
 
-    render :json => BaseProduct.all, :include => {
+    render :json => BaseProduct.order(:id).all, :include => {
         :products => {
             :methods => :amount_bought,
             :except => [:enabled, :base_product_id, :created_at, :updated_at]
