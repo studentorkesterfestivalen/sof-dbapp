@@ -25,12 +25,12 @@ class API::V1::CortegeMembershipController < ApplicationController
         membership.save!
         membership.user.save!
 
-        render :status => '200', :json => {:message => 'Membership created'}
+        render :status => '200', :json => {:message => 'Medlemmen tillagd.'}
       rescue => error
-        render :status => '403', :json => {:status => error}
+        render :status => '403', :json => {:message => error}
       end
     else
-      render :status => '400', :json => {:status => 'Assigned user does not exists or is self'}
+      render :status => '400', :json => {:message => 'Den givna användaren finns ej, alltså har den aldrig loggat in på hemsidan innan. Eller så angav du dig själv.'}
     end
   end
 
