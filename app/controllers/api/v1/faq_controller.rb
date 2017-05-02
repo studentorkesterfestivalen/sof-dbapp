@@ -1,6 +1,8 @@
 class API::V1::FaqController < ApplicationController
   include ViewPermissionConcern
 
+  before_action :authenticate_user!
+
   def index
     render :json => Faq.all, include: {
         faq_groups: {
@@ -32,7 +34,6 @@ class API::V1::FaqController < ApplicationController
     require_admin_permission AdminPermission::EDITOR
 
     faq = Faq.destroy(params[:id])
-
     if faq.destroyed?
       render :status => 200, :json => {
           message: 'Successfully deleted Faq.',

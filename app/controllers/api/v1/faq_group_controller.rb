@@ -1,6 +1,8 @@
 class API::V1::FaqGroupController < ApplicationController
   include ViewPermissionConcern
 
+  before_action :authenticate_user!
+
   def index
     render :json => FaqGroup.all, except => [:created_at, :updated_at]
   end
