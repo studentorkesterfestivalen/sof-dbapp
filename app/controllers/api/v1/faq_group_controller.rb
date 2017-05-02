@@ -4,7 +4,7 @@ class API::V1::FaqGroupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render :json => FaqGroup.all, except => [:created_at, :updated_at]
+    render :json => FaqGroup.all, :except => [:created_at, :updated_at]
   end
 
   def create

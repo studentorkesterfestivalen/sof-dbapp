@@ -1,14 +1,12 @@
 class API::V1::FaqController < ApplicationController
   include ViewPermissionConcern
 
-  before_action :authenticate_user!
-
   def index
     render :json => Faq.all, include: {
         faq_groups: {
-            except => [:created_at, :updated_at]
+            :except => [:created_at, :updated_at]
         },
-        except => [:created_at, :updated_at]
+        :except => [:created_at, :updated_at]
     }
   end
 

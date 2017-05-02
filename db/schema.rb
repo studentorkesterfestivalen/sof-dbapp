@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502174219) do
+ActiveRecord::Schema.define(version: 20170502200835) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -101,17 +101,20 @@ ActiveRecord::Schema.define(version: 20170502174219) do
   end
 
   create_table "faq_groups", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",                    null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "name_eng",   default: "", null: false
   end
 
   create_table "faqs", force: :cascade do |t|
-    t.string   "question",     null: false
-    t.text     "answer",       null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "question",                  null: false
+    t.text     "answer",                    null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.integer  "faq_group_id"
+    t.string   "question_eng", default: "", null: false
+    t.text     "answer_eng",   default: "", null: false
     t.index ["faq_group_id"], name: "index_faqs_on_faq_group_id"
   end
 
