@@ -1,17 +1,28 @@
 class API::V1::FaqController < ApplicationController
   include ViewPermissionConcern
 
-
   def index
     render :json => Faq.all, include: {
         faq_groups: {
             except => [:created_at, :updated_at]
-        }
+        },
+        except => [:created_at, :updated_at]
     }
   end
 
   def create
-    require_admin_permission AdminPermission::
+    require_admin_permission AdminPermission::EDITOR
+
+    faq = Faq.new(item_params)
+    if faq.save
+      render :status => 200, :json => {
+          message: 'Successfully created Faq.',
+      }
+    else
+      render :status => 500, :json => {
+          message: faq.errors
+      }
+    end
   end
 
   def show
