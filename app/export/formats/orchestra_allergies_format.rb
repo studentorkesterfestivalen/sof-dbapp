@@ -17,6 +17,7 @@ module Formats
       {
           :orchestra_id => 'Orkester',
           :user_id => 'Namn',
+          :orchestra_food_ticket => 'Dagar',
           :vegetarian => 'Vegetariskt',
           :vegan => 'Vegansk',
           :lactos => 'Laktos',
@@ -46,6 +47,8 @@ module Formats
           item.orchestra.name
         when :user_id
           item.user.display_name
+        when :orchestra_food_ticket
+          item.user.orchestra_signup.orchestra_food_ticket
         when :other
           item.special_diets.select { |diet| not column_names.values.include? diet.name }
         else
@@ -55,7 +58,7 @@ module Formats
 
     def increase_total(column, value)
       if value.present?
-        unless column == :orchestra_id or column == :user_id
+        unless column == :orchestra_id or column == :user_id or column == :orchestra_food_ticket
             @total[column] += 1
         end
       end
@@ -68,6 +71,8 @@ module Formats
         when :other
           value.map! { |diet| diet.name }
           value.join(', ')
+        when :orchestra_food_ticket
+          ticket_description_for value.kind
         else
           if value.present?
             'x'
@@ -89,5 +94,17 @@ module Formats
     def has_allergy(item, column)
       item.special_diets.any? { |diet| diet.name == column_names[column] }
     end
+
+    def ticket_description_for(kind)
+      descriptions = {
+          0 => 'Torsdag, Fredag, Lördag',
+          1 => 'Fredag, Lördag',
+          2 => 'Lördag',
+          3 => '',
+          4 => 'Torsdag, Fredag'
+      }
+      descriptions[kind]
+    end
+
   end
 end
