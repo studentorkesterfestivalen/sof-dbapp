@@ -31,8 +31,9 @@ class API::V1::FaqController < ApplicationController
   def destroy
     require_admin_permission AdminPermission::EDITOR
 
+    faq = Faq.destroy(params[:id])
 
-    if faq.destroy(params[:id])
+    if faq.destroyed?
       render :status => 200, :json => {
           message: 'Successfully deleted Faq.',
       }
