@@ -49,16 +49,4 @@ class API::V1::OrderItemController < ApplicationController
       raise 'Unable to change owner'
     end
   end
-
-
-
-  private
-
-  # TODO: Remove, this is just for me to have a better view of what Im creating
-  def all_items_json
-    {
-
-    }
-
-  end
 end
