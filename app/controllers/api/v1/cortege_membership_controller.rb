@@ -30,7 +30,7 @@ class API::V1::CortegeMembershipController < ApplicationController
         render :status => '403', :json => {:message => error}
       end
     else
-      render :status => '400', :json => {:message => 'Den givna användaren finns ej eller är dig själv.'}
+      render :status => '400', :json => {:message => 'Den givna användaren finns ej, alltså har den aldrig loggat in på hemsidan innan. Eller så angav du dig själv.'}
     end
   end
 
