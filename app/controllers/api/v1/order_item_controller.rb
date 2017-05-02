@@ -50,35 +50,14 @@ class API::V1::OrderItemController < ApplicationController
     end
   end
 
-  def all_items
-    require_admin_permission AdminPermission::ANALYST
 
-    # Todo: Sort items in a nice json with only the needed fields, instead of the GIANT motherfkingblob that is spawned with the command below.
-    base_products = BaseProduct.all
-    products = Product.all
-    all_items = OrderItem.all
-
-    resultJson = {}
-
-    render :json => resultJson
-  end
 
   private
 
   # TODO: Remove, this is just for me to have a better view of what Im creating
   def all_items_json
     {
-        _base_product_: {
-            name: 'xxx',
-            price: 'xxx',
 
-            _products_: {
-                name: 'xx',
-                price: 'xx',
-                amount_bought: 'xx',
-                max_limit: 'xx'
-            }
-        }
     }
 
   end
