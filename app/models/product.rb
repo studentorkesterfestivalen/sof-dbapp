@@ -37,4 +37,8 @@ class Product < ApplicationRecord
   def current_count(user, additional_items)
     (user.purchased_items + additional_items).count { |x| x.product.id == id }
   end
+
+  def amount_bought
+    OrderItem.where(product_id: id).count
+  end
 end

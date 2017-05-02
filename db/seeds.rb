@@ -44,7 +44,8 @@ test_menu_items = [
         ['Hantera kårteger', '/manage/corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera casekårteger', '/manage/case_corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera produkter', '/manage/products', permissions: AdminPermission::ALL],
-        ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS]
+        ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS],
+        ['Order-statistik', '/manage/products/statistics', permissions: AdminPermission::ANALYST]
     ]]
 ]
 
