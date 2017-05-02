@@ -26,7 +26,6 @@ module Formats
           :fish => 'Fisk',
           :peanuts => 'Jordnötter',
           :other => 'Special'
-
       }
     end
 
@@ -59,7 +58,7 @@ module Formats
 
     def increase_total(column, value)
       if value.present?
-        unless column == :orchestra_id or column == :user_id or :orchestra_food_ticket
+        unless column == :orchestra_id or column == :user_id or column == :orchestra_food_ticket
             @total[column] += 1
         end
       end
