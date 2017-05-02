@@ -144,7 +144,9 @@ module Formats
           when :medal, :tag
             value += item_article(signup, column)
           when :orchestra_food_ticket, :orchestra_ticket
-            increase_hash_total(value, ticket_count_increase_for(signup.send(column).kind))
+            if signup.send(column).present?
+              increase_hash_total(value, ticket_count_increase_for(signup.send(column).kind))
+            end
           when :dormitory
             if signup.send(column)
               increase_hash_total(value, ticket_count_increase_for(signup.send(:orchestra_ticket).kind))
