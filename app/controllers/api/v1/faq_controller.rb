@@ -29,9 +29,22 @@ class API::V1::FaqController < ApplicationController
   end
 
   def destroy
+    require_admin_permission AdminPermission::EDITOR
+
+
+    if faq.destroy(params[:id])
+      render :status => 200, :json => {
+          message: 'Successfully deleted Faq.',
+      }
+    else
+      render :status => 500, :json => {
+          message: faq.errors
+      }
+    end
   end
 
   private
+
 
   def item_params
     params.require(:item).permit(
