@@ -25,6 +25,16 @@ class API::V1::FaqController < ApplicationController
   end
 
   def show
+    require_admin_permission AdminPermission::EDITOR
+
+    faq = FaqGroup.find(params[:id])
+    if faq.present?
+      render :json => faq, :except => [:created_at, :updated_at]
+    else
+      render :status => 500, :json => {
+          message: 'FAQ not found.'
+      }
+    end
   end
 
   def destroy
