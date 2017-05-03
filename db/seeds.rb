@@ -31,6 +31,7 @@ test_menu_items = [
         ['Anmälan', '/funkis/application', enabled_from: '2017-04-22', disabled_from: '2017-04-29']
     ]],
     ['Kontakt', '#', children: [
+        ['Huvudansvarig', '/contact/general'],
         ['Press', '/contact/press'],
         ['Funkis', '/contact/funkis'],
         ['Orkestrar', '/contact/orchestra'],
@@ -45,7 +46,9 @@ test_menu_items = [
         ['Hantera lineup', '/manage/cortege_lineups', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera casekårteger', '/manage/case_corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera produkter', '/manage/products', permissions: AdminPermission::ALL],
-        ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS]
+        ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS],
+        ['Order-statistik', '/manage/products/statistics', permissions: AdminPermission::ANALYST],
+        ['Lämna ut varor', '/manage/collect', permissions: AdminPermission::TICKETER]
     ]]
 ]
 

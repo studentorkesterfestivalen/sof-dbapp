@@ -43,6 +43,9 @@ Rails.application.routes.draw do
       end
       resources :order
       resources :order_item
+      resources :base_product do
+        get 'statistics', action: 'statistics', on: :collection
+      end
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'
@@ -55,6 +58,11 @@ Rails.application.routes.draw do
         post '/charge', to: 'payment#charge'
       end
 
+      scope '/collect' do
+        get '/search', to: 'item_collect#find'
+        get '/:id', to: 'item_collect#show'
+        post '/:id', to: 'item_collect#collect'
+      end
 
       get 'user', to: 'users#show'
     end
