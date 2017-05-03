@@ -40,6 +40,18 @@ class API::V1::FaqGroupController < ApplicationController
   end
 
   def destroy
+    require_admin_permission AdminPermission::EDITOR
+
+    faq_group = FaqGroup.destroy(params[:id])
+    if faq_group.destroyed?
+      render :status => 200, :json => {
+          message: 'Successfully deleted Faq-group.',
+      }
+    else
+      render :status => 500, :json => {
+          message: faq.errors
+      }
+    end
   end
 
   private
