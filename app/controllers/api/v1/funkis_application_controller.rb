@@ -17,7 +17,7 @@ class API::V1::FunkisApplicationController < ApplicationController
   end
 
   def create
-    disable_feature from: '2017-04-29'
+    disable_feature from: '2017-05-04'
 
     application = FunkisApplication.new(application_params)
     application.user = current_user
