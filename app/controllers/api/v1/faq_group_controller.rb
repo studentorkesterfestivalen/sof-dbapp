@@ -4,7 +4,11 @@ class API::V1::FaqGroupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render :json => FaqGroup.all, :except => [:created_at, :updated_at]
+    render :json => FaqGroup.order(:id).all, :include => {
+        :faqs => {
+            :except => [:created_at, :updated_at]
+        },
+    }, :except => [:created_at, :updated_at]
   end
 
   def create
@@ -32,7 +36,8 @@ class API::V1::FaqGroupController < ApplicationController
 
   def item_params
     params.require(:item).permit(
-        :name
+        :name,
+        :name_eng
     )
   end
 end

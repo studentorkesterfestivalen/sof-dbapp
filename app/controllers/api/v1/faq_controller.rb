@@ -2,12 +2,11 @@ class API::V1::FaqController < ApplicationController
   include ViewPermissionConcern
 
   def index
-    render :json => Faq.all, include: {
-        faq_groups: {
+    render :json => Faq.order(:faq_group_id).all, include: {
+        :faq_group => {
             :except => [:created_at, :updated_at]
-        },
-        :except => [:created_at, :updated_at]
-    }
+        }
+    }, :except => [:created_at, :updated_at]
   end
 
   def create
