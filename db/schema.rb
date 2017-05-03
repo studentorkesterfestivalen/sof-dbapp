@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424144801) do
+ActiveRecord::Schema.define(version: 20170502202128) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -219,11 +219,13 @@ ActiveRecord::Schema.define(version: 20170424144801) do
     t.integer  "user_id"
     t.integer  "order_id"
     t.integer  "product_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "owner_id"
     t.integer  "gifted_by_id"
-    t.integer  "cost",         default: 0, null: false
+    t.integer  "cost",         default: 0,     null: false
+    t.boolean  "collected",    default: false, null: false
+    t.datetime "collected_at"
     t.index ["gifted_by_id"], name: "index_order_items_on_gifted_by_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["owner_id"], name: "index_order_items_on_owner_id"
@@ -298,7 +300,7 @@ ActiveRecord::Schema.define(version: 20170424144801) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-04-28 16:12:15', null: false
+    t.datetime "union_valid_thru",                 default: '2017-04-23 11:49:09', null: false
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
     t.integer  "rebate_balance",                   default: 0
