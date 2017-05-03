@@ -27,15 +27,29 @@ class API::V1::FaqController < ApplicationController
   def show
     require_admin_permission AdminPermission::EDITOR
 
-    faq = FaqGroup.find(params[:id])
+    faq = Faq.find(params[:id])
     if faq.present?
-      render :json => faq, :except => [:created_at, :updated_at]
+      render :json => faq, include: {
+          :faq_group => {
+              :except => [:created_at, :updated_at]
+          }
+      }, :except => [:created_at, :updated_at]
     else
       render :status => 500, :json => {
           message: 'FAQ not found.'
       }
     end
   end
+
+  def update
+    require_admin_permission AdminPermission::EDITOR
+
+    Faq.update(params[:id], item_params)
+    render :status => 200, :json => {
+        message: 'FAQ updated'
+    }
+  end
+
 
   def destroy
     require_admin_permission AdminPermission::EDITOR
@@ -58,7 +72,9 @@ class API::V1::FaqController < ApplicationController
   def item_params
     params.require(:item).permit(
         :question,
+        :question_eng,
         :answer,
+        :answer_eng,
         :faq_group_id
     )
   end
