@@ -38,6 +38,10 @@ class API::V1::OrderItemController < ApplicationController
       raise 'Product is not giftable'
     end
 
+    if order_item.collected
+      raise 'Collected products cannot be gifted'
+    end
+
     new_owner = User.find_by email: params[:item][:owner]
     if new_owner.nil?
       raise 'Unable to find user'

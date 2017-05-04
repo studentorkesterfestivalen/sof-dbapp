@@ -57,6 +57,12 @@ Rails.application.routes.draw do
         post '/charge', to: 'payment#charge'
       end
 
+      scope '/collect' do
+        get '/search', to: 'item_collect#find'
+        get '/:id', to: 'item_collect#show'
+        post '/:id', to: 'item_collect#collect'
+      end
+
       get 'user', to: 'users#show'
     end
   end
