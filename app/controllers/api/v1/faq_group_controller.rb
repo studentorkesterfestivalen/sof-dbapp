@@ -40,14 +40,12 @@ class API::V1::FaqGroupController < ApplicationController
   end
 
   def update
-    def update
-      require_admin_permission AdminPermission::EDITOR
+    require_admin_permission AdminPermission::EDITOR
 
-      FaqGroup.update(params[:id], item_params)
-      render :status => 200, :json => {
-          message: 'FAQ updated'
-      }
-    end
+    FaqGroup.update(params[:id], item_params)
+    render :status => 200, :json => {
+        message: 'FAQ-group updated'
+    }
   end
 
   def destroy
