@@ -15,7 +15,7 @@ class API::V1::FaqController < ApplicationController
     faq = Faq.new(item_params)
     if faq.save
       render :status => 200, :json => {
-          message: 'Successfully created Faq.',
+          message: 'FAQ skapad.',
       }
     else
       render :status => 500, :json => {
@@ -36,7 +36,7 @@ class API::V1::FaqController < ApplicationController
       }, :except => [:created_at, :updated_at]
     else
       render :status => 500, :json => {
-          message: 'FAQ not found.'
+          message: 'FAQ hittades ej.'
       }
     end
   end
@@ -46,7 +46,7 @@ class API::V1::FaqController < ApplicationController
 
     Faq.update(params[:id], item_params)
     render :status => 200, :json => {
-        message: 'FAQ updated'
+        message: 'FAQ uppdaterad.'
     }
   end
 
@@ -57,7 +57,7 @@ class API::V1::FaqController < ApplicationController
     faq = Faq.destroy(params[:id])
     if faq.destroyed?
       render :status => 200, :json => {
-          message: 'Successfully deleted Faq.',
+          message: 'FAQ togs bort.',
       }
     else
       render :status => 500, :json => {

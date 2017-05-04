@@ -34,7 +34,7 @@ class API::V1::FaqGroupController < ApplicationController
       render :json => faq_group, :except => [:created_at, :updated_at]
     else
       render :status => 500, :json => {
-          message: 'FAQ-Group not found.'
+          message: 'FAQ-Grupp hittades ej.'
       }
     end
   end
@@ -44,7 +44,7 @@ class API::V1::FaqGroupController < ApplicationController
 
     FaqGroup.update(params[:id], item_params)
     render :status => 200, :json => {
-        message: 'FAQ-group updated'
+        message: 'FAQ-grupp uppdaterad'
     }
   end
 
@@ -54,7 +54,7 @@ class API::V1::FaqGroupController < ApplicationController
     faq_group = FaqGroup.destroy(params[:id])
     if faq_group.destroyed?
       render :status => 200, :json => {
-          message: 'Successfully deleted Faq-group.',
+          message: 'FAQ-gruppen togs bort.',
       }
     else
       render :status => 500, :json => {
