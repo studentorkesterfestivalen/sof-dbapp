@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20170502202128) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
@@ -98,6 +99,24 @@ ActiveRecord::Schema.define(version: 20170502202128) do
     t.datetime "updated_at",                                         null: false
     t.boolean  "paid",                           default: false,     null: false
     t.index ["user_id"], name: "index_corteges_on_user_id"
+  end
+
+  create_table "faq_groups", force: :cascade do |t|
+    t.string   "name",                    null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "name_eng",   default: "", null: false
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.string   "question",                  null: false
+    t.text     "answer",                    null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "faq_group_id"
+    t.string   "question_eng", default: "", null: false
+    t.text     "answer_eng",   default: "", null: false
+    t.index ["faq_group_id"], name: "index_faqs_on_faq_group_id"
   end
 
   create_table "funkis_applications", force: :cascade do |t|
@@ -300,7 +319,8 @@ ActiveRecord::Schema.define(version: 20170502202128) do
     t.datetime "updated_at",                                                       null: false
     t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
-    t.datetime "union_valid_thru",                 default: '2017-04-23 11:49:09', null: false
+    t.datetime "union_valid_thru",                 default: '2017-05-02 16:48:11', null: false
+
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
     t.integer  "rebate_balance",                   default: 0

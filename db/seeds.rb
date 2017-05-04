@@ -14,6 +14,7 @@ test_menu_items = [
         ['Mina produkter', '/store/inventory'],
         ['Mina ordrar', '/store/orders'],
     ]],
+    ['Frågor & Svar', '/faq'],
     ['Orkester', '#', children: [
         ['Information', '/orchestra'],
         ['Anmälan', '/orchestra/register'],
@@ -44,6 +45,7 @@ test_menu_items = [
         ['Hantera kårteger', '/manage/corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera casekårteger', '/manage/case_corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera produkter', '/manage/products', permissions: AdminPermission::ALL],
+        ['Hantera FAQs', '/manage/faqs', permissions: AdminPermission::EDITOR],
         ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS],
         ['Order-statistik', '/manage/products/statistics', permissions: AdminPermission::ANALYST],
         ['Lämna ut varor', '/manage/collect', permissions: AdminPermission::TICKETER]
