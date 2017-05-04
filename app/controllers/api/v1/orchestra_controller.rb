@@ -61,7 +61,7 @@ class API::V1::OrchestraController < ApplicationController
   def allergies
     require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
-    orchestra_signups = OrchestraSignup.order(:orchestra_id).includes(:special_diets).all
+    orchestra_signups = OrchestraSignup.order(:orchestra_id).includes(:special_diets).where.not(:special_diets => {id: nil})
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraAllergiesFormat)
   end
 

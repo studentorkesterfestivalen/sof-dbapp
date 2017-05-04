@@ -47,7 +47,8 @@ test_menu_items = [
         ['Hantera produkter', '/manage/products', permissions: AdminPermission::ALL],
         ['Hantera FAQs', '/manage/faqs', permissions: AdminPermission::EDITOR],
         ['Funkis-statistik', '/manage/funkis', permissions: AdminPermission::LIST_FUNKIS_APPLICATIONS],
-        ['Order-statistik', '/manage/products/statistics', permissions: AdminPermission::ANALYST]
+        ['Order-statistik', '/manage/products/statistics', permissions: AdminPermission::ANALYST],
+        ['Lämna ut varor', '/manage/collect', permissions: AdminPermission::TICKETER]
     ]]
 ]
 
