@@ -1,10 +1,7 @@
 class API::V1::CortegeLineupsController < ApplicationController
   include ViewPermissionConcern
 
-  before_action :authenticate_user!
-
   def index
-    require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
     render :json => CortegeLineup.all
   end
 

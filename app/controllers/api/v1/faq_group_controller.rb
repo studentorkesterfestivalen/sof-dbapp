@@ -1,8 +1,6 @@
 class API::V1::FaqGroupController < ApplicationController
   include ViewPermissionConcern
 
-  before_action :authenticate_user!
-
   def index
     render :json => FaqGroup.order(:id).all, :include => {
         :faqs => {
