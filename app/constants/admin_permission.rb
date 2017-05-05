@@ -10,4 +10,5 @@ module AdminPermission
   LIST_FUNKIS_APPLICATIONS     = 1 << 8
   ANALYST                      = 1 << 9
   TICKETER                     = 1 << 10
+  EDITOR                       = 1 << 11
 end
