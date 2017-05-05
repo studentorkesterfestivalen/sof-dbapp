@@ -1,0 +1,3 @@
+class CortegeLineup < ApplicationRecord
+
+end

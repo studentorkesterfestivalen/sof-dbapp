@@ -34,6 +34,9 @@ Rails.application.routes.draw do
         get 'export_applications', on: :collection
       end
       resources :funkis_application
+
+      resources :cortege_lineups
+
       resources :cortege_membership do
         get 'cortege/:id', action: 'show_cortege_members', on: :collection
         get 'case_cortege/:id', action: 'show_case_cortege_members', on: :collection

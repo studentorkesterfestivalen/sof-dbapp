@@ -73,6 +73,16 @@ ActiveRecord::Schema.define(version: 20170502202128) do
     t.index ["user_id"], name: "index_case_corteges_on_user_id"
   end
 
+  create_table "cortege_lineups", force: :cascade do |t|
+    t.string   "name",         null: false
+    t.text     "description",  null: false
+    t.string   "image",        null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "cortege_type"
+    t.integer  "order"
+  end
+
   create_table "cortege_memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at",      null: false
