@@ -4,9 +4,11 @@ class API::V1::UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    # Deprecated
     require_admin_permission AdminPermission::LIST_USERS
 
-    render :json => User.all
+    redirect_to root
+    #render :json => User.all
   end
 
   def show
@@ -54,7 +56,11 @@ class API::V1::UsersController < ApplicationController
       require_admin_permission AdminPermission::LIST_USERS
 
       user = User.find(params[:id])
-      render json: user, include: [:funkis_application]
+      if user.present?
+        render json: user, include: [:funkis_application]
+      else
+        render :status => '404', :json => {:message => 'Användare kunde inte hittas'}
+      end
     end
   end
 
@@ -94,6 +100,18 @@ class API::V1::UsersController < ApplicationController
     head :no_content
   end
 
+  def find_ids
+    require_admin_permission AdminPermission::LIST_USERS
+
+    users = find_users_id_from_query
+    puts users.to_json
+    if users.present?
+      render :json => users, :only => ['id']
+    else
+      render :status => '404', :json => {:message => 'Användaren kunde inte hittas'}
+    end
+  end
+
   private
 
   def user_params
@@ -111,5 +129,41 @@ class API::V1::UsersController < ApplicationController
         :usergroup
     )
   end
+
+  # Ordered with least complexity first
+  def find_users_id_from_query
+    find_users_from :liu_id or
+    find_users_from :email or
+    find_users_from :card or
+    find_users_from :name
+  end
+
+  def find_users_from(source)
+    case source
+      when :card
+        find_users_from_kobra(params[:query])
+      when :liu_id
+        User.where('nickname like ?', "%#{params[:query]}%").limit(10)
+      when :email
+        User.where('email like ?', "%#{params[:query]}%").limit(10)
+      when :name
+        User.where('name like ?', "%#{params[:query]}%").limit(10)
+      else
+        nil
+    end
+  end
+
+  def find_users_from_kobra(card_id)
+    begin
+      kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
+      response = kobra.get_student(id: card_id)
+      liu_id = response[:liu_id]
+
+      User.where('nickname like ?', "%#{liu_id}%").limit(10)
+    rescue
+      nil
+    end
+  end
+
 
 end
