@@ -127,6 +127,7 @@ class API::V1::UsersController < ApplicationController
 
   # Ordered with least complexity first
   def find_users_id_from_query
+
     find_users_from :liu_id or
     find_users_from :email or
     find_users_from :card or
@@ -138,11 +139,26 @@ class API::V1::UsersController < ApplicationController
       when :card
         find_users_from_kobra(params[:query])
       when :liu_id
-        User.where('nickname like ?', "%#{params[:query]}%").limit(10)
+        res = User.where('nickname like ?', "%#{params[:query]}%").limit(10)
+        if res.present?
+          res
+        else
+          nil
+        end
       when :email
-        User.where('email like ?', "%#{params[:query]}%").limit(10)
+        res = User.where('email like ?', "%#{params[:query]}%").limit(10)
+        if res.present?
+          res
+        else
+          nil
+        end
       when :name
-        User.where('display_name like ?', "%#{params[:query]}%").limit(10)
+        res = User.where('display_name like ?', "%#{params[:query]}%").limit(10)
+        if res.present?
+          res
+        else
+          nil
+        end
       else
         nil
     end
@@ -153,7 +169,7 @@ class API::V1::UsersController < ApplicationController
       kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
       response = kobra.get_student(id: card_id)
       liu_id = response[:liu_id]
-
+      
       User.where('nickname like ?', "%#{liu_id}%").limit(10)
     rescue
       nil
