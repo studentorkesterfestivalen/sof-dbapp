@@ -135,32 +135,23 @@ class API::V1::UsersController < ApplicationController
   end
 
   def find_users_from(source)
+    res = nil
     case source
       when :card
         find_users_from_kobra(params[:query])
       when :liu_id
         res = User.where('nickname like ?', "%#{params[:query]}%").limit(10)
-        if res.present?
-          res
-        else
-          nil
-        end
       when :email
         res = User.where('email like ?', "%#{params[:query]}%").limit(10)
-        if res.present?
-          res
-        else
-          nil
-        end
       when :name
         res = User.where('display_name like ?', "%#{params[:query]}%").limit(10)
-        if res.present?
-          res
-        else
-          nil
-        end
       else
         nil
+    end
+    if res.present?
+      res
+    else
+      nil
     end
   end
 
@@ -169,7 +160,7 @@ class API::V1::UsersController < ApplicationController
       kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
       response = kobra.get_student(id: card_id)
       liu_id = response[:liu_id]
-      
+
       User.where('nickname like ?', "%#{liu_id}%").limit(10)
     rescue
       nil
