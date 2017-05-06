@@ -4,7 +4,7 @@ class API::V1::UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_admin_permission AdminPermission::LIST_USERS
+    raise 'Listing all users not supported'
   end
 
   def show
@@ -142,7 +142,7 @@ class API::V1::UsersController < ApplicationController
       when :email
         User.where('email like ?', "%#{params[:query]}%").limit(10)
       when :name
-        User.where('name like ?', "%#{params[:query]}%").limit(10)
+        User.where('display_name like ?', "%#{params[:query]}%").limit(10)
       else
         nil
     end

@@ -32,16 +32,16 @@ class UserManagementTest < AuthenticatedIntegrationTest
     assert_response :success
   end
 
-  test 'listing users requires permissions' do
+  test 'searching users requires permissions' do
     assert_raises (Exception) {
-      get '/api/v1/users', headers: auth_headers
+      get '/api/v1/users/search', headers: auth_headers
     }
 
     current_user.admin_permissions |= AdminPermission::LIST_USERS
     current_user.save!
 
-    get '/api/v1/users', headers: auth_headers
-    assert_response :success
+    get "/api/v1/users/search/?query=foo", headers: auth_headers
+    assert_response 404
   end
 
   test 'normal users can update their display name' do
