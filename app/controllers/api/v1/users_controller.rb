@@ -104,7 +104,6 @@ class API::V1::UsersController < ApplicationController
     require_admin_permission AdminPermission::LIST_USERS
 
     users = find_users_id_from_query
-    puts users.to_json
     if users.present?
       render :json => users, :only => ['id']
     else
