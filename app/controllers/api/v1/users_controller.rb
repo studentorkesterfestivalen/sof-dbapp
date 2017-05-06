@@ -4,11 +4,7 @@ class API::V1::UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # Deprecated
     require_admin_permission AdminPermission::LIST_USERS
-
-    redirect_to root
-    #render :json => User.all
   end
 
   def show
