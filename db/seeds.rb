@@ -17,6 +17,7 @@ test_menu_items = [
     ['Frågor & Svar', '/faq'],
     ['Festivalen', '#', children: [
        ['Spelschema', '/festival/schedule'],
+       ['Karta', '/festival/map'],
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
