@@ -20,7 +20,11 @@ Rails.application.routes.draw do
         get 'verify', action: 'verify_code', on: :collection
       end
       resources :article
-      resources :users
+
+      resources :users do
+        get 'search', action: 'find_ids', on: :collection
+      end
+
       resources :cortege
       resources :case_cortege
       resources :payments
@@ -61,7 +65,6 @@ Rails.application.routes.draw do
       end
 
       scope '/collect' do
-        get '/search', to: 'item_collect#find'
         get '/:id', to: 'item_collect#show'
         post '/:id', to: 'item_collect#collect'
       end

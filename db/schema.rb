@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 20170502202128) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
@@ -330,7 +329,6 @@ ActiveRecord::Schema.define(version: 20170502202128) do
     t.integer  "admin_permissions",      limit: 8, default: 0,                     null: false
     t.string   "union"
     t.datetime "union_valid_thru",                 default: '2017-05-02 16:48:11', null: false
-
     t.string   "display_name"
     t.integer  "usergroup",              limit: 8, default: 0,                     null: false
     t.integer  "rebate_balance",                   default: 0
