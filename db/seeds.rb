@@ -15,9 +15,10 @@ test_menu_items = [
         ['Mina ordrar', '/store/orders'],
     ]],
     ['Frågor & Svar', '/faq'],
-    ['Orkester', '#', children: [
-        ['Information', '/orchestra'],
-        ['Anmälan', '/orchestra/register'],
+    ['Festivalen', '#', children: [
+       ['Spelschema', '/festival/schedule'],
+       ['Karta', '/festival/map'],
+       ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
         ['Lineup', '/cortege_lineups'],
@@ -25,6 +26,10 @@ test_menu_items = [
         ['Om Casekårtege', '/case_cortege'],
         ['Kårtegeanmälan', '/cortege/interest', disabled_from: '2017-04-01'],
         ['Casekårtegeanmälan', '/case_cortege/new', disabled_from: '2017-04-01'],
+    ]],
+    ['Orkester', '#', children: [
+        ['Information', '/orchestra'],
+        ['Anmälan', '/orchestra/register'],
     ]],
     ['Jobba på SOF', '#', children: [
         ['Förmåner', '/funkis'],
