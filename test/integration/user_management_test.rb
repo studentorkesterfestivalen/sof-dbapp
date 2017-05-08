@@ -115,4 +115,23 @@ class UserManagementTest < AuthenticatedIntegrationTest
 
     assert_nil User.find_by_id(new_user.id)
   end
+
+  test 'searching returns result from multiple sources' do
+    current_user.admin_permissions |= AdminPermission::LIST_USERS
+    current_user.save!
+
+    # Match by email
+    create_user 'tutputten.sofsson@sof17.se'
+
+    # Match by name
+    name_match_user = create_user 'something@sof17.se'
+    name_match_user.display_name = 'Tutputten Sofsson'
+    name_match_user.save!
+
+    get '/api/v1/users/search/?query=tutputten', headers: auth_headers
+    assert_response :success
+
+    result = JSON.parse response.body
+    assert_equal 2, result.count
+  end
 end
