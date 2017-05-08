@@ -3,6 +3,14 @@ class API::V1::UsersController < ApplicationController
 
   before_action :authenticate_user!
 
+  USER_SOURCES_PRIORITY = [
+    :liu_id,
+    :email,
+    :name
+  ]
+
+  USER_COUNT_SEARCH_LIMIT = 10
+
   def index
     raise 'Listing all users not supported'
   end
@@ -127,31 +135,40 @@ class API::V1::UsersController < ApplicationController
 
   # Ordered with least complexity first
   def find_users_id_from_query
+    if query_is_mifare_number?
+      puts 'CAAAAARD'
+      find_users_from :card
+    else
+      found_user_ids = Set.new
 
-    find_users_from :liu_id or
-    find_users_from :email or
-    find_users_from :card or
-    find_users_from :name
+      USER_SOURCES_PRIORITY.each do |source|
+        if found_user_ids.size < USER_COUNT_SEARCH_LIMIT
+          found_user_ids.merge(find_users_from source)
+        end
+      end
+
+      found_user_ids.take(USER_COUNT_SEARCH_LIMIT)
+    end
   end
 
   def find_users_from(source)
     res = nil
     case source
       when :card
-        find_users_from_kobra(params[:query])
+        res = find_users_from_kobra(params[:query])
       when :liu_id
-        res = User.where('nickname like ?', "%#{params[:query]}%").limit(10)
+        res = User.where('nickname like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       when :email
-        res = User.where('email like ?', "%#{params[:query]}%").limit(10)
+        res = User.where('email like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       when :name
-        res = User.where('display_name like ?', "%#{params[:query]}%").limit(10)
+        res = User.where('display_name like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       else
         nil
     end
     if res.present?
       res
     else
-      nil
+      []
     end
   end
 
@@ -161,11 +178,13 @@ class API::V1::UsersController < ApplicationController
       response = kobra.get_student(id: card_id)
       liu_id = response[:liu_id]
 
-      User.where('nickname like ?', "%#{liu_id}%").limit(10)
+      User.where('nickname like ?', "%#{liu_id}%").limit(USER_COUNT_SEARCH_LIMIT)
     rescue
-      nil
+      []
     end
   end
 
-
+  def query_is_mifare_number?
+    !!(params[:query] =~ /\A[0-9]+\z/)
+  end
 end
