@@ -135,7 +135,8 @@ class API::V1::UsersController < ApplicationController
     params.require(:user).permit(
         :display_name,
         :admin_permissions,
-        :usergroup
+        :usergroup,
+        :rebate_balance
     )
   end
 
