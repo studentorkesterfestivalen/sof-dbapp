@@ -136,7 +136,6 @@ class API::V1::UsersController < ApplicationController
   # Ordered with least complexity first
   def find_users_id_from_query
     if query_is_mifare_number?
-      puts 'CAAAAARD'
       find_users_from :card
     else
       found_user_ids = Set.new
@@ -163,7 +162,7 @@ class API::V1::UsersController < ApplicationController
       when :name
         res = User.where('display_name like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       else
-        nil
+        []
     end
     if res.present?
       res
@@ -178,7 +177,7 @@ class API::V1::UsersController < ApplicationController
       response = kobra.get_student(id: card_id)
       liu_id = response[:liu_id]
 
-      User.where('nickname like ?', "%#{liu_id}%").limit(USER_COUNT_SEARCH_LIMIT)
+      User.where('nickname like ?', "%#{liu_id}%").limit(1)
     rescue
       []
     end
