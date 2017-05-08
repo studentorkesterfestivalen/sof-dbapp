@@ -11,6 +11,12 @@ class API::V1::UsersController < ApplicationController
 
   USER_COUNT_SEARCH_LIMIT = 10
 
+  if Rails.env.production?
+    LIKE = 'ILIKE'
+  else
+    LIKE = 'LIKE'
+  end
+
   def index
     raise 'Listing all users not supported'
   end
@@ -129,7 +135,8 @@ class API::V1::UsersController < ApplicationController
     params.require(:user).permit(
         :display_name,
         :admin_permissions,
-        :usergroup
+        :usergroup,
+        :rebate_balance
     )
   end
 
@@ -156,11 +163,11 @@ class API::V1::UsersController < ApplicationController
       when :card
         res = find_users_from_kobra(params[:query])
       when :liu_id
-        res = User.where('nickname like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
+        res = User.where("nickname #{LIKE} ?", "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       when :email
-        res = User.where('email like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
+        res = User.where("email #{LIKE} ?", "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       when :name
-        res = User.where('display_name like ?', "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
+        res = User.where("display_name #{LIKE} ?", "%#{params[:query]}%").limit(USER_COUNT_SEARCH_LIMIT)
       else
         []
     end
@@ -177,7 +184,7 @@ class API::V1::UsersController < ApplicationController
       response = kobra.get_student(id: card_id)
       liu_id = response[:liu_id]
 
-      User.where('nickname like ?', "%#{liu_id}%").limit(1)
+      User.where("nickname #{LIKE} ?", "%#{liu_id}%").limit(1)
     rescue
       []
     end
