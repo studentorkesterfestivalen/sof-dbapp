@@ -17,12 +17,11 @@ test_menu_items = [
     ['Frågor & Svar', '/faq'],
     ['Festivalen', '#', children: [
        ['Spelschema', '/festival/schedule'],
-       ['Karta', '/festival/map'],
+       ['Karta', '/festival/map', active: false],
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
         ['Lineup', '/cortege_lineups'],
-        ['Kårtegens väg', '/cortege/map'],
         ['Om Kårtegen', '/cortege'],
         ['Om Casekårtege', '/case_cortege'],
         ['Kårtegeanmälan', '/cortege/interest', disabled_from: '2017-04-01'],
@@ -60,7 +59,7 @@ test_menu_items = [
     ]]
 ]
 
-def create_menu_item(title, href, permissions: 0, display_empty: true, enabled_from: nil, disabled_from: nil, children: [])
+def create_menu_item(title, href, permissions: 0, display_empty: true, enabled_from: nil, disabled_from: nil, children: [], active: true)
   a = MenuItem.new
   a.title = title
   a.href = href
@@ -69,6 +68,7 @@ def create_menu_item(title, href, permissions: 0, display_empty: true, enabled_f
   a.enabled_from = enabled_from.present? ? DateTime.parse(enabled_from) : nil
   a.disabled_from = disabled_from.present? ? DateTime.parse(disabled_from) : nil
   a.menu_items = children.map { |c| create_menu_item *c }
+  a.active = active
   a.save
   return a
 end
