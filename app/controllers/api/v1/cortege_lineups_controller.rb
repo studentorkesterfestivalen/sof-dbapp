@@ -34,11 +34,13 @@ class API::V1::CortegeLineupsController < ApplicationController
     head :no_content
   end
 
-  def get_artists
-    render :json => CortegeLineup.where(:cortege_type => 'orkester')
+  def get_corteges
+    render :json => CortegeLineup.where(cortege: true)
   end
 
-
+  def get_artists
+    render :json => CortegeLineup.where(orchestra: true)
+  end
 
   private
 
@@ -47,8 +49,10 @@ class API::V1::CortegeLineupsController < ApplicationController
       :name,
       :description,
       :image,
-      :cortege_type,
-      :order
+      :order,
+      :orchestra,
+      :ballet,
+      :cortege
     )
   end
 

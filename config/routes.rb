@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 
       resources :cortege_lineups do
         get 'artists_from_lineups', action: 'get_artists', on: :collection
+        get 'corteges_from_lineups', action: 'get_corteges', on: :collection
       end
 
       resources :cortege_membership do
