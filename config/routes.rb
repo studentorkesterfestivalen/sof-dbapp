@@ -40,7 +40,7 @@ Rails.application.routes.draw do
       resources :funkis_application
 
       resources :cortege_lineups do
-        get 'orchestra_from_lineups', action: 'get_orchestra', on: :collection
+        get 'artists_from_lineups', action: 'get_artists', on: :collection
       end
 
       resources :cortege_membership do

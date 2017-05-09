@@ -21,7 +21,7 @@ test_menu_items = [
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
-        ['Lineup', '/cortege_lineups'],
+        ['Lineup', '/cortege/lineups'],
         ['Om Kårtegen', '/cortege'],
         ['Om Casekårtege', '/case_cortege'],
         ['Kårtegeanmälan', '/cortege/interest', disabled_from: '2017-04-01'],
