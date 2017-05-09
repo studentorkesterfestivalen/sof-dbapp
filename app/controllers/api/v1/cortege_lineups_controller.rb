@@ -34,6 +34,10 @@ class API::V1::CortegeLineupsController < ApplicationController
     head :no_content
   end
 
+
+
+
+  
   private
 
   def item_params
