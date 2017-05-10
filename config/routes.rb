@@ -39,7 +39,10 @@ Rails.application.routes.draw do
       end
       resources :funkis_application
 
-      resources :cortege_lineups
+      resources :lineups do
+        get 'artists_from_lineups', action: 'get_artists', on: :collection
+        get 'corteges_from_lineups', action: 'get_corteges', on: :collection
+      end
 
       resources :cortege_membership do
         get 'cortege/:id', action: 'show_cortege_members', on: :collection
