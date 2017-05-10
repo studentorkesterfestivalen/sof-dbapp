@@ -1,4 +1,4 @@
-class StupidFuckingDefaultValues2 < ActiveRecord::Migration[5.0]
+class FixingDefaultValues2 < ActiveRecord::Migration[5.0]
   def change
 
     remove_column :cortege_lineups, :orchestra, :boolean, default: false, null: false
