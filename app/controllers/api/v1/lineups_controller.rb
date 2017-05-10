@@ -1,25 +1,25 @@
-class API::V1::CortegeLineupsController < ApplicationController
+class API::V1::LineupsController < ApplicationController
   include ViewPermissionConcern
 
   def index
-    render :json => CortegeLineup.all
+    render :json => Lineup.all
   end
 
   def create
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = CortegeLineup.new(item_params)
+    cortege = Lineup.new(item_params)
     cortege.save!
   end
 
   def show
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = CortegeLineup.find(params[:id])
+    cortege = Lineup.find(params[:id])
     render :json => cortege
   end
 
   def update
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = CortegeLineup.find(params[:id])
+    cortege = Lineup.find(params[:id])
     if cortege.update(item_params)
       redirect_to api_v1_cortege_lineups_url(cortege)
     else
@@ -29,17 +29,17 @@ class API::V1::CortegeLineupsController < ApplicationController
 
   def destroy
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = CortegeLineup.find(params[:id])
+    cortege = Lineup.find(params[:id])
     cortege.destroy
     head :no_content
   end
 
   def get_corteges
-    render :json => CortegeLineup.where(cortege: true)
+    render :json => Lineup.where(cortege: true)
   end
 
   def get_artists
-    render :json => CortegeLineup.where(orchestra: true)
+    render :json => Lineup.where(orchestra: true)
   end
 
   private

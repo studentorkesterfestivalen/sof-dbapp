@@ -16,7 +16,7 @@ test_menu_items = [
     ]],
     ['Frågor & Svar', '/faq'],
     ['Festivalen', '#', children: [
-       ['lineup', '/festival/lineup'],
+       ['lineup', '/festival/lineups'],
        ['Spelschema', '/festival/schedule'],
        ['Karta', '/festival/map', active: false],
        ['Årets öl', '/festival/beer']
@@ -50,7 +50,7 @@ test_menu_items = [
         ['Hantera användare', '/manage/users', permissions: AdminPermission::LIST_USERS],
         ['Hantera orkestrar', '/manage/orchestras', permissions: AdminPermission::LIST_ORCHESTRA_SIGNUPS],
         ['Hantera kårteger', '/manage/corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
-        ['Hantera lineup', '/manage/cortege_lineups', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
+        ['Hantera lineups', '/manage/lineups', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera casekårteger', '/manage/case_corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera produkter', '/manage/products', permissions: AdminPermission::ALL],
         ['Hantera FAQs', '/manage/faqs', permissions: AdminPermission::EDITOR],

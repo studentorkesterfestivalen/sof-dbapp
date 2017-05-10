@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170509142301) do
+ActiveRecord::Schema.define(version: 20170509160431) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -77,18 +77,6 @@ ActiveRecord::Schema.define(version: 20170509142301) do
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.index ["user_id"], name: "index_case_corteges_on_user_id"
-  end
-
-  create_table "cortege_lineups", force: :cascade do |t|
-    t.string   "name",        null: false
-    t.text     "description", null: false
-    t.string   "image",       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "order"
-    t.boolean  "orchestra"
-    t.boolean  "ballet"
-    t.boolean  "cortege"
   end
 
   create_table "cortege_memberships", force: :cascade do |t|
@@ -181,6 +169,18 @@ ActiveRecord::Schema.define(version: 20170509142301) do
     t.integer  "green_limit",        default: 0,  null: false
     t.string   "date",               default: "", null: false
     t.index ["funkis_category_id"], name: "index_funkis_shifts_on_funkis_category_id"
+  end
+
+  create_table "lineups", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.text     "description", null: false
+    t.string   "image",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "order"
+    t.boolean  "orchestra"
+    t.boolean  "ballet"
+    t.boolean  "cortege"
   end
 
   create_table "menu_items", force: :cascade do |t|
