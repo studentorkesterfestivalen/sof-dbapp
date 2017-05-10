@@ -7,30 +7,30 @@ class API::V1::LineupsController < ApplicationController
 
   def create
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = Lineup.new(item_params)
-    cortege.save!
+    lineup = Lineup.new(item_params)
+    lineup.save!
   end
 
   def show
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = Lineup.find(params[:id])
-    render :json => cortege
+    lineup = Lineup.find(params[:id])
+    render :json => lineup
   end
 
   def update
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = Lineup.find(params[:id])
-    if cortege.update(item_params)
-      redirect_to api_v1_cortege_lineups_url(cortege)
+    lineup = Lineup.find(params[:id])
+    if lineup.update(item_params)
+      redirect_to api_v1_lineups_url(lineup)
     else
-      raise 'Unable to update cortege_lineup'
+      raise 'Unable to update lineup'
     end
   end
 
   def destroy
     require_admin_permission AdminPermission::LIST_CORTEGE_APPLICATIONS
-    cortege = Lineup.find(params[:id])
-    cortege.destroy
+    lineup = Lineup.find(params[:id])
+    lineup.destroy
     head :no_content
   end
 
