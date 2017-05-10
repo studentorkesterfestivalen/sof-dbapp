@@ -1,2 +1,0 @@
-class ArtistLineup < ApplicationRecord
-end

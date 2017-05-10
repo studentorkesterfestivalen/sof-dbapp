@@ -16,13 +16,13 @@ test_menu_items = [
     ]],
     ['Frågor & Svar', '/faq'],
     ['Festivalen', '#', children: [
-       ['lineup', '/festival/lineups'],
+       ['Arist-lineup', '/festival/lineups'],
        ['Spelschema', '/festival/schedule'],
        ['Karta', '/festival/map', active: false],
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
-        ['Lineup', '/cortege/lineups'],
+        ['Kårtegeordning', '/cortege/lineups'],
         ['Om Kårtegen', '/cortege'],
         ['Om Casekårtege', '/case_cortege'],
         ['Kårtegeanmälan', '/cortege/interest', disabled_from: '2017-04-01'],
