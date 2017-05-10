@@ -72,6 +72,10 @@ Rails.application.routes.draw do
         post '/:id', to: 'item_collect#collect'
       end
 
+      scope '/order_stats' do
+        get '/', to: 'order_statistics#summary'
+      end
+
       get 'user', to: 'users#show'
     end
   end
