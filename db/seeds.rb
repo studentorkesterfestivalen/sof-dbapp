@@ -23,7 +23,6 @@ test_menu_items = [
     ]],
     ['Kårtege', '#', children: [
         ['Kårtegeordning', '/cortege/lineups'],
-        ['Lineup', '/cortege_lineups'],
         ['Kårtegens väg', '/cortege/map'],
         ['Om Kårtegen', '/cortege'],
         ['Om Casekårtege', '/case_cortege'],
