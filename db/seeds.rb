@@ -18,7 +18,7 @@ test_menu_items = [
     ['Festivalen', '#', children: [
        ['Artist-lineup', '/festival/lineups'],
        ['Festivalschema', '/festival/schedule'],
-       ['Spelschema', '/festival/schedule'],
+       ['Spelschema', '/festival/orchestra/schedule'],
        ['Karta', '/festival/map'],
        ['Årets öl', '/festival/beer']
     ]],
