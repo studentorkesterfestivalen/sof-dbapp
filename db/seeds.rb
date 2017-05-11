@@ -16,17 +16,18 @@ test_menu_items = [
     ]],
     ['Frågor & Svar', '/faq'],
     ['Festivalen', '#', children: [
-       ['Arist-lineup', '/festival/lineups'],
-       ['Spelschema', '/festival/schedule'],
+       ['Orkestrar', '/festival/lineups'],
+       ['Festivalschema', '/festival/schedule'],
+       ['Spelschema', '/festival/orchestra/schedule'],
        ['Colour it', '/festival/colour_it'],
-       ['Karta', '/festival/map', active: false],
+       ['Karta', '/festival/map'],
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
         ['Kårtegeordning', '/cortege/lineups'],
         ['Kårtegens väg', '/cortege/map'],
-        ['Om Kårtegen', '/cortege'],
-        ['Om Casekårtege', '/case_cortege'],
+        ['Om Kårtegen', '/cortege', active: false],
+        ['Om Casekårtege', '/case_cortege', active: false],
         ['Kårtegeanmälan', '/cortege/interest', disabled_from: '2017-04-01'],
         ['Casekårtegeanmälan', '/case_cortege/new', disabled_from: '2017-04-01'],
     ]],
