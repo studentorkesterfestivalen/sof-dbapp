@@ -86,7 +86,7 @@ class API::V1::OrderStatisticsController < ApplicationController
     name = product[0]
     kind = product[1]
 
-    if kind.nil? or kind.empty?
+    if kind.blank?
       name
     else
       "#{name} (#{kind})"
