@@ -16,11 +16,12 @@ test_menu_items = [
     ]],
     ['Frågor & Svar', '/faq'],
     ['Festivalen', '#', children: [
-       ['Orkestrar', '/festival/lineups'],
+       ['Orkestrar', '/festival/artist_lineup'],
        ['Festivalschema', '/festival/schedule'],
        ['Spelschema', '/festival/orchestra/schedule'],
        ['Colour it', '/festival/colour_it'],
        ['Karta', '/festival/map'],
+       ['Mat på området', '/festival/food'],
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
