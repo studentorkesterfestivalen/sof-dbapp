@@ -19,6 +19,7 @@ test_menu_items = [
        ['Orkestrar', '/festival/lineups'],
        ['Festivalschema', '/festival/schedule'],
        ['Spelschema', '/festival/orchestra/schedule'],
+       ['Colour it', '/festival/colour_it'],
        ['Karta', '/festival/map'],
        ['Årets öl', '/festival/beer']
     ]],
