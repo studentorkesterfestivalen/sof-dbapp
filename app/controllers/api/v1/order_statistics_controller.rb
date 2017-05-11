@@ -3,42 +3,48 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   before_action :authenticate_user!
 
-  PARAMETERS = [
-      :full_cost,
-      :sold_count,
-      :rebate_count
-  ]
+  FIRST_DATE = '2017-04-23'.to_date
+  LAST_DATE = '2017-05-14'.to_date
 
   def summary
     require_admin_permission AdminPermission::ANALYST
 
-    date_from = params[:from].to_date
-    date_to = params[:to].to_date
+    if params[:parameter].present?
+      # Display data from the first day of ticket sale until the last, or today
+      date_from = FIRST_DATE
+      date_to = [LAST_DATE, Date.today].min
 
-    data = {
-        labels: []
-    }
+      num_days = (date_to - date_from).to_i + 1
+      labels = date_from.upto(date_to)
+      value_map = {}
 
-    date_from.upto(date_to) do |date|
-      data[:labels] << date
+      # Query database for requested parameter
+      query_result = evaluate_parameter(params[:parameter].to_sym)
 
-      # Generate summaries for the requested date or date span
-      local_date_from = params[:sum].present? ? date_from : date
-      item_summaries = Product.all.map { |x| summary_for_item(x, local_date_from, date) }
+      # Prepare value_map with zeroes for all labels and fill with available data
+      query_result.each { |k, v| value_map[[k[0], k[2]]] = [0] * num_days }
+      query_result.each { |k, v| value_map[[k[0], k[2]]][(k[1].to_date - date_from).to_i] = v }
 
-      if data[:datasets].nil?
-        # Create initial structure in dataset
-        item_summaries.each do |item|
-          PARAMETERS.each { |x| item[x] = [item[x]] }
-        end
-        data[:datasets] = item_summaries.map { |x| [x[:id], x] }.to_h
-      else
-        # Append dataset structure with more data
-        item_summaries.each do |item|
-          base = data[:datasets][item[:id]]
-          PARAMETERS.each { |x| base[x] << item[x] }
-        end
+      # Generate data structure
+      data = {
+          labels: labels,
+          datasets: value_map.map do |product, values|
+            {
+                name: product_name(product),
+                values: values
+            }
+          end
+      }
+
+      # Sum the values over all previous days for every day if requested
+      if params[:sum] == 'true'
+        sum_days data
       end
+
+      # Append index to dataset which is used for coloring the graph
+      data[:datasets].each_with_index { |x, index| x[:index] = index }
+    else
+      data = {}
     end
 
     render json: data
@@ -46,49 +52,44 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   private
 
-  def summary_for_item(product, from, to)
-    summary_hash = {
-        id: product.id,
-        name: product_name(product)
-    }
+  NAMES_ELIGABLE_FOR_REBATE = ['Dagsbiljett', 'Endagsbiljett', 'Helhelgsbiljett', 'Orkesterbiljett']
 
-    PARAMETERS.each { |x| summary_hash[x] = evaluate_parameter(product, x, from, to) }
-
-    summary_hash
-  end
-
-  ELIGABLE_NAMES = ['Dagsbiljett', 'Endagsbiljett', 'Helhelgsbiljett', 'Orkesterbiljett']
-  def is_eligable_for_rebate?(product)
-    ELIGABLE_NAMES.include? product.base_product.name
-  end
-
-  def evaluate_parameter(product, parameter, from, to)
-    query = base_query(product, from, to)
+  def evaluate_parameter(parameter)
     case parameter
       when :full_cost
-        query.sum { |x| x.cost }
+        base_query.sum(:cost)
       when :sold_count
-        query.count
+        base_query.count
       when :rebate_count
-        if is_eligable_for_rebate?(product)
-          query.where.not('orders.rebate' => 0).count
-        else
-          0
-        end
+        # Count every OrderItem which is eligable for rebate and part of an order where LinTek rebate was given
+        base_query.where('base_products.name': NAMES_ELIGABLE_FOR_REBATE).where.not('orders.rebate' => 0).count
       else
-        0
+        {}
     end
   end
 
-  def base_query(product, from, to)
-    OrderItem.includes(:order).where(product_id: product.id).where(created_at: from.midnight..to.end_of_day)
+  def base_query
+    OrderItem.joins(product: [:base_product], order: []).group('base_products.name', 'DATE(order_items.created_at)', 'products.kind')
+  end
+
+  def sum_days(data)
+    data[:datasets].each do |dataset|
+      sum = 0
+      dataset[:values].each_with_index do |value, index|
+        sum += value
+        dataset[:values][index] = sum
+      end
+    end
   end
 
   def product_name(product)
-    if product.kind.nil? or product.kind.empty?
-      product.base_product.name
+    name = product[0]
+    kind = product[1]
+
+    if kind.blank?
+      name
     else
-      "#{product.base_product.name} (#{product.kind})"
+      "#{name} (#{kind})"
     end
   end
 end
