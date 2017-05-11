@@ -21,6 +21,7 @@ test_menu_items = [
        ['Spelschema', '/festival/orchestra/schedule'],
        ['Colour it', '/festival/colour_it'],
        ['Karta', '/festival/map'],
+       ['Mat på området', '/festival/food'],
        ['Årets öl', '/festival/beer']
     ]],
     ['Kårtege', '#', children: [
