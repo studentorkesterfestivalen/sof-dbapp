@@ -74,7 +74,7 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   def created_at_hour
     if Rails.env.production?
-      "date_format(order_items.created_at, '%Y-%m-%d %H:00')"
+      "to_char(order_items.created_at, 'YYYY-mm-dd HH24:00')"
     else
       "strftime('%Y-%m-%d %H:00', order_items.created_at)"
     end
