@@ -66,9 +66,17 @@ class API::V1::OrderStatisticsController < ApplicationController
   def base_query
     if params[:date].present?
       date = params[:date].to_date
-      OrderItem.joins(product: [:base_product], order: []).where(created_at: date.midnight..date.end_of_day).group('base_products.name', "strftime('%Y-%m-%d %H:00', order_items.created_at)", 'products.kind')
+      OrderItem.joins(product: [:base_product], order: []).where(created_at: date.midnight..date.end_of_day).group('base_products.name', created_at_hour, 'products.kind')
     else
       OrderItem.joins(product: [:base_product], order: []).group('base_products.name', 'DATE(order_items.created_at)', 'products.kind')
+    end
+  end
+
+  def created_at_hour
+    if Rails.env.production?
+      "date_format(order_items.created_at, '%Y-%m-%d %H:00')"
+    else
+      "strftime('%Y-%m-%d %H:00', order_items.created_at)"
     end
   end
 
