@@ -12,7 +12,7 @@ class Product < ApplicationRecord
   end
 
   def is_purchasable?(user, additional_items)
-    below_user_limit?(user, additional_items) && below_global_limit?(additional_items)
+    enabled && below_user_limit?(user, additional_items) && below_global_limit?(additional_items)
   end
 
   def below_user_limit?(user, additional_items)
