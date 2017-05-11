@@ -10,20 +10,15 @@ class API::V1::OrderStatisticsController < ApplicationController
     require_admin_permission AdminPermission::ANALYST
 
     if params[:parameter].present?
-      # Display data from the first day of ticket sale until the last, or today
-      date_from = FIRST_DATE
-      date_to = [LAST_DATE, Date.today].min
-
-      num_days = (date_to - date_from).to_i + 1
-      labels = date_from.upto(date_to)
+      num_days = labels.count
       value_map = {}
 
       # Query database for requested parameter
       query_result = evaluate_parameter(params[:parameter].to_sym)
 
       # Prepare value_map with zeroes for all labels and fill with available data
-      query_result.each { |k, v| value_map[[k[0], k[2]]] = [0] * num_days }
-      query_result.each { |k, v| value_map[[k[0], k[2]]][(k[1].to_date - date_from).to_i] = v }
+      query_result.each { |k, v| value_map[label(k)] = [0] * num_days }
+      query_result.each { |k, v| value_map[label(k)][value_index(k)] = v }
 
       # Generate data structure
       data = {
@@ -69,7 +64,12 @@ class API::V1::OrderStatisticsController < ApplicationController
   end
 
   def base_query
-    OrderItem.joins(product: [:base_product], order: []).group('base_products.name', 'DATE(order_items.created_at)', 'products.kind')
+    if params[:date].present?
+      date = params[:date].to_date
+      OrderItem.joins(product: [:base_product], order: []).where(created_at: date.midnight..date.end_of_day).group('base_products.name', "strftime('%Y-%m-%d %H:00', order_items.created_at)", 'products.kind')
+    else
+      OrderItem.joins(product: [:base_product], order: []).group('base_products.name', 'DATE(order_items.created_at)', 'products.kind')
+    end
   end
 
   def sum_days(data)
@@ -90,6 +90,43 @@ class API::V1::OrderStatisticsController < ApplicationController
       name
     else
       "#{name} (#{kind})"
+    end
+  end
+
+  def first_label
+    if params[:date].present?
+      params[:date].to_date.midnight
+    else
+      FIRST_DATE
+    end
+  end
+
+  def last_label
+    if params[:date].present?
+      first_label + 23.hours
+    else
+      # Display data until the last day, or today
+      [LAST_DATE, Date.today].min
+    end
+  end
+
+  def labels
+    if params[:date].present?
+      Array.new(24) { |x| (first_label + x.hours).strftime('%H:%M') }
+    else
+      first_label.upto(last_label)
+    end
+  end
+
+  def label(k)
+    [k[0], k[2]]
+  end
+
+  def value_index(k)
+    if params[:date].present?
+      (k[1].to_datetime.hour).to_i
+    else
+      (k[1].to_date - first_label).to_i
     end
   end
 end
