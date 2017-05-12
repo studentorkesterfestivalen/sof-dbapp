@@ -74,6 +74,7 @@ Rails.application.routes.draw do
 
       scope '/order_stats' do
         get '/', to: 'order_statistics#summary'
+        get '/measures', to: 'order_statistics#key_measures'
       end
 
       get 'user', to: 'users#show'
