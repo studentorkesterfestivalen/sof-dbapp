@@ -14,7 +14,8 @@ class API::V1::PaymentController < ApplicationController
       end
       current_user.cart.empty!
 
-      ReceiptMailer.order_receipt(order).deliver_now
+
+
 
       redirect_to api_v1_order_url(order)
     else

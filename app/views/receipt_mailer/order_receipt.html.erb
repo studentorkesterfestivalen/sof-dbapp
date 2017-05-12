@@ -222,6 +222,91 @@
         <% end %>
         <!-- END LOOP HERE -->
 
+        <% if @order.rebate > 0 %>
+            <tr>
+              <td style="padding: 10px 0 0 0; border-top: 1px dashed #aaaaaa;">
+                <!-- TWO COLUMNS -->
+                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td valign="top" class="mobile-wrapper">
+                      <!-- LEFT COLUMN -->
+                      <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;" align="left">
+                        <tr>
+                          <td style="padding: 0 0 10px 0;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
+                                  <%= "Kårrabatt" %>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      <!-- RIGHT COLUMN -->
+                      <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;" align="right">
+                        <tr>
+                          <td style="padding: 0 0 10px 0;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td align="right" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
+                                  <%= "-#{number_with_delimiter(@order.rebate, delimiter: ' ')} SEK" %>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+        <% end %>
+
+        <% if @order.funkis_rebate > 0 %>
+            <tr>
+              <td style="padding: 10px 0 0 0; border-top: 1px dashed #aaaaaa;">
+                <!-- TWO COLUMNS -->
+                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td valign="top" class="mobile-wrapper">
+                      <!-- LEFT COLUMN -->
+                      <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;" align="left">
+                        <tr>
+                          <td style="padding: 0 0 10px 0;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
+                                  <%= "Funkis-rabatt" %>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      <!-- RIGHT COLUMN -->
+                      <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;" align="right">
+                        <tr>
+                          <td style="padding: 0 0 10px 0;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td align="right" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
+                                  <%= "-#{number_with_delimiter(@order.funkis_rebate, delimiter: ' ')} SEK" %>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+        <% end %>
+
+
 
         <!-- TOTAL AMOUNT -->
         <tr>
@@ -290,7 +375,8 @@
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                       <td align="left" style="padding: 0 0 0 0; font-size: 14px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color: #aaaaaa; font-style: italic;" class="padding-copy">
-                        Om det är någon du undrar över är det bara att kontakta oss. Kontaktinfo hittar på www.sof17.se
+                        Om det är någon du undrar över är det bara att kontakta oss. <br>
+                        Kontaktinfo hittar på www.sof17.se
                       </td>
                     </tr>
                   </table>
@@ -320,7 +406,8 @@
       <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table">
         <tr>
           <td align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666;">
-            Lintek, Tekniska Högskolan, 581 83 Linköping
+            Lintek, Tekniska Högskolan, 581 83 Linköping <br>
+            Du får detta mail för du har gjort ett köp på www.sof17.se
             <br>
           </td>
         </tr>
