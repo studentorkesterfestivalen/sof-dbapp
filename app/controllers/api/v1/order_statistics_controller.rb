@@ -66,7 +66,7 @@ class API::V1::OrderStatisticsController < ApplicationController
   def base_query
     if params[:date].present?
       date = params[:date].to_date
-      OrderItem.joins(product: [:base_product], order: []).where(created_at: date.midnight..date.end_of_day).group('base_products.name', created_at_hour, 'products.kind')
+      OrderItem.joins(product: [:base_product], order: []).where(created_at: first_label..last_label).group('base_products.name', created_at_hour, 'products.kind')
     else
       OrderItem.joins(product: [:base_product], order: []).group('base_products.name', 'DATE(order_items.created_at)', 'products.kind')
     end
@@ -103,7 +103,7 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   def first_label
     if params[:date].present?
-      params[:date].to_date.midnight
+      params[:date].to_date.midnight + timezone_offset
     else
       FIRST_DATE
     end
@@ -120,7 +120,7 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   def labels
     if params[:date].present?
-      Array.new(24) { |x| (first_label + x.hours).strftime('%H:%M') }
+      Array.new(24) { |x| "#{x.to_s.rjust(2, '0')}:00" }
     else
       first_label.upto(last_label)
     end
@@ -132,9 +132,13 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   def value_index(k)
     if params[:date].present?
-      (k[1].to_datetime.hour).to_i
+      ((k[1].to_datetime + timezone_offset).hour).to_i
     else
       (k[1].to_date - first_label).to_i
     end
+  end
+
+  def timezone_offset
+    params[:date].to_date.in_time_zone('Stockholm').utc_offset.seconds
   end
 end
