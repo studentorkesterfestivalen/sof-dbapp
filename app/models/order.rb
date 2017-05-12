@@ -49,6 +49,10 @@ class Order < ApplicationRecord
     user.save!
     save!
 
+    send_receipt
+  end
+
+  def send_receipt
     ReceiptMailer.order_receipt(self).deliver_now
     self.receipt_sent = true
     save!
