@@ -1,5 +1,5 @@
 namespace :orders do
-  task send_receipts_to_old_orders: :environment do
+  task send_unsent_receipts: :environment do
     Order.find_each do |order|
       unless order.receipt_sent
         ReceiptMailer.order_receipt(order).deliver_now
@@ -9,9 +9,14 @@ namespace :orders do
     end
   end
 
-  task reset_receipt_sent: :environment do
-    Order.find_each do |order|
-      order.receipt_sent = false
+  task resend_receipt: :environment do
+    # Make sure arguments are collected properly
+    ARGV.each { |a| task a.to_sym do ; end}
+
+    if ARGV[1]
+      order = Order.find(ARGV[1])
+      ReceiptMailer.order_receipt(order).deliver_now
+      order.receipt_sent = true
       order.save!
     end
   end
