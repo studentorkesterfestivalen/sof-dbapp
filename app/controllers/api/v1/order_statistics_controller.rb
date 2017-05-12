@@ -45,6 +45,17 @@ class API::V1::OrderStatisticsController < ApplicationController
     render json: data
   end
 
+  def key_measures
+    data = {
+        used_lintek_rebate: Order.sum(:rebate),
+        used_funkis_rebate: Order.sum(:funkis_rebate),
+        collected: OrderItem.where(collected: true).count,
+        collectable: OrderItem.where(collected: false).count
+    }
+
+    render json: data
+  end
+
   private
 
   NAMES_ELIGABLE_FOR_REBATE = ['Dagsbiljett', 'Endagsbiljett', 'Helhelgsbiljett', 'Orkesterbiljett']
