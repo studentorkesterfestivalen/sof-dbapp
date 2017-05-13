@@ -14,9 +14,6 @@ class API::V1::PaymentController < ApplicationController
       end
       current_user.cart.empty!
 
-
-
-
       redirect_to api_v1_order_url(order)
     else
       head :not_acceptable

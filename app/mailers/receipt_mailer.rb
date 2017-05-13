@@ -6,7 +6,6 @@ class ReceiptMailer < ApplicationMailer
     @order = order
     @total = order.order_items.sum { |x| x.cost } - order.rebate - order.funkis_rebate
 
-
     mail(to: @user.email, subject: 'SOF17: Kvitto för order')
   end
 end
