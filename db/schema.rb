@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510074920) do
+ActiveRecord::Schema.define(version: 20170512211535) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -265,13 +265,14 @@ ActiveRecord::Schema.define(version: 20170510074920) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string   "payment_method",             null: false
+    t.string   "payment_method",                 null: false
     t.string   "payment_data"
     t.integer  "user_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "rebate",         default: 0, null: false
-    t.integer  "funkis_rebate",  default: 0, null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "rebate",         default: 0,     null: false
+    t.integer  "funkis_rebate",  default: 0,     null: false
+    t.boolean  "receipt_sent",   default: false, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 

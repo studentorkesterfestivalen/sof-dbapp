@@ -1,0 +1,27 @@
+Ett kvitto på att du TAGGAR SOF!
+
+Ett litet SOF17 är du värd.
+
+Order #<%= @order.id %>.
+Köpet gjordes <%=	@order.created_at.in_time_zone('Stockholm').strftime('%Y-%m-%d %H:%M:%S') %> och
+tillhör <%= @user.display_name %> med e-mail: <%= @user.email %>.
+Kvittot sammanställdes <%= Time.now.strftime('%Y-%m-%d %H:%M:%S') %>.
+
+<% @order.order_items.each do |item| %>
+    --
+    <% if item.product.kind.blank? %>
+        <%= item.product.base_product.name %>
+    <% else %>
+        <%= "#{item.product.base_product.name} (#{item.product.kind})" %>
+    <% end %>
+
+    <%= "#{number_with_delimiter(item.cost, delimiter: ' ')} SEK" %>
+    --
+<% end %>
+
+Totalt: <%= "#{number_with_delimiter(@total, delimiter: ' ')} SEK" %>
+
+--
+Om det är någon du undrar över är det bara att kontakta oss. Kontaktinfo hittar på www.sof17.se
+
+Lintek, Tekniska Högskolan, 581 83 Linköping
