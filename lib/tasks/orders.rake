@@ -2,9 +2,7 @@ namespace :orders do
   task send_unsent_receipts: :environment do
     Order.find_each do |order|
       unless order.receipt_sent
-        ReceiptMailer.order_receipt(order).deliver_now
-        order.receipt_sent = true
-        order.save!
+        order.send_receipt
       end
     end
   end
@@ -15,9 +13,7 @@ namespace :orders do
 
     if ARGV[1]
       order = Order.find(ARGV[1])
-      ReceiptMailer.order_receipt(order).deliver_now
-      order.receipt_sent = true
-      order.save!
+      order.send_receipt
     end
   end
 end
