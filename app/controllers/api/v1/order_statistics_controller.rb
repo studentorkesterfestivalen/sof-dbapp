@@ -46,12 +46,14 @@ class API::V1::OrderStatisticsController < ApplicationController
   end
 
   def key_measures
+    rebate_counts = count_rebates
     data = {
         used_lintek_rebate: Order.sum(:rebate),
         used_funkis_rebate: Order.sum(:funkis_rebate),
         collected: OrderItem.where(collected: true).count,
         collectable: OrderItem.where(collected: false).count
     }
+    data = data.merge(rebate_counts)
 
     render json: data
   end
@@ -151,5 +153,63 @@ class API::V1::OrderStatisticsController < ApplicationController
 
   def timezone_offset
     params[:date].to_date.in_time_zone('Stockholm').utc_offset.seconds
+  end
+
+  def count_rebates
+    @counts = {
+        :thursday => 0,
+        :friday => 0,
+        :saturday => 0,
+        :weekend => 0,
+        :unknown => 0
+    }
+    # Product id: 3 = Thursday
+    # Product id: 4 = Friday
+    # Product id: 5 = Satyrday
+    # BaseProduct id: 4 = Weekend
+    Order.find_each do |order|
+      @cur_rebate = order.rebate
+      if @cur_rebate > 0
+        # Find the easy ones, thursdays and weekends
+        order.order_items.each do |item|
+          if item.product_id == 2 and @cur_rebate - 20 >= 0
+            @cur_rebate -= 20
+            @counts[:thursday] += 1
+          elsif item.product.base_product.id == 4 and @cur_rebate - 90 >= 0
+            @cur_rebate -= 90
+            @counts[:weekend] += 1
+          end
+        end
+
+        # Find all the orders with only one friday or saturday
+        if order.order_items.count == 1 and @cur_rebate - 30 >= 0
+          if order.order_items.first.product_id == 4
+            @cur_rebate -= 30
+            @counts[:friday] += 1
+          elsif order.order_items.first.product_id == 5
+            @cur_rebate -= 30
+            @counts[:saturday] += 1
+          end
+        end
+
+        # Find those order that used either a friday or saturday rebate and only that rebate
+        if @cur_rebate == 30
+          if order.order_items.any? { |a| a.product_id == 4 }
+            @cur_rebate -= 30
+            @counts[:friday] += 1
+          elsif order.order_items.any? { |a| a.product_id == 5 }
+            @cur_rebate -= 30
+            @counts[:saturday] += 1
+          end
+        end
+
+        if @cur_rebate >= 30
+          unknown = @cur_rebate % 30
+          @counts[:saturday] += unknown
+        end
+      end
+    end
+
+    @counts
   end
 end
