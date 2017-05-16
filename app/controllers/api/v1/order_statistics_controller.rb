@@ -172,17 +172,17 @@ class API::V1::OrderStatisticsController < ApplicationController
       if @cur_rebate > 0
         # Find the easy ones, thursdays and weekends
         order.order_items.each do |item|
-          if item.product_id == 2 and @cur_rebate - 20 >= 0
+          if item.product_id == 2 and @cur_rebate >= 20
             @cur_rebate -= 20
             @counts[:thursday] += 1
-          elsif item.product.base_product.id == 4 and @cur_rebate - 90 >= 0
+          elsif item.product.base_product.id == 4 and @cur_rebate >= 90
             @cur_rebate -= 90
             @counts[:weekend] += 1
           end
         end
 
         # Find all the orders with only one friday or saturday
-        if order.order_items.count == 1 and @cur_rebate - 30 >= 0
+        if order.order_items.count == 1 and @cur_rebate >= 30
           if order.order_items.first.product_id == 4
             @cur_rebate -= 30
             @counts[:friday] += 1
@@ -204,8 +204,8 @@ class API::V1::OrderStatisticsController < ApplicationController
         end
 
         if @cur_rebate >= 30
-          unknown = @cur_rebate % 30
-          @counts[:saturday] += unknown
+          unknown = @cur_rebate / 30
+          @counts[:unknown] += unknown
         end
       end
     end
