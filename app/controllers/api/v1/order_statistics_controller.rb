@@ -172,39 +172,39 @@ class API::V1::OrderStatisticsController < ApplicationController
       if @cur_rebate > 0
         # Find the easy ones, thursdays and weekends
         order.order_items.each do |item|
-          if item.product_id == 2 and @cur_rebate >= 20
-            @cur_rebate -= 20
+          if item.product.kind == 'Torsdag' and @cur_rebate >= 30
+            @cur_rebate -= 30
             @counts[:thursday] += 1
-          elsif item.product.base_product.id == 4 and @cur_rebate >= 90
+          elsif item.product.base_product.name == 'Helhelgsbiljett' and @cur_rebate >= 90
             @cur_rebate -= 90
             @counts[:weekend] += 1
           end
         end
 
         # Find all the orders with only one friday or saturday
-        if order.order_items.count == 1 and @cur_rebate >= 30
-          if order.order_items.first.product_id == 4
-            @cur_rebate -= 30
+        if order.order_items.count == 1 and @cur_rebate >= 20
+          if order.order_items.first.product.kind == 'Fredag'
+            @cur_rebate -= 20
             @counts[:friday] += 1
-          elsif order.order_items.first.product_id == 5
-            @cur_rebate -= 30
+          elsif order.order_items.first.product.kind == 'Lördag'
+            @cur_rebate -= 20
             @counts[:saturday] += 1
           end
         end
 
         # Find those order that used either a friday or saturday rebate and only that rebate
-        if @cur_rebate == 30
-          if order.order_items.any? { |a| a.product_id == 4 }
-            @cur_rebate -= 30
+        if @cur_rebate == 20
+          if order.order_items.any? { |a| a.product.kind == 'Fredag' }
+            @cur_rebate -= 20
             @counts[:friday] += 1
-          elsif order.order_items.any? { |a| a.product_id == 5 }
-            @cur_rebate -= 30
+          elsif order.order_items.any? { |a| a.product.kind == 'Lördag' }
+            @cur_rebate -= 20
             @counts[:saturday] += 1
           end
         end
 
-        if @cur_rebate >= 30
-          unknown = @cur_rebate / 30
+        if @cur_rebate >= 20
+          unknown = @cur_rebate / 20
           @counts[:unknown] += unknown
         end
       end

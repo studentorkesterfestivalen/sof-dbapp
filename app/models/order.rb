@@ -49,6 +49,7 @@ class Order < ApplicationRecord
     user.save!
     save!
 
+
     send_receipt
   end
 
