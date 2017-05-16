@@ -204,8 +204,8 @@ class API::V1::OrderStatisticsController < ApplicationController
         end
 
         if @cur_rebate >= 30
-          unknown = @cur_rebate % 30
-          @counts[:saturday] += unknown
+          unknown = @cur_rebate / 30
+          @counts[:unknown] += unknown
         end
       end
     end
