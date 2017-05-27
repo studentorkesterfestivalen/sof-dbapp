@@ -68,8 +68,8 @@ class API::V1::OrchestraController < ApplicationController
   def lintek_rebate
     require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
-    orchestra_signups = User.includes(:orchestra_signup).where.not('orchestra_signups.id' => nil).where(union: 'LinTek')
-    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraLintekRebateFormat)
+    orchestraUser = User.includes(:orchestra_signup).where.not('orchestra_signups.id' => nil).where(union: 'LinTek')
+    render :plain => CSVExport.render_csv(orchestraUser, Formats::OrchestraLintekRebateFormat)
 
   end
 

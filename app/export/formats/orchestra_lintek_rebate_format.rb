@@ -24,11 +24,11 @@ module Formats
     def value_for(item, column)
       case column
         when :orchestra_id
-          item.user.orchestra.name
+          item.orchestra.name
         when :name
-          item.user.display_name
+          item.display_name
         when :email
-          item.user.email
+          item.email
         when :lintek_rebate
           lintek_rebate(item)
         else
