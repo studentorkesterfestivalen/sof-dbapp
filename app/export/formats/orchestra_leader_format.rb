@@ -17,7 +17,8 @@ module Formats
               :thursday => 0,
               :friday => 0,
               :saturday => 0
-          }
+          },
+          :lintek_rebate => 0
       }
     end
 
@@ -32,6 +33,7 @@ module Formats
           :tshirt => 'T-shirt',
           :orchestra_food_ticket => 'Mat',
           :is_late_registration => 'Sen anmälan',
+          :lintek_rebate => 'Lintek',
           :total_cost => 'Kostnad'
       }
     end
@@ -61,6 +63,8 @@ module Formats
           item.user.email
         when :medal, :tag, :tshirt
           item_article(item, column)
+        when :lintek_rebate
+          lintek_rebate(item)
         else
           item.send(column)
       end
@@ -149,6 +153,15 @@ module Formats
       }
 
       increments[kind]
+    end
+
+    def lintek_rebate(item)
+      if item.user.is_lintek_member
+        rebate = [100, 100, 70, 0]
+        rebate[item.user.orchestra_signup.orchestra_ticket.kind]
+      else
+        0
+      end
     end
 
     def yes_no(value)
