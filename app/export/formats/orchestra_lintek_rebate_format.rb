@@ -11,7 +11,7 @@ module Formats
           :orchestra_id => 'Orkester',
           :name => 'Namn',
           :email => 'E-mail',
-          :lintek_rebate => 'Lintek rabatt'
+          :lintek_rebate => 'Lintekarabatt'
       }
     end
 
@@ -21,10 +21,16 @@ module Formats
       value
     end
 
+    def extra_row
+      column_names.keys.map { |col| total_value_for(col) }
+    end
+
+    private
+
     def value_for(item, column)
       case column
         when :orchestra_id
-          item.orchstra_signup.orchestra.name
+          item.orchestra_signup.orchestra.name
         when :name
           item.display_name
         when :email
@@ -35,12 +41,6 @@ module Formats
           item.send(column)
       end
     end
-
-    def extra_row
-      column_names.keys.map { |col| total_value_for(col) }
-    end
-
-    private
 
     def increase_total(column, value)
       if @total.has_key? column
