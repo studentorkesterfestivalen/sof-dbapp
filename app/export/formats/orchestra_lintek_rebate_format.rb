@@ -26,9 +26,9 @@ module Formats
         when :orchestra_id
           item.orchestra.name
         when :name
-          item.display_name
+          item.user.display_name
         when :email
-          item.email
+          item.user.email
         when :lintek_rebate
           lintek_rebate(item)
         else
@@ -61,7 +61,7 @@ module Formats
 
     def lintek_rebate(item)
       rebate = [100, 100, 70, 0]
-      rebate[item.orchestra_signup.orchestra_ticket.kind]
+      rebate[item.orchestra_ticket.kind]
     end
 
   end
