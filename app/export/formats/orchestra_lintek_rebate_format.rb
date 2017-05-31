@@ -24,11 +24,11 @@ module Formats
     def value_for(item, column)
       case column
         when :orchestra_id
-          item.orchestra.name
+          item.orchstra_signup.orchestra.name
         when :name
-          item.user.display_name
+          item.display_name
         when :email
-          item.user.email
+          item.email
         when :lintek_rebate
           lintek_rebate(item)
         else
@@ -61,7 +61,7 @@ module Formats
 
     def lintek_rebate(item)
       rebate = [100, 100, 70, 0]
-      rebate[item.orchestra_ticket.kind]
+      rebate[item.orchestra_signup.orchestra_ticket.kind]
     end
 
   end
