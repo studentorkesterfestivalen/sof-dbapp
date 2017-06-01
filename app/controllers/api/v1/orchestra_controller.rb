@@ -69,10 +69,6 @@ class API::V1::OrchestraController < ApplicationController
     require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     orchestra_signups = User.includes(:orchestra_signup).where.not('orchestra_signups.id' => nil).where(union: 'LinTek')
-    puts ".................................."
-    puts orchestra_signups
-    puts "....................................  "
-    #orchestra_signups = OrchestraSignup.order(:orchestra_id).includes(:union)
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraLintekRebateFormat)
 
   end
