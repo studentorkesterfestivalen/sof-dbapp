@@ -60,7 +60,7 @@ module Formats
     end
 
     def lintek_rebate(item)
-      rebate = [100, 100, 70, 0]
+      rebate = [100, 100, 30, 0]
       rebate[item.orchestra_signup.orchestra_ticket.kind]
     end
 
