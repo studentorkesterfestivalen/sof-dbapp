@@ -16,4 +16,10 @@ namespace :user do
       puts 'Missing UID parameter.'
     end
   end
+
+  task :sof_evaluation => :environment do
+    User.find_each do |u|
+      EvaluationMailer.evaluation(u).deliver_now
+    end
+  end
 end
