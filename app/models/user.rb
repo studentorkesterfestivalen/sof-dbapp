@@ -97,6 +97,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_evaluation_email
+    EvaluationMailer.evaluation(self).deliver_now
+  end
+
   private
 
   def update_union
@@ -154,4 +158,6 @@ class User < ActiveRecord::Base
   def is_liu_student?
     provider == 'cas'
   end
+
+
 end

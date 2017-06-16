@@ -18,8 +18,8 @@ namespace :user do
   end
 
   task :sof_evaluation => :environment do
-    User.find_each do |u|
-      EvaluationMailer.evaluation(u).deliver_now
+    User.find_each do |user|
+      user.send_evaluation_email
     end
   end
 end
