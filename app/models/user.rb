@@ -158,6 +158,4 @@ class User < ActiveRecord::Base
   def is_liu_student?
     provider == 'cas'
   end
-
-
 end
