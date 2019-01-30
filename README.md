@@ -1,6 +1,6 @@
-#RESTful API for SOF
+# RESTful API for SOF 
 
-##Useful Rail commands:
+## Useful Rail commands:
 
 To run the server:
 ```
@@ -21,7 +21,7 @@ To see all the possible calls for the RESTful API:
 $rails routes
 ```
 
-##Deployment
+## Deployment
 Requires sqlite3 and ruby
 
 To install bundler
@@ -46,12 +46,12 @@ After this you _might_ have to update which versions you're using in the gemfile
 
 Then you should be good to go, enjoy!
 
-##External librarys used
+## External librarys used
 
 For [authentification](https://github.com/lynndylanhurley/devise_token_auth) (login, registration, etc.):
 
 
-##File structure
+## File structure
 If you're looking at a ruby on rails project for the first time this might be a
 little confusing. [Here's](https://www.javatpoint.com/ruby-on-rails-directory-structure) a short intro.
 For more extensive info; Google is your friend.
