@@ -37,7 +37,19 @@ module SofDbapp
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 
+
+    # Remember to change origins when not running on localhost! #
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+      origins '*'
+      resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options, :patch]
+      end
+    end
+
     # Fallback to English locale when Swedish translation is missing.
     config.i18n.fallbacks = [:en]
+
+
+  
   end
 end

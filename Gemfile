@@ -20,7 +20,7 @@ gem 'puma', '~> 3.0'
 # gem 'capistrano-rails', group: :development
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
+gem 'rack-cors', require: 'rack/cors'
 
 # Kobra integration to verify student union membership
 gem 'kobra_client', git: 'https://github.com/studentorkesterfestivalen/kobra_client.git'
@@ -58,4 +58,4 @@ gem 'devise_token_auth'
 gem 'omniauth-cas'
 
 # Ruby version for Heroku
-ruby '2.3.3'
+ruby '2.5.1'
