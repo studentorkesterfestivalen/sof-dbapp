@@ -42,14 +42,15 @@ module SofDbapp
     config.middleware.insert_before 0, Rack::Cors do
       allow do
       origins '*'
-      resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options, :patch]
+      resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options, :patch], :expose => ['uid', 'client', 'expiry', 'access-token', 'token-type']
       end
     end
+
 
     # Fallback to English locale when Swedish translation is missing.
     config.i18n.fallbacks = [:en]
 
 
-  
+
   end
 end

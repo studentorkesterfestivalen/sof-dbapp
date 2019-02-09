@@ -33,8 +33,8 @@ class API::V1::OrchestraController < ApplicationController
   def list_all
     if current_user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
       list all = []
-      Orchestra.find_each do |Orchestra|
-        all.push(Orchestra)
+      Orchestra.find_each do |orchestra|
+        all.push(orchestra)
       end
       render :json => all, include: [orchestra]
     else
