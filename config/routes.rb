@@ -15,6 +15,7 @@ Rails.application.routes.draw do
           get 'anniversary', action: 'anniversary'
           get 'allergies', action: 'allergies'
           get 'lintek_rebate', action: 'lintek_rebate'
+          get 'list_all', action: 'list_all'
         end
       end
       resources :orchestra_signup do

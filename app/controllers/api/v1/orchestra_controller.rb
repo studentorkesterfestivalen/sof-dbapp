@@ -10,8 +10,8 @@ class API::V1::OrchestraController < ApplicationController
   end
 
   def create
-    unless current_user.orchestra.nil?
-      raise 'Cannot create another orchestra'
+    unless current.user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
+      raise 'Cannot create orchestra'
     end
 
     orchestra = Orchestra.new(item_params)
@@ -28,6 +28,19 @@ class API::V1::OrchestraController < ApplicationController
     require_ownership_or_admin_permission orchestra, AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}]
+  end
+
+  def list_all
+    if current_user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
+      list all = []
+      Orchestra.find_each do |Orchestra|
+        all.push(Orchestra)
+      end
+      render :json => all, include: [orchestra]
+    else
+      render status: 401
+    end
+
   end
 
   def all_signups
