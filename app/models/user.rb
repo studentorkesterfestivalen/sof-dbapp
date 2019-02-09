@@ -1,4 +1,4 @@
-require 'kobra'
+# require 'kobra'
 
 class User < ActiveRecord::Base
   # Include default devise modules.
@@ -91,17 +91,17 @@ class User < ActiveRecord::Base
     cart.cart_items.count
   end
 
-  def update_from_kobra!
-    return unless is_liu_student?
-
-    if self[:display_name].nil?
-      update_display_name
-    end
-
-    if self[:union].nil? or union_valid_thru.past?
-      update_union
-    end
-  end
+  # def update_from_kobra!
+  #   return unless is_liu_student?
+  #
+  #   if self[:display_name].nil?
+  #     update_display_name
+  #   end
+  #
+  #   if self[:union].nil? or union_valid_thru.past?
+  #     update_union
+  #   end
+  # end
 
   def send_evaluation_email
     EvaluationMailer.evaluation(self).deliver_now
@@ -109,48 +109,48 @@ class User < ActiveRecord::Base
 
   private
 
-  def update_union
-    if is_liu_student?
-      begin
-        kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
-        response = kobra.get_student(id: nickname, union: true)
+  # def update_union
+  #   if is_liu_student?
+  #     begin
+  #       kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
+  #       response = kobra.get_student(id: nickname, union: true)
+  #
+  #       self[:union] = response[:union]
+  #
+  #       if is_lintek_member
+  #         self[:usergroup] |= UserGroupPermission::LINTEK_MEMBER
+  #         self[:union_valid_thru] = end_of_fiscal_year
+  #       else
+  #         self[:usergroup] &= ~UserGroupPermission::LINTEK_MEMBER
+  #         self[:union_valid_thru] = DateTime.now.at_end_of_day
+  #       end
+  #
+  #       save!
+  #     rescue Kobra::Client::NotFound
+  #       # Will try again tomorrow
+  #       FaultReport.send("Failed to find student in Kobra (id: #{nickname})")
+  #       self[:union_valid_thru] = DateTime.now.at_end_of_day
+  #     rescue
+  #       # Will try again in 10 minutes
+  #       FaultReport.send("Failed to update union from Kobra (id: #{nickname})")
+  #       self[:union_valid_thru] = DateTime.now + 10.minutes
+  #     end
+  #   end
+  #
+  #   save!
+  # end
 
-        self[:union] = response[:union]
-
-        if is_lintek_member
-          self[:usergroup] |= UserGroupPermission::LINTEK_MEMBER
-          self[:union_valid_thru] = end_of_fiscal_year
-        else
-          self[:usergroup] &= ~UserGroupPermission::LINTEK_MEMBER
-          self[:union_valid_thru] = DateTime.now.at_end_of_day
-        end
-
-        save!
-      rescue Kobra::Client::NotFound
-        # Will try again tomorrow
-        FaultReport.send("Failed to find student in Kobra (id: #{nickname})")
-        self[:union_valid_thru] = DateTime.now.at_end_of_day
-      rescue
-        # Will try again in 10 minutes
-        FaultReport.send("Failed to update union from Kobra (id: #{nickname})")
-        self[:union_valid_thru] = DateTime.now + 10.minutes
-      end
-    end
-
-    save!
-  end
-
-  def update_display_name
-    begin
-      kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
-      response = kobra.get_student(id: nickname)
-
-      self[:display_name] = response[:name]
-      save!
-    rescue
-      FaultReport.send("Failed to update name from Kobra (id: #{nickname})")
-    end
-  end
+  # def update_display_name
+  #   begin
+  #     # kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
+  #     # response = kobra.get_student(id: nickname)
+  #
+  #     self[:display_name] = response[:name]
+  #     save!
+  #   rescue
+  #     FaultReport.send("Failed to update name from Kobra (id: #{nickname})")
+  #   end
+  # end
 
   def end_of_fiscal_year
     now = DateTime.now

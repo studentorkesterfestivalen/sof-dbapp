@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-- 2.3.3
+- 2.5.1
 before_script:
   - bundle exec rake db:create db:migrate db:seed
 script:

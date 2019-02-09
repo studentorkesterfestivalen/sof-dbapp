@@ -23,7 +23,7 @@ gem 'puma', '~> 3.0'
 gem 'rack-cors', require: 'rack/cors'
 
 # Kobra integration to verify student union membership
-gem 'kobra_client', git: 'https://github.com/studentorkesterfestivalen/kobra_client.git'
+# gem 'kobra_client', git: 'https://github.com/studentorkesterfestivalen/kobra_client.git'
 
 # Stripe payments API
 gem 'stripe'

@@ -1,4 +1,4 @@
-require 'kobra'
+# require 'kobra'
 
 class API::V1::ItemCollectController < ApplicationController
   include ViewPermissionConcern

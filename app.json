@@ -12,9 +12,6 @@
     "MAILER_URL": {
       "required": true
     },
-    "KOBRA_API_KEY": {
-      "required": true
-    },
     "STRIPE_SECRET_KEY": {
       "required": true
     }
