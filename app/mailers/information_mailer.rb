@@ -3,6 +3,6 @@ class InformationMailer < ApplicationMailer
     @user = application.user
     @application = application
 
-    mail(to: @user.email, subject: 'SOF17: Anmäld till funkis-pass')
+    mail(to: @user.email, subject: 'SOF19: Anmäld till funkis-pass')
   end
 end

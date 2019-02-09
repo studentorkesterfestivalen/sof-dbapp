@@ -1,6 +1,6 @@
 class FaultMailer < ApplicationMailer
-  default to: 'itutskottet@sof17.se',
-          from: 'no-reply@sof17.se'
+  default to: 'it@sof.lintek.nu',
+          from: 'no-reply@sof.lintek.nu'
 
   def fault_mail(report)
     @report = report

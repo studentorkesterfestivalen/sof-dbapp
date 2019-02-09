@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'no-reply@sof17.se'
+  default from: 'no-reply@sof.lintek.nu'
   layout 'mailer'
 end

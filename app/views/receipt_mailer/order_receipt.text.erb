@@ -1,6 +1,6 @@
 Ett kvitto på att du TAGGAR SOF!
 
-Ett litet SOF17 är du värd.
+Lite SOF är du värd.
 
 Order #<%= @order.id %>.
 Köpet gjordes <%=	@order.created_at.in_time_zone('Stockholm').strftime('%Y-%m-%d %H:%M:%S') %> och
@@ -22,6 +22,6 @@ Kvittot sammanställdes <%= Time.now.strftime('%Y-%m-%d %H:%M:%S') %>.
 Totalt: <%= "#{number_with_delimiter(@total, delimiter: ' ')} SEK" %>
 
 --
-Om det är någon du undrar över är det bara att kontakta oss. Kontaktinfo hittar på www.sof17.se
+Om det är någon du undrar över är det bara att kontakta oss. Kontaktinfo hittar på sof.lintek.liu.se
 
 Lintek, Tekniska Högskolan, 581 83 Linköping
