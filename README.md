@@ -50,6 +50,9 @@ Then you should be good to go, enjoy!
 
 For [authentification](https://github.com/lynndylanhurley/devise_token_auth) (login, registration, etc.):
 
+To get local smtp server up and running for local development use [mailcatcher](https://mailcatcher.me/).
+```$gem install mailcatcher``` and then ```$mailcatcher``` will start the smtp server at http://localhost:1025. You can see all e-mails sent at http://localhost:1080.
+**Do not include mailcatcher in your gemfile**
 
 ## File structure
 If you're looking at a ruby on rails project for the first time this might be a
