@@ -39,8 +39,8 @@ Run the setup file for the project
 $ruby /bin/setup
 ```
 
-This will install all dependencies from the gemfile etc.
-(can also be done with ```$bundle install```)
+This will install all dependencies from the gemfile and setup database.
+(can also be done with ```$bundle install``` to install dependencies and ```ruby bin/rails db:setup``` to setup database)
 
 After this you _might_ have to update which versions you're using in the gemfile.
 
