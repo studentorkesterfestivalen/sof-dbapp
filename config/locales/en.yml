@@ -25,3 +25,8 @@ en:
     messages:
       must_use_cas: "Log in using the LiU-login instead"
   welcome_to_sof: "welcome to SOF!"
+  orchestra_mailer:
+    subject: "Orchestra invitation, SOF 2019!"
+    invited: "You've been invited to join SOF in Linköping with your orchestra."
+    register: "All members of your orchestra should go to www.sof.lintek.liu.se and register an account. After that, use the code provided below to join your orchestra."
+    code: "Your code is: '%{code}'"

@@ -61,3 +61,8 @@ sv:
   hello: "Hej"
   welcome: "Hej"
   welcome_to_sof: "välkommen till SOF!"
+  orchestra_mailer:
+    subject: "Orkesterinbjuden, SOF 2019!"
+    invited: "Ni har härmed blivit inbjudna till att delta med er orkester på SOF i Linköping."
+    login: "Alla medlemmar i eran orkester ska gå in på vår hemsida www.sof.lintek.liu.se för att registrera ett konto. Därefter ska ni anmäla er till eran orkester med hjälp av koden som skickas med i det här mailet."
+    code: "Er kod är: '%{code}'"

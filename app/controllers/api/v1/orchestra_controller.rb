@@ -6,7 +6,7 @@ class API::V1::OrchestraController < ApplicationController
   def index
     require_admin_permission AdminPermission::ORCHESTRA_ADMIN
 
-    render :json => Orchestra.all, include: [:user]
+    render :json => Orchestra.all, include: [orchestra: {include: [:user] }]
   end
 
   def create
@@ -19,6 +19,8 @@ class API::V1::OrchestraController < ApplicationController
     orchestra.user.usergroup |= UserGroupPermission::ORCHESTRA_LEADER | UserGroupPermission::ORCHESTRA_MEMBER
     orchestra.save!
     orchestra.user.save!
+
+    OrchestraMailer.orchestra_invitation_mailer(orchestra).deliver_now
 
     redirect_to api_v1_orchestra_url(orchestra)
   end
