@@ -20,9 +20,10 @@ class API::V1::OrchestraController < ApplicationController
     orchestra.save!
     orchestra.user.save!
 
-    OrchestraMailer.orchestra_invitation_mailer(orchestra).deliver_now
+    OrchestraMailer.orchestra_invitation(orchestra).deliver_now
 
-    redirect_to api_v1_orchestra_url(orchestra)
+    render :json => orchestra
+    # redirect_to api_v1_orchestra_url(orchestra)
   end
 
   def show
