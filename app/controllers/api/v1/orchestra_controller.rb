@@ -15,7 +15,7 @@ class API::V1::OrchestraController < ApplicationController
     end
 
     orchestra = Orchestra.new(item_params)
-    orchestra.user = current_user!
+    orchestra.user = current_user
     orchestra.user.usergroup |= UserGroupPermission::ORCHESTRA_LEADER | UserGroupPermission::ORCHESTRA_MEMBER
     orchestra.save!
     orchestra.user.save!

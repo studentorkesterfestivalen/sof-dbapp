@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
 
 
 
-  has_one :orchestra
+  has_many :orchestra
   has_one :orchestra_signup
   has_one :cortege
   has_one :case_cortege
