@@ -4,18 +4,18 @@ class API::V1::OrchestraController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    require_admin_permission AdminPermission::LIST_ORCHESTRA_SIGNUPS
+    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
 
     render :json => Orchestra.all, include: [:user]
   end
 
   def create
-    unless current.user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
+    unless current_user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
       raise 'Cannot create orchestra'
     end
 
     orchestra = Orchestra.new(item_params)
-    orchestra.user = current_user
+    orchestra.user = current_user!
     orchestra.user.usergroup |= UserGroupPermission::ORCHESTRA_LEADER | UserGroupPermission::ORCHESTRA_MEMBER
     orchestra.save!
     orchestra.user.save!
@@ -28,19 +28,6 @@ class API::V1::OrchestraController < ApplicationController
     require_ownership_or_admin_permission orchestra, AdminPermission::LIST_ORCHESTRA_SIGNUPS
 
     render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}]
-  end
-
-  def list_all
-    if current_user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
-      list all = []
-      Orchestra.find_each do |orchestra|
-        all.push(orchestra)
-      end
-      render :json => all, include: [orchestra]
-    else
-      render status: 401
-    end
-
   end
 
   def all_signups
@@ -117,8 +104,9 @@ class API::V1::OrchestraController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(
+    params.require(:data).permit(
         :name,
+        :email,
         :orchestra_type,
         :allow_signup,
         :dormitory
