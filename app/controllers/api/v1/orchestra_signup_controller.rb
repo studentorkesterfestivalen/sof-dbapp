@@ -15,7 +15,7 @@ class API::V1::OrchestraSignupController < ApplicationController
     #   raise 'Cannot sign up for another orchestra'
     # end
 
-    orchestra = Orchestra.find_by(code: params[:item][:code].downcase, allow_signup: true)
+    orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
     if orchestra.nil?
       raise 'Unable to find matching orchestra'
     end
@@ -25,14 +25,16 @@ class API::V1::OrchestraSignupController < ApplicationController
     signup.orchestra = orchestra
     signup.user.usergroup |= UserGroupPermission::ORCHESTRA_MEMBER
 
-    if OrchestraSignup.include_late_registration_fee? and DateTime.now < DateTime.parse('2019-04-30 22:00')
-      signup.is_late_registration = true
-    end
+
+    # if OrchestraSignup.include_late_registration_fee? and DateTime.now < DateTime.parse('2019-04-30 22:00')
+    #   signup.is_late_registration = true
+    # end
 
     signup.save!
     signup.user.save!
 
-    redirect_to api_v1_orchestra_signup_url(signup)
+    render :json => signup
+    # redirect_to api_v1_orchestra_signup_url(signup)
   end
 
   def show
@@ -63,6 +65,7 @@ class API::V1::OrchestraSignupController < ApplicationController
   end
 
   def verify_code
+    print params[:data]
     orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
     if orchestra.nil?
       raise 'Unable to find matching orchestra'
@@ -83,20 +86,18 @@ class API::V1::OrchestraSignupController < ApplicationController
         :other_performances,
         :orchestra_role,
         :arrival_date,
-        orchestra_ticket_attributes: [
-            :kind
-        ],
-        orchestra_food_ticket_attributes: [
-            :kind,
-            :diet
-        ],
-        orchestra_articles_attributes: [
-            :kind,
-            :data
-        ],
-        special_diets_attributes: [
-            :name
-        ]
+        :allergies
+        # orchestra_ticket_attributes: [
+        #     :kind
+        # ],
+        # orchestra_food_ticket_attributes: [
+        #     :kind,
+        #     :diet
+        # ],
+        # orchestra_articles_attributes: [
+        #     :kind,
+        #     :data
+        # ],
     )
   end
 end
