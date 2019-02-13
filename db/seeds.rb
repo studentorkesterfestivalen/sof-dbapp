@@ -53,7 +53,7 @@ test_menu_items = [
     ]],
     ['Administration', '#', display_empty: false, children: [
         ['Hantera användare', '/manage/users', permissions: AdminPermission::LIST_USERS],
-        ['Hantera orkestrar', '/manage/orchestras', permissions: AdminPermission::LIST_ORCHESTRA_SIGNUPS],
+        ['Hantera orkestrar', '/manage/orchestras', permissions: AdminPermission::ORCHESTRA_ADMIN],
         ['Hantera kårteger', '/manage/corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera lineups', '/manage/lineups', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],
         ['Hantera casekårteger', '/manage/case_corteges', permissions: AdminPermission::LIST_CORTEGE_APPLICATIONS],

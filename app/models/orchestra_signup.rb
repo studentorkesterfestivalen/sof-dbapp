@@ -1,5 +1,21 @@
 class OrchestraSignup < ApplicationRecord
-  LATE_REGISTRATION_START_DATE = Time.utc(2017, 3, 6)
+  LATE_REGISTRATION_START_DATE = Time.utc(2019, 3, 10)
+
+  BIG_PACKAGE   = 500
+  SMALL_PACKAGE = 470
+  ORCHESTRA     = 220
+
+  FOOD_TICKET_BIG_PACKAGE   = 240
+  FOOD_TICKET_SMALL_PACKAGE = 140
+  FOOD_TICKET_SATURDAY      = 75
+
+  DORMITORY = 50
+
+  T_SHIRT = 100
+  MEDAL   = 40
+  PATCH   = 20
+
+  LATE_REGISTRATION = 300
 
   belongs_to :orchestra
   belongs_to :user
@@ -32,8 +48,8 @@ class OrchestraSignup < ApplicationRecord
     cost = 0
     cost += ticket_price
     cost += food_ticket_price
-    cost += 50 if dormitory
-    cost += 100 if is_late_registration?
+    cost += DORMITORY if dormitory
+    cost += LATE_REGISTRATION if is_late_registration?
 
     unless orchestra_articles.nil?
       orchestra_articles.each { |x| cost += article_prices[x.kind] }
@@ -47,11 +63,8 @@ class OrchestraSignup < ApplicationRecord
       return 0
     end
 
-    if user.is_lintek_member
-      prices = [435, 410, 190, 0]
-    else
-      prices = [535, 510, 220, 0]
-    end
+    prices = [BIG_PACKAGE, SMALL_PACKAGE, ORCHESTRA, 0]
+
 
     prices[orchestra_ticket.kind]
   end
@@ -60,13 +73,13 @@ class OrchestraSignup < ApplicationRecord
     if orchestra_food_ticket.nil?
       return 0
     end
-
-    prices = [215, 140, 75, 0, 140]
+      # Stora paketet,
+    prices = [FOOD_TICKET_BIG_PACKAGE, FOOD_TICKET_SMALL_PACKAGE, FOOD_TICKET_SATURDAY, 0]
     prices[orchestra_food_ticket.kind]
   end
 
   def article_prices
-    [0, 100, 40, 20]
+    [0, T_SHIRT, MEDAL, PATCH]
   end
 
   def self.include_late_registration_fee?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190211161145) do
+ActiveRecord::Schema.define(version: 20190213104628) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -225,7 +225,6 @@ ActiveRecord::Schema.define(version: 20190211161145) do
     t.boolean  "is_late_registration", default: false, null: false
     t.integer  "orchestra_role"
     t.integer  "arrival_date"
-    t.string   "allergies"
     t.index ["orchestra_id"], name: "index_orchestra_signups_on_orchestra_id"
     t.index ["user_id"], name: "index_orchestra_signups_on_user_id"
   end
