@@ -112,7 +112,8 @@ class API::V1::OrchestraController < ApplicationController
         :email,
         :orchestra_type,
         :allow_signup,
-        :dormitory
+        :dormitory,
+        :arrival_date
     )
   end
 end
