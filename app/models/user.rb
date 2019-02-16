@@ -2,9 +2,14 @@
 
 class User < ActiveRecord::Base
   # Include default devise modules.
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable, :omniauthable
+  devise :database_authenticatable,
+        :registerable,
+        :recoverable,
+        :rememberable,
+        :trackable,
+        :validatable,
+        #:confirmable,
+        :omniauthable
   include DeviseTokenAuth::Concerns::User
 
 
@@ -59,16 +64,16 @@ class User < ActiveRecord::Base
   end
 
   def union
-    if is_liu_student? and union_valid_thru.past?
-      update_union
-    end
+    #if is_liu_student? and union_valid_thru.past?
+    #  update_union
+    #end
 
     super
   end
 
-  def is_lintek_member
-    self[:union] == 'LinTek'
-  end
+  #def is_lintek_member
+  #  self[:union] == 'LinTek'
+  #end
 
   def cart
     cart = super
@@ -140,7 +145,10 @@ class User < ActiveRecord::Base
   #   save!
   # end
 
-  # def update_display_name
+  def update_display_name
+       self[:display_name] = self[:uid]
+       save!
+  end
   #   begin
   #     # kobra = Kobra::Client.new(api_key: Rails.configuration.kobra_api_key)
   #     # response = kobra.get_student(id: nickname)
