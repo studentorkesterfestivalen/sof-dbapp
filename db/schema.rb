@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190215124731) do
+ActiveRecord::Schema.define(version: 20190216114754) do
 
   create_table "active_funkis_shift_limits", force: :cascade do |t|
     t.integer  "active_limit", default: 0
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(version: 20190215124731) do
     t.boolean  "dormitory",      default: false, null: false
     t.integer  "orchestra_type", default: 0,     null: false
     t.string   "email"
-    t.integer  "arrival_data"
+    t.integer  "arrival_date"
     t.index ["user_id"], name: "index_orchestras_on_user_id"
   end
 
