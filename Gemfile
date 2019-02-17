@@ -58,4 +58,4 @@ gem 'devise_token_auth'
 gem 'omniauth-cas'
 
 # Ruby version for Heroku
-ruby '2.5.1'
+ruby '2.6.0'
