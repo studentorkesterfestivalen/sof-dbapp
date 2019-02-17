@@ -32,7 +32,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   # Use sqlite3 as the database for Active Record when developing and testing
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3', '< 1.4'
 end
 
 group :development do
