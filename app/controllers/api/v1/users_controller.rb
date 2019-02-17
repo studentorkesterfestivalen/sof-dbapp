@@ -21,6 +21,7 @@ class API::V1::UsersController < ApplicationController
     raise 'Listing all users not supported'
   end
 
+  # Gets user or current_user if no params sent by user id
   def show
     if params[:id].nil?
       render json: current_user,
@@ -74,8 +75,145 @@ class API::V1::UsersController < ApplicationController
     end
   end
 
+  # Gets user or current user if no params sent by email
+  def get_user
+    if params[:email].nil?
+      render json: current_user,
+         except: [
+           :created_at,
+           :updated_at,
+           :permissions
+         ],
+         include: {
+           case_cortege: {},
+           cortege: {},
+           orchestra: {},
+           orchestra_signup: {
+             include: [
+               :orchestra
+             ]
+           },
+           funkis_application: {
+             include: [
+               funkis_shift_applications: {
+                 include: [
+                   funkis_shift: {
+                     include: [
+                       :funkis_category
+                     ],
+                     except: [
+                       :maximum_workers
+                     ]
+                   }
+                 ]
+               }
+             ]
+           }
+         }
+    else
+      user = User.find_by email:(params[:email])
+      unless user.nil?
+        if current_user.has_admin_permission? AdminPermission::ALL
+          render json: user,
+            include: {
+              case_cortege: {},
+              cortege: {},
+              orchestra: {},
+              orchestra_signup: {
+                include: [
+                  :orchestra
+                ]
+              },
+              funkis_application: {
+                include: [
+                  funkis_shift_applications: {
+                    include: [
+                      funkis_shift: {
+                        include: [
+                          :funkis_category
+                        ],
+                        except: [
+                          :maximum_workers
+                        ]
+                      }
+                    ]
+                  }
+                ],
+              }
+            }
+        elsif current_user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
+          render json: user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ],
+            include: {
+              orchestra: {},
+              orchestra_signup: {
+                include: [
+                  :orchestra
+                ]
+              }
+            }
+
+        elsif current_user.has_admin_permission? \
+          AdminPermission::LIST_CORTEGE_APPLICATIONS || AdminPermission::APPROVE_CORTEGE_APPLICATIONS
+          render json: user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ],
+            include: {
+              case_cortege: {},
+              cortege: {},
+            }
+        elsif current_user.has_admin_permission? AdminPermission::LIST_FUNKIS_APPLICATIONS
+          render json: user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ],
+            include: {
+              case_cortege: {},
+              cortege: {},
+              orchestra: {},
+              orchestra_signup: {
+                include: [
+                  :orchestra
+                ]
+              },
+              funkis_application: {
+                include: [
+                  funkis_shift_applications: {
+                    include: [
+                      funkis_shift: {
+                        include: [
+                          :funkis_category
+                        ],
+                        except: [
+                          :maximum_workers
+                        ]
+                      }
+                    ]
+                  }
+                ],
+              }
+            }
+        else
+          render json: user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ]
+        end
+      else
+        render :status => '404', :json => {:message => 'Användare kunde inte hittas'}
+      end
+    end
+  end
+
   def create
-    raise 'User creation not supported'
+    raise 'User creation is handled via library'
   end
 
   def update

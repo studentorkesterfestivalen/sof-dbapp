@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
       resources :users do
         get 'search', action: 'find_ids', on: :collection
+        get 'get_user', action: 'get_user', on: :collection
       end
 
       resources :cortege
