@@ -21,61 +21,146 @@ class API::V1::UsersController < ApplicationController
     raise 'Listing all users not supported'
   end
 
+  # Gets current_user if no email is sent as param, otherwise gets user with that specific email
   def show
-    if params[:id].nil?
+    if params[:email].nil?
       render json: current_user,
-             except: [
-               :created_at,
-               :updated_at,
-               :permissions
-             ],
-             include: {
-               case_cortege: {},
-               cortege: {},
-               orchestra: {},
-               orchestra_signup: {
+         except: [
+           :created_at,
+           :updated_at,
+           :permissions
+         ],
+         include: {
+           case_cortege: {},
+           cortege: {},
+           orchestra: {},
+           orchestra_signup: {
+             include: [
+               :orchestra
+             ]
+           },
+           funkis_application: {
+             include: [
+               funkis_shift_applications: {
                  include: [
-                   :orchestra
-                 ]
-               },
-               funkis_application: {
-                 include: [
-                   funkis_shift_applications: {
+                   funkis_shift: {
                      include: [
-                       funkis_shift: {
-                         include: [
-                           :funkis_category
-                         ],
-                         except: [
-                           :maximum_workers
-                         ]
-                       }
+                       :funkis_category
+                     ],
+                     except: [
+                       :maximum_workers
                      ]
                    }
-                 ],
-                 methods: [
-                   :steps_completed
                  ]
                }
-             },
-             methods: [
-                 :is_lintek_member,
-                 :shopping_cart_count
              ]
+           }
+         }
     else
-      require_admin_permission AdminPermission::LIST_USERS
+      user = User.find(params[:email])
+      unless user.nil?
+        if current_user.has_admin_permission? AdminPermission::ALL
+          render :json user,
+            include: {
+              case_cortege: {},
+              cortege: {},
+              orchestra: {},
+              orchestra_signup: {
+                include: [
+                  :orchestra
+                ]
+              },
+              funkis_application: {
+                include: [
+                  funkis_shift_applications: {
+                    include: [
+                      funkis_shift: {
+                        include: [
+                          :funkis_category
+                        ],
+                        except: [
+                          :maximum_workers
+                        ]
+                      }
+                    ]
+                  }
+                ],
+              }
+            }
+        elsif current_user.has_admin_permission? AdminPermission::ORCHESTRA_ADMIN
+          render :json user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ],
+            include: {
+              orchestra: {},
+              orchestra_signup: {
+                include: [
+                  :orchestra
+                ]
+              }
+            }
 
-      user = User.find(params[:id])
-      if user.present?
-        render json: user, include: [:funkis_application]
+        elsif current_user.has_admin_permission? \
+          AdminPermission::LIST_CORTEGE_APPLICATIONS || AdminPermission::APPROVE_CORTEGE_APPLICATIONS
+          render :json user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ],
+            include: {
+              case_cortege: {},
+              cortege: {},
+            }
+        elsif current_user.has_admin_permission? AdminPermission::LIST_FUNKIS_APPLICATIONS
+          render :json user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ],
+            include: {
+              case_cortege: {},
+              cortege: {},
+              orchestra: {},
+              orchestra_signup: {
+                include: [
+                  :orchestra
+                ]
+              },
+              funkis_application: {
+                include: [
+                  funkis_shift_applications: {
+                    include: [
+                      funkis_shift: {
+                        include: [
+                          :funkis_category
+                        ],
+                        except: [
+                          :maximum_workers
+                        ]
+                      }
+                    ]
+                  }
+                ],
+              }
+            }
+        else
+          render :json user, except: [
+              :created_at,
+              :updated_at,
+              :permissions
+            ]
+        end
       else
         render :status => '404', :json => {:message => 'Användare kunde inte hittas'}
       end
     end
   end
 
+
   def create
-    raise 'User creation not supported'
+    raise 'User creation is handled via library'
   end
 
   def update
