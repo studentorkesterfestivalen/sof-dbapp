@@ -28,7 +28,7 @@ class API::V1::UsersController < ApplicationController
              except: [
                :created_at,
                :updated_at,
-               :permissions
+               :admin_permissions
              ],
              include: {
                case_cortege: {},
@@ -82,7 +82,7 @@ class API::V1::UsersController < ApplicationController
          except: [
            :created_at,
            :updated_at,
-           :permissions
+           :admin_permissions
          ],
          include: {
            case_cortege: {},
@@ -145,7 +145,7 @@ class API::V1::UsersController < ApplicationController
           render json: user, except: [
               :created_at,
               :updated_at,
-              :permissions
+              :admin_permissions
             ],
             include: {
               orchestra: {},
@@ -161,7 +161,7 @@ class API::V1::UsersController < ApplicationController
           render json: user, except: [
               :created_at,
               :updated_at,
-              :permissions
+              :admin_permissions
             ],
             include: {
               case_cortege: {},
@@ -171,7 +171,7 @@ class API::V1::UsersController < ApplicationController
           render json: user, except: [
               :created_at,
               :updated_at,
-              :permissions
+              :admin_permissions
             ],
             include: {
               case_cortege: {},
