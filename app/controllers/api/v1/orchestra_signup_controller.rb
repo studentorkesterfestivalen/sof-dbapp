@@ -9,8 +9,10 @@ class API::V1::OrchestraSignupController < ApplicationController
     render :json => OrchestraSignup.all
   end
 
+
   def create
     # If a user only belongs to one orchestra
+
     # unless current_user.orchestra_signup.nil?
     #   raise 'Cannot sign up for another orchestra'
     # end
@@ -18,6 +20,17 @@ class API::V1::OrchestraSignupController < ApplicationController
     orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
     if orchestra.nil?
       raise 'Unable to find matching orchestra'
+    end
+
+    # Bad practice to remove directly from params, did not find any other way
+    unless current_user.orchestra_signup.nil?
+      params[:item].delete :orchestra_ticket_attributes
+      params[:item].delete :orchestra_food_ticket_attributes
+      params[:item].delete :orchestra_articles_attributes
+      params[:item].delete :special_diets_attributes
+      params[:item].delete :dormitory
+      params[:item].delete :consecutive_10
+      params[:item].delete :consecutive_25
     end
 
     signup = OrchestraSignup.new(item_params)
