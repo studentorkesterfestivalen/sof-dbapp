@@ -54,7 +54,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Authentication
 gem 'omniauth'
-gem 'devise_token_auth'
+gem 'devise'
+gem 'devise_token_auth', git: 'git@github.com:NaabZer/devise_token_auth.git'
 gem 'omniauth-cas'
 
 # Ruby version for Heroku
