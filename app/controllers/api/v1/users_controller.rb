@@ -263,7 +263,8 @@ class API::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-        :display_name
+        :display_name,
+        :nickname
     )
   end
 
@@ -275,6 +276,13 @@ class API::V1::UsersController < ApplicationController
         :admin_permissions,
         :usergroup,
         :rebate_balance
+    )
+  end
+
+  def sign_up_params
+    params.require(:user).permit(
+        :display_name,
+        :nickname
     )
   end
 

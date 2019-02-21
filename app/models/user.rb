@@ -10,14 +10,10 @@ class User < ActiveRecord::Base
         :validatable,
         #:confirmable,
         :omniauthable
+
   include DeviseTokenAuth::Concerns::User
 
-
-
   include UserPermissionConcern
-
-
-
 
   has_many :orchestra
   has_many :orchestra_signup
