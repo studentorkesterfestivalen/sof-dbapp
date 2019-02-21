@@ -86,7 +86,7 @@ class API::V1::OrchestraSignupController < ApplicationController
     end
 
     first_signup = true
-    unless current_user.orchestra_signup.nil?
+    unless current_user.orchestra_signup.empty?
       first_signup = false
     end
 
