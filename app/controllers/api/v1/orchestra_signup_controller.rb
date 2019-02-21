@@ -4,6 +4,7 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
+
     require_admin_permission AdminPermission::ORCHESTRA_ADMIN
 
     render :json => OrchestraSignup.all
@@ -84,7 +85,16 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
-    render :json => orchestra, only: [:name, :dormitory, :arrival_date]
+    first_signup = true
+    unless current_user.orchestra_signup.nil?
+      first_signup = false
+    end
+
+    #Fix later: Filter out data from the return orchestra object
+
+    #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
+    render :json => {:orchestra => orchestra, :first_signup => first_signup}
+
   end
 
   private
