@@ -4,12 +4,16 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-
-    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
-
-    render :json => OrchestraSignup.all
+    render :json => current_user.orchestra_signup.all
   end
 
+  def all
+    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
+    #render :json => OrchestraSignup.all
+
+    orchestra_singups = OrchestraSignup.all.order(:orchestra_signup_id)
+    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraSignupFormat)
+  end
 
   def create
     # If a user only belongs to one orchestra
@@ -86,12 +90,12 @@ class API::V1::OrchestraSignupController < ApplicationController
     end
 
     first_signup = true
+    p current_user.orchestra_signup
     unless current_user.orchestra_signup.nil?
       first_signup = false
     end
 
     #Fix later: Filter out data from the return orchestra object
-
     #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
     render :json => {:orchestra => orchestra, :first_signup => first_signup}
 
