@@ -4,12 +4,16 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-
-    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
-
-    render :json => OrchestraSignup.all
+    render :json => current_user.orchestra_signup.all
   end
 
+  def all
+    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
+    #render :json => OrchestraSignup.all
+
+    orchestra_singups = OrchestraSignup.all.order(:orchestra_signup_id)
+    render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraSignupFormat)
+  end
 
   def create
     # If a user only belongs to one orchestra
@@ -23,6 +27,9 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
+    unless orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
+      raise 'Can not register to same orchestra twice'
+    end
     # Bad practice to remove directly from params, did not find any other way
     unless current_user.orchestra_signup.nil?
       params[:item].delete :orchestra_ticket_attributes
@@ -85,15 +92,16 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
-    first_signup = true
-    unless current_user.orchestra_signup.empty?
-      first_signup = false
-    end
+    # First signup is used to minimize the number of questions
+    # that need to be filled in on the front end if false.
+    first_signup = current_user.orchestra_signup.empty?
+
+    # Used to reroute to an already submitted signup in frontend if true
+    double_signup = !orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
 
     #Fix later: Filter out data from the return orchestra object
-
     #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
-    render :json => {:orchestra => orchestra, :first_signup => first_signup}
+    render :json => {:orchestra => orchestra, :double_signup => double_signup ,:first_signup => first_signup}
 
   end
 
