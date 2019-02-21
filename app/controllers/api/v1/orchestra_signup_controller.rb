@@ -89,15 +89,16 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
-    first_signup = true
-    p current_user.orchestra_signup
-    unless current_user.orchestra_signup.nil?
-      first_signup = false
-    end
+    # First signup is used to minimize the number of questions
+    # that need to be filled in on the front end if false.
+    first_signup = current_user.orchestra_signup.empty?
+
+    # Used to reroute to an already submitted signup in frontend if true
+    double_signup = !orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
 
     #Fix later: Filter out data from the return orchestra object
     #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
-    render :json => {:orchestra => orchestra, :first_signup => first_signup}
+    render :json => {:orchestra => orchestra, :double_signup => double_signup ,:first_signup => first_signup}
 
   end
 
