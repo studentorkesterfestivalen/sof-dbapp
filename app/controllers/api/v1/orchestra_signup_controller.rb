@@ -4,7 +4,8 @@ class API::V1::OrchestraSignupController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render :json => current_user.orchestra_signup.all
+    #Returns all signups for the user making the request,
+    render :json => current_user.orchestra_signup.all, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets]
   end
 
   def all
@@ -16,8 +17,8 @@ class API::V1::OrchestraSignupController < ApplicationController
   end
 
   def create
-    # If a user only belongs to one orchestra
 
+    # If a user only belongs to one orchestra
     # unless current_user.orchestra_signup.nil?
     #   raise 'Cannot sign up for another orchestra'
     # end
@@ -27,9 +28,9 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
-    unless orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
-      raise 'Can not register to same orchestra twice'
-    end
+    #unless orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
+    #  raise 'Can not register to same orchestra twice'
+    #end
     # Bad practice to remove directly from params, did not find any other way
     unless current_user.orchestra_signup.nil?
       params[:item].delete :orchestra_ticket_attributes
@@ -53,6 +54,8 @@ class API::V1::OrchestraSignupController < ApplicationController
 
     signup.save!
     signup.user.save!
+
+    p signup.total_cost
 
     render :json => signup
     # redirect_to api_v1_orchestra_signup_url(signup)
