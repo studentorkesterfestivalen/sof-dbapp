@@ -1,5 +1,5 @@
 class ChangeDataToBeIntegerInOrchestraArticles < ActiveRecord::Migration[5.0]
   def change
-    change_column :orchestra_articles, :data, :integer
+    change_column :orchestra_articles, :data, 'integer USING data::integer';
   end
 end
