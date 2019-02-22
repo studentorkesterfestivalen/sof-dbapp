@@ -3,7 +3,7 @@ class OrchestraSignup < ApplicationRecord
 
   BIG_PACKAGE   = 500
   SMALL_PACKAGE = 470
-  ORCHESTRA     = 220
+  SATURDAY      = 220
 
   FOOD_TICKET_BIG_PACKAGE   = 240
   FOOD_TICKET_SMALL_PACKAGE = 140
@@ -38,7 +38,7 @@ class OrchestraSignup < ApplicationRecord
     # Allow dormitory to inherit from orchestra default preference
     value = super
     if value.nil?
-      orchestra.dormitory
+      false
     else
       value
     end
@@ -63,7 +63,7 @@ class OrchestraSignup < ApplicationRecord
       return 0
     end
 
-    prices = [BIG_PACKAGE, SMALL_PACKAGE, ORCHESTRA, 0]
+    prices = [BIG_PACKAGE, SMALL_PACKAGE, SATURDAY, 0]
 
 
     prices[orchestra_ticket.kind]
@@ -79,7 +79,7 @@ class OrchestraSignup < ApplicationRecord
   end
 
   def article_prices
-    [0, T_SHIRT, MEDAL, PATCH]
+    [T_SHIRT, MEDAL, PATCH, 0]
   end
 
   def self.include_late_registration_fee?

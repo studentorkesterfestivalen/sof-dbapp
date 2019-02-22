@@ -28,11 +28,12 @@ class API::V1::OrchestraSignupController < ApplicationController
       raise 'Unable to find matching orchestra'
     end
 
-    #unless orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
-    #  raise 'Can not register to same orchestra twice'
-    #end
+    unless orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
+      raise 'Can not register to same orchestra twice'
+    end
     # Bad practice to remove directly from params, did not find any other way
-    unless current_user.orchestra_signup.nil?
+    # OBS Important to not use .nil? since it returns an empty list (which is ever nil)
+    unless current_user.orchestra_signup.empty?
       params[:item].delete :orchestra_ticket_attributes
       params[:item].delete :orchestra_food_ticket_attributes
       params[:item].delete :orchestra_articles_attributes
