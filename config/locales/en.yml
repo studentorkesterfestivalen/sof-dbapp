@@ -24,6 +24,10 @@ en:
   errors:
     messages:
       must_use_cas: "Log in using the LiU-login instead"
+    orchestra:
+      unverified: "You cannot register for an orchestra before your email is verified"
+      invalid_code: "No orchestra found with code"
+
   welcome_to_sof: "welcome to SOF!"
   orchestra_mailer:
     subject: "Orchestra invitation, SOF 2019!"

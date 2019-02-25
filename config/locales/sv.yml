@@ -39,6 +39,9 @@ sv:
       not_email: "är ingen e-postadress"
       already_in_use: "används redan"
       must_use_cas: "Logga in med LiU-inloggningen istället"
+    orchestra:
+      unverified: "Du kan inte registrera dig till en orkester för än din email är verifierad"
+      invalid_code: "Ingen orkester hittades med koden"
   devise:
     mailer:
       confirmation_instructions:

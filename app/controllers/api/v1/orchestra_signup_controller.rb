@@ -12,7 +12,7 @@ class API::V1::OrchestraSignupController < ApplicationController
     require_admin_permission AdminPermission::ORCHESTRA_ADMIN
     #render :json => OrchestraSignup.all
 
-    orchestra_singups = OrchestraSignup.all.order(:orchestra_signup_id)
+    orchestra_signups = OrchestraSignup.all.order(:orchestra_signup_id)
     render :plain => CSVExport.render_csv(orchestra_signups, Formats::OrchestraSignupFormat)
   end
 
@@ -90,22 +90,24 @@ class API::V1::OrchestraSignupController < ApplicationController
   end
 
   def verify_code
-    print params[:data]
+
     orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
     if orchestra.nil?
-      raise 'Unable to find matching orchestra'
+      render :status => '404', :json => {:message => I18n.t('errors.orchestra.invalid_code') + params[:code]}
+    else 
+
+      # First signup is used to minimize the number of questions
+      # that need to be filled in on the front end if false.
+      first_signup = current_user.orchestra_signup.empty?
+
+      # Used to reroute to an already submitted signup in frontend if true
+      #double_signup = !orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
+      double_signup = false
+
+      #Fix later: Filter out data from the return orchestra object
+      #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
+      render :json => {:orchestra => orchestra, :double_signup => double_signup ,:first_signup => first_signup}
     end
-
-    # First signup is used to minimize the number of questions
-    # that need to be filled in on the front end if false.
-    first_signup = current_user.orchestra_signup.empty?
-
-    # Used to reroute to an already submitted signup in frontend if true
-    double_signup = !orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
-
-    #Fix later: Filter out data from the return orchestra object
-    #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
-    render :json => {:orchestra => orchestra, :double_signup => double_signup ,:first_signup => first_signup}
 
   end
 
