@@ -27,6 +27,7 @@ en:
     orchestra:
       unverified: "You cannot register for an orchestra before your email is verified"
       invalid_code: "No orchestra found with code"
+      already_reg: "You are already registered to"
 
   welcome_to_sof: "welcome to SOF!"
   orchestra_mailer:

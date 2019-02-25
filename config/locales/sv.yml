@@ -42,6 +42,7 @@ sv:
     orchestra:
       unverified: "Du kan inte registrera dig till en orkester för än din email är verifierad"
       invalid_code: "Ingen orkester hittades med koden"
+      already_reg: "Du är redan registrerad till"
   devise:
     mailer:
       confirmation_instructions:

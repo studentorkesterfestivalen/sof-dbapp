@@ -22,14 +22,17 @@ class API::V1::OrchestraSignupController < ApplicationController
     # unless current_user.orchestra_signup.nil?
     #   raise 'Cannot sign up for another orchestra'
     # end
+    if !current_user.confirmed? 
+      render :status => '403', :json => {:message => I18n.t('errors.orchestra.unverified')} and return
+    end
 
     orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
     if orchestra.nil?
-      raise 'Unable to find matching orchestra'
+      render :status => '404', :json => {:message => I18n.t('errors.orchestra.invalid_code') + " " + params[:code]} and return
     end
 
     unless orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
-      raise 'Can not register to same orchestra twice'
+        render :status => '403', :json => {:message => I18n.t('errors.orchestra.already:reg') + " " + orchestra.name} and return
     end
     # Bad practice to remove directly from params, did not find any other way
     # OBS Important to not use .nil? since it returns an empty list (which is ever nil)
@@ -92,8 +95,10 @@ class API::V1::OrchestraSignupController < ApplicationController
   def verify_code
 
     orchestra = Orchestra.find_by(code: params[:code].downcase, allow_signup: true)
-    if orchestra.nil?
-      render :status => '404', :json => {:message => I18n.t('errors.orchestra.invalid_code') + params[:code]}
+    if !current_user.confirmed?
+      render :status => '403', :json => {:message => I18n.t('errors.orchestra.unverified')} and return
+    elsif orchestra.nil?
+      render :status => '404', :json => {:message => I18n.t('errors.orchestra.invalid_code') + " " + params[:code]} and return
     else 
 
       # First signup is used to minimize the number of questions
