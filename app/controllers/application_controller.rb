@@ -11,6 +11,10 @@ class ApplicationController < ActionController::API
   end
 
   def set_locale
-    I18n.locale = request.headers["locale"] || 'sv'
+    if !request.header["locale"].nil?
+      I18n.locale = request.headers["locale"]
+    else 
+      I18n.locale = 'sv'
+    end
   end
 end
