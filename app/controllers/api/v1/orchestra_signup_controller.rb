@@ -22,7 +22,7 @@ class API::V1::OrchestraSignupController < ApplicationController
     # unless current_user.orchestra_signup.nil?
     #   raise 'Cannot sign up for another orchestra'
     # end
-    if !current_user.confirmed? 
+    if !current_user.confirmed?
       render :status => '403', :json => {:message => I18n.t('errors.orchestra.unverified')} and return
     end
 
@@ -99,7 +99,7 @@ class API::V1::OrchestraSignupController < ApplicationController
       render :status => '403', :json => {:message => I18n.t('errors.orchestra.unverified')} and return
     elsif orchestra.nil?
       render :status => '404', :json => {:message => I18n.t('errors.orchestra.invalid_code') + " " + params[:code]} and return
-    else 
+    else
 
       # First signup is used to minimize the number of questions
       # that need to be filled in on the front end if false.
@@ -136,7 +136,8 @@ class API::V1::OrchestraSignupController < ApplicationController
         ],
         orchestra_articles_attributes: [
           :kind,
-          :data
+          :data,
+          :size
         ],
         special_diets_attributes: [
             :name
