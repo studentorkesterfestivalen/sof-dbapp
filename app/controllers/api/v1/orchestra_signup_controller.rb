@@ -5,7 +5,7 @@ class API::V1::OrchestraSignupController < ApplicationController
 
   def index
     #Returns all signups for the user making the request,
-    render :json => current_user.orchestra_signup.all, include: [:orchestra, :orchestra_articles, :orchestra_ticket, :orchestra_food_ticket, :special_diets]
+    render :json => current_user.orchestra_signup.all, include: {orchestra: {methods: :members_count}, orchestra_articles: {}, orchestra_ticket: {}, orchestra_food_ticket: {}, special_diets: {}}
   end
 
   def all
