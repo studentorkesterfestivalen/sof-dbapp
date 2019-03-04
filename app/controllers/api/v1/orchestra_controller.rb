@@ -6,7 +6,7 @@ class API::V1::OrchestraController < ApplicationController
   def index
     require_admin_permission AdminPermission::ORCHESTRA_ADMIN
 
-    render :json => Orchestra.all
+    render :json => Orchestra.all, methods: :members_count
   end
 
   def create

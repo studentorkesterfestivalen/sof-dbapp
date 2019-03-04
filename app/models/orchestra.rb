@@ -20,6 +20,10 @@ class Orchestra < ApplicationRecord
     user == owner
   end
 
+  def members_count
+    orchestra_signups.count()
+  end
+
   private
 
   def ensure_access_code_present
