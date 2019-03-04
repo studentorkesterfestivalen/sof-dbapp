@@ -15,7 +15,7 @@ class OrchestraSignup < ApplicationRecord
   MEDAL   = 40
   PATCH   = 20
 
-  LATE_REGISTRATION = 300
+  LATE_REGISTRATION = 250
 
   belongs_to :orchestra
   belongs_to :user
