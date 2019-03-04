@@ -3,9 +3,9 @@ module Formats
     def initialize
       @total = {
           :dormitory => 0,
+          :tshirt => 0,
           :medal => 0,
           :tag => 0,
-          :tshirt => 0,
           :total_cost => 0,
           :is_late_registration => 0,
           :orchestra_ticket => {
@@ -27,9 +27,9 @@ module Formats
           :email => 'E-mail',
           :orchestra_ticket => 'Biljett',
           :dormitory => 'Boende',
+          :tshirt => 'T-shirt',
           :medal => 'Medalj',
           :tag => 'Märke',
-          :tshirt => 'T-shirt',
           :orchestra_food_ticket => 'Mat',
           :is_late_registration => 'Sen anmälan',
           :total_cost => 'Kostnad'
@@ -59,7 +59,7 @@ module Formats
           item.user.display_name
         when :email
           item.user.email
-        when :medal, :tag, :tshirt
+        when :tshirt, :medal, :tag
           item_article(item, column)
         else
           item.send(column)
@@ -100,7 +100,7 @@ module Formats
     end
 
     def item_article(item, article_name)
-      item.orchestra_articles.where(kind: article_kind_map[article_name]).count
+      item.orchestra_articles.where(kind: article_kind_map[article_name]).first.data
     end
 
     def item_ticket(item, ticket_type)
@@ -109,9 +109,9 @@ module Formats
 
     def article_kind_map
       {
-          :tshirt => 1,
-          :medal => 2,
-          :tag => 3
+          :tshirt => 0,
+          :medal => 1,
+          :tag => 2
       }
     end
 
