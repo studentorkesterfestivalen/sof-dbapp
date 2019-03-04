@@ -52,7 +52,7 @@ class OrchestraSignup < ApplicationRecord
     cost += LATE_REGISTRATION if is_late_registration?
 
     unless orchestra_articles.nil?
-      orchestra_articles.each { |x| cost += article_prices[x.kind] }
+      orchestra_articles.each { |x| cost += article_prices[x.kind] * x.data}
     end
 
     cost
