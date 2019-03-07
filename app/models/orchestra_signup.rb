@@ -24,7 +24,7 @@ class OrchestraSignup < ApplicationRecord
   has_many :orchestra_articles, dependent: :destroy
   has_many :special_diets, dependent: :destroy
 
-  accepts_nested_attributes_for :orchestra_ticket, :orchestra_food_ticket, :orchestra_articles, :special_diets
+  accepts_nested_attributes_for :orchestra_ticket, :orchestra_food_ticket, :orchestra_articles, :special_diets, allow_destroy: true
 
   def has_member?(member)
     has_owner? member or orchestra.has_owner? member

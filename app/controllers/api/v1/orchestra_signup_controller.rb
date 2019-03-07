@@ -77,7 +77,9 @@ class API::V1::OrchestraSignupController < ApplicationController
     require_ownership orchestra_signup
 
     if orchestra_signup.update(item_params)
-      redirect_to api_v1_orchestra_signup_url(orchestra_signup)
+      orchestra_signup.save
+      #redirect_to api_v1_orchestra_signup_url(orchestra_signup)
+      render :json => 'success'
     else
       raise 'Unable to save signup'
     end
@@ -129,16 +131,20 @@ class API::V1::OrchestraSignupController < ApplicationController
         :orchestra_role,
         :arrival_date,
         orchestra_ticket_attributes: [
+            :id,
             :kind
         ],
         orchestra_food_ticket_attributes: [
+            :id,
             :kind
         ],
         orchestra_articles_attributes: [
+          :id,
           :kind,
           :data
         ],
         special_diets_attributes: [
+            :id,
             :name
         ]
     )
