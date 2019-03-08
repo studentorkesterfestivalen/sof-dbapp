@@ -8,6 +8,13 @@ module Formats
           :tag => 0,
           :total_cost => 0,
           :is_late_registration => 0,
+          :instrument_size =>{
+            :very_small => 0,
+            :small => 0,
+            :medium => 0,
+            :large => 0,
+            :none => 0,
+          },
           :orchestra_ticket => {
               :thursday => 0,
               :friday => 0,
@@ -25,6 +32,7 @@ module Formats
       {
           :name => 'Namn',
           :email => 'E-mail',
+          :instrument_size => 'Instrument/utrustningsstorlek',
           :orchestra_ticket => 'Biljett',
           :dormitory => 'Boende',
           :tshirt => 'T-shirt',
@@ -45,7 +53,13 @@ module Formats
     def format_value(column, value)
       case column
         when :orchestra_ticket, :orchestra_food_ticket
-          ticket_description_for value.kind
+          if value.nil?
+            ticket_description_for 5
+          else
+            ticket_description_for value.kind
+          end
+        when :instrument_size
+          instrument_size_description_for value
         when :dormitory, :is_late_registration
           yes_no value
         else
@@ -61,6 +75,8 @@ module Formats
           item.user.email
         when :tshirt, :medal, :tag
           item_article(item, column)
+        when :instrument_size
+          instrument_size(item, column)
         else
           item.send(column)
       end
@@ -73,18 +89,24 @@ module Formats
     private
 
     def increase_total(column, value)
+      if value.nil?
+        return
+      end
       if @total.has_key? column
-        if value.is_a? Numeric
+        if column == :instrument_size
+          p instrument_size_increase_for(value)
+          increase_total_fields(@total[column], instrument_size_increase_for(value))
+        elsif value.is_a? Numeric
           @total[column] += value
         elsif value.is_a? ApplicationRecord
-          increase_ticket_total(@total[column], ticket_count_increase_for(value.kind))
+          increase_total_fields(@total[column], ticket_count_increase_for(value.kind))
         elsif value
           @total[column] += 1
         end
       end
     end
 
-    def increase_ticket_total(total_field, increments)
+    def increase_total_fields(total_field, increments)
       increments.each { |k,v| total_field[k] += v }
     end
 
@@ -94,13 +116,26 @@ module Formats
           'TOTALT'
         when :orchestra_ticket, :orchestra_food_ticket
           total_ticket_str @total[col]
+        when :instrument_size
+          total_sizes_str @total[col]
         else
           @total[col]
       end
     end
 
     def item_article(item, article_name)
+      if item.orchestra_articles.nil? || item.orchestra_articles.empty?
+        return 5
+      end
       item.orchestra_articles.where(kind: article_kind_map[article_name]).first.data
+    end
+
+    def instrument_size(item, article_name)
+      if item.instrument_size.nil? 
+        item.user.orchestra_signup.first.instrument_size
+      else
+        item.instrument_size
+      end
     end
 
     def item_ticket(item, ticket_type)
@@ -121,7 +156,8 @@ module Formats
           1 => 'Fredag, Lördag',
           2 => 'Lördag',
           3 => '',
-          4 => 'Torsdag, Fredag'
+          4 => 'Torsdag, Fredag',
+          5 => 'Ingen biljett (anmälan via annan orkester)'
       }
 
       descriptions[kind]
@@ -146,10 +182,35 @@ module Formats
               :thursday => 1,
               :friday => 1
           },
+          5 => {},
+      }
+      increments[kind]
+    end
+
+    def instrument_size_description_for(kind)
+      descriptions = {
+          0 => 'Mycket litet',
+          1 => 'Litet',
+          2 => 'Medel',
+          3 => 'Stort',
+          4 => 'Inget',
+      }
+
+      descriptions[kind]
+    end
+
+    def instrument_size_increase_for(kind)
+      increments = {
+        0 => { :very_small => 1 },
+        1 => { :small => 1 },
+        2 => { :medium => 1 },
+        3 => { :large => 1},
+        4 => {}
       }
 
       increments[kind]
     end
+
 
     def yes_no(value)
       value ? 'Ja' : 'Nej'
@@ -157,6 +218,10 @@ module Formats
 
     def total_ticket_str(total_field)
       "Torsdag: #{total_field[:thursday]}, Fredag: #{total_field[:friday]}, Lördag: #{total_field[:saturday]}"
+    end
+
+    def total_sizes_str(total_field)
+      "M-Litet: #{total_field[:very_small]}, Litet: #{total_field[:small]}, Medel: #{total_field[:medium]}, Stort: #{total_field[:large]}"
     end
   end
 end
