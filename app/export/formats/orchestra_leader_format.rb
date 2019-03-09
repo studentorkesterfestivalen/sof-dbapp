@@ -125,7 +125,7 @@ module Formats
 
     def item_article(item, article_name)
       if item.orchestra_articles.nil? || item.orchestra_articles.empty?
-        return 5
+        return 
       end
       item.orchestra_articles.where(kind: article_kind_map[article_name]).first.data
     end
