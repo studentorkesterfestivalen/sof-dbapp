@@ -74,7 +74,7 @@ class API::V1::OrchestraSignupController < ApplicationController
 
   def update
     orchestra_signup = OrchestraSignup.find(params[:id])
-    require_ownership orchestra_signup
+    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
 
     if orchestra_signup.update(item_params)
       orchestra_signup.save
@@ -87,7 +87,7 @@ class API::V1::OrchestraSignupController < ApplicationController
 
   def destroy
     orchestra_signup = OrchestraSignup.find(params[:id])
-    require_ownership orchestra_signup
+    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
 
     orchestra_signup.destroy
 
