@@ -141,6 +141,7 @@ class API::V1::OrchestraSignupController < ApplicationController
         orchestra_articles_attributes: [
           :id,
           :kind,
+          :size,
           :data
         ],
         special_diets_attributes: [
