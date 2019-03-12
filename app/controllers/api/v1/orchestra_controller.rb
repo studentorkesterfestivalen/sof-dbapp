@@ -30,7 +30,7 @@ class API::V1::OrchestraController < ApplicationController
     orchestra = Orchestra.find(params[:id])
     require_ownership_or_admin_permission orchestra, AdminPermission::ORCHESTRA_ADMIN
 
-    render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}]
+    render :json => orchestra, include: [orchestra_signups: {include: [:user], methods: :total_cost}], methods: :members_count
   end
 
   def all_signups
