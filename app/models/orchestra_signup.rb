@@ -1,5 +1,5 @@
 class OrchestraSignup < ApplicationRecord
-  LATE_REGISTRATION_START_DATE = Time.utc(2019, 3, 17)
+  LATE_REGISTRATION_START_DATE = Time.utc(2019, 3, 18)
 
   BIG_PACKAGE   = 500
   SMALL_PACKAGE = 470

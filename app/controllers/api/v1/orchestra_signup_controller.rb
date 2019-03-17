@@ -1,4 +1,5 @@
 class API::V1::OrchestraSignupController < ApplicationController
+  LATE_REGISTRATION_START_DATE = Time.utc(2019, 3, 18)
   include ViewPermissionConcern
 
   before_action :authenticate_user!
@@ -52,9 +53,10 @@ class API::V1::OrchestraSignupController < ApplicationController
     signup.user.usergroup |= UserGroupPermission::ORCHESTRA_MEMBER
 
 
-    # if OrchestraSignup.include_late_registration_fee? and DateTime.now < DateTime.parse('2019-04-30 22:00')
-    #   signup.is_late_registration = true
-    # end
+    if OrchestraSignup.include_late_registration_fee? && signup.user.orchestra_signup.empty?
+      # TODO: end date and DateTime.now < DateTime.parse('2019-04-30 22:00')
+      signup.is_late_registration = true
+    end
 
     signup.save!
     signup.user.save!
@@ -111,9 +113,11 @@ class API::V1::OrchestraSignupController < ApplicationController
       #double_signup = !orchestra.orchestra_signups.find_by(user_id: current_user.id).nil?
       double_signup = false
 
+      late_signup = first_signup && Time.now >= LATE_REGISTRATION_START_DATE
+
       #Fix later: Filter out data from the return orchestra object
       #render :json => orchestra, only: [:name, :dormitory, :arrival_date]
-      render :json => {:orchestra => orchestra, :double_signup => double_signup ,:first_signup => first_signup}
+      render :json => {:orchestra => orchestra, :double_signup => double_signup ,:first_signup => first_signup, :late_signup => late_signup}
     end
 
   end
