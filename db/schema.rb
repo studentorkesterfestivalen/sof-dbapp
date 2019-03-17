@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190303145314) do
+ActiveRecord::Schema.define(version: 20190312164347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,6 +346,7 @@ ActiveRecord::Schema.define(version: 20190303145314) do
     t.bigint   "usergroup",              default: 0,                     null: false
     t.integer  "rebate_balance",         default: 0
     t.boolean  "rebate_given",           default: false,                 null: false
+    t.boolean  "allow_password_change",  default: false,                 null: false
     t.index ["email"], name: "index_users_on_email", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
