@@ -87,6 +87,23 @@ class API::V1::OrchestraSignupController < ApplicationController
     end
   end
 
+  def update_shirt_size
+    orchestra_signup = OrchestraSignup.find(params[:id])
+    shirts = orchestra_signup.orchestra_articles.find_by kind: 0, size: nil;
+
+    if !shirts.nil?
+      if orchestra_signup.update(update_shirt_params)
+        orchestra_signup.save
+
+        render :json => 'success'
+      else
+        render :status => '500', :json => {:message => I18n.t('errors.general.wrong')} and return
+      end
+    else
+      render :status => '403', :json => {:message => I18n.t('errors.orchestra.already_size')} and return
+    end
+  end
+
   def destroy
     orchestra_signup = OrchestraSignup.find(params[:id])
     require_admin_permission AdminPermission::ORCHESTRA_ADMIN
@@ -123,6 +140,16 @@ class API::V1::OrchestraSignupController < ApplicationController
   end
 
   private
+
+  def update_shirt_params
+    params.require(:item).permit(
+      orchestra_articles_attributes: [
+        :id,
+        :kind,
+        :size,
+      ],
+    )
+  end
 
   def item_params
     params.require(:item).permit(

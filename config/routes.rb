@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       end
       resources :orchestra_signup do
         get 'verify', action: 'verify_code', on: :collection
+        put 'update_shirt_size/:id', action: 'update_shirt_size', on: :collection
       end
       resources :article
 

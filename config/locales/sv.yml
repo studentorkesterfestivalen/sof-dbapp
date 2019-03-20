@@ -35,6 +35,8 @@ sv:
       missing_passwords: "Du måste fylla i båda lösenordsfälten"
       successfully_updated: "Ditt lösenord har uppdaterats"
   errors:
+    general:
+      wrong: "Något gick fel, försök igen om ett tag"
     messages:
       not_email: "är ingen e-postadress"
       already_in_use: "används redan"
@@ -43,6 +45,7 @@ sv:
       unverified: "Du kan inte registrera dig till en orkester för än din email är verifierad"
       invalid_code: "Ingen orkester hittades med koden"
       already_reg: "Du är redan registrerad till"
+      already_size: "Du har redan valt storlek"
   devise:
     mailer:
       confirmation_instructions:

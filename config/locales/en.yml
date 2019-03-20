@@ -22,12 +22,15 @@
 en:
   hello: "Hello world"
   errors:
+    general:
+      wrong: "Something went wrong, try again in a little while"
     messages:
       must_use_cas: "Log in using the LiU-login instead"
     orchestra:
       unverified: "You cannot register for an orchestra before your email is verified"
       invalid_code: "No orchestra found with code"
       already_reg: "You are already registered to"
+      already_size: "You've already chosen a t-shirt size"
 
   welcome_to_sof: "welcome to SOF!"
   orchestra_mailer:
