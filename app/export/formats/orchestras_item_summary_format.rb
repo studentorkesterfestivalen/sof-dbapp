@@ -86,7 +86,7 @@ module Formats
         when :name
           item.send(column)
         when :user_id
-          User.where(id: item.send(column)).pluck(:email).first
+          item.email 
         else
           value_for_item(item, column)
       end
