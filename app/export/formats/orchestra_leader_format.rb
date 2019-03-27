@@ -4,6 +4,18 @@ module Formats
       @total = {
           :dormitory => 0,
           :tshirt => 0,
+          :shirt_size => {
+            :ds => 0,
+            :dm => 0,
+            :dl => 0,
+            :dxl => 0,
+            :dxxl => 0 ,
+            :hs => 0,
+            :hm => 0,
+            :hl => 0,
+            :hxl => 0,
+            :hxxl => 0 ,
+          },
           :medal => 0,
           :tag => 0,
           :total_cost => 0,
@@ -36,6 +48,7 @@ module Formats
           :orchestra_ticket => 'Biljett',
           :dormitory => 'Boende',
           :tshirt => 'T-shirt',
+          :shirt_size => 'Tröjstorlek',
           :medal => 'Medalj',
           :tag => 'Märke',
           :orchestra_food_ticket => 'Mat',
@@ -51,6 +64,9 @@ module Formats
     end
 
     def format_value(column, value)
+      p 'hello'
+      p value
+      p column
       case column
         when :orchestra_ticket, :orchestra_food_ticket
           if value.nil?
@@ -60,6 +76,8 @@ module Formats
           end
         when :instrument_size
           instrument_size_description_for value
+        when :shirt_size
+          shirt_size_description_for value.size
         when :dormitory, :is_late_registration
           yes_no value
         else
@@ -77,6 +95,8 @@ module Formats
           item_article(item, column)
         when :instrument_size
           instrument_size(item, column)
+        when :shirt_size
+          item_shirt(item)
         else
           item.send(column)
       end
@@ -92,12 +112,17 @@ module Formats
       if value.nil?
         return
       end
+      p "helo"
+      p column
+      p value
       if @total.has_key? column
         if column == :instrument_size
           p instrument_size_increase_for(value)
           increase_total_fields(@total[column], instrument_size_increase_for(value))
         elsif value.is_a? Numeric
           @total[column] += value
+        elsif column == :shirt_size
+          increase_total_fields(@total[column], shirt_size_count_increase_for(value.size, value.data))
         elsif value.is_a? ApplicationRecord
           increase_total_fields(@total[column], ticket_count_increase_for(value.kind))
         elsif value
@@ -118,6 +143,8 @@ module Formats
           total_ticket_str @total[col]
         when :instrument_size
           total_sizes_str @total[col]
+        when :shirt_size
+          total_size_str @total[col]
         else
           @total[col]
       end
@@ -142,6 +169,10 @@ module Formats
       ticket_description_for item.send(ticket_type).kind
     end
 
+    def item_shirt(item)
+      item.orchestra_articles.where(kind: 0).first
+    end
+
     def article_kind_map
       {
           :tshirt => 0,
@@ -161,6 +192,23 @@ module Formats
       }
 
       descriptions[kind]
+    end
+
+    def shirt_size_description_for(size)
+      descriptions = {
+          '0' => 'Dam S',
+          '1' => 'Dam M',
+          '2' => 'Dam L',
+          '3' => 'Dam XL',
+          '4' => 'Dam XXL',
+          '5' => 'Herr S',
+          '6' => 'Herr M',
+          '7' => 'Herr L',
+          '8' => 'Herr XL',
+          '9' => 'Herr XXL'
+      }
+
+      descriptions[size]
     end
 
     def ticket_count_increase_for(kind)
@@ -211,6 +259,42 @@ module Formats
       increments[kind]
     end
 
+    def shirt_size_count_increase_for(size, amt)
+      increments = {
+          '0' => {
+              :ds => amt
+          },
+          '1' => {
+              :dm => amt
+          },
+          '2' => {
+              :dl => amt
+          },
+          '3' => {
+              :dxl => amt
+          },
+          '4' => {
+              :dxxl => amt
+          },
+          '5' => {
+              :hs => amt
+          },
+          '6' => {
+              :hm => amt
+          },
+          '7' => {
+              :hl => amt
+          },
+          '8' => {
+              :hxl => amt
+          },
+          '9' => {
+              :hxxl => amt
+          },
+      }
+
+      increments[size]
+    end
 
     def yes_no(value)
       value ? 'Ja' : 'Nej'
@@ -222,6 +306,11 @@ module Formats
 
     def total_sizes_str(total_field)
       "M-Litet: #{total_field[:very_small]}, Litet: #{total_field[:small]}, Medel: #{total_field[:medium]}, Stort: #{total_field[:large]}"
+    end
+
+    def total_size_str(total_field)
+      "Dam S: #{total_field[:ds]}, Dam M: #{total_field[:dm]}, Dam L: #{total_field[:dl]}, Dam XL #{total_field[:dxl]}, Dam XL #{total_field[:dxxl]},
+Herr S: #{total_field[:hs]}, Herr M: #{total_field[:hm]}, Herr L: #{total_field[:hl]}, Herr XL #{total_field[:hxl]}, Herr XL #{total_field[:hxxl]}"
     end
   end
 end

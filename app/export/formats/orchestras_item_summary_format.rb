@@ -10,21 +10,17 @@ module Formats
           :medal => 0,
           :tag => 0,
           :tshirt => {
-              :womenxs => 0,
               :womens => 0,
               :womenm => 0,
               :womenl => 0,
               :womenxl => 0,
               :womenxxl => 0,
-              :womenxxxl => 0,
 
-              :manxs => 0,
               :mans => 0,
               :manm => 0,
               :manl => 0,
               :manxl => 0,
               :manxxl => 0,
-              :manxxxl => 0
           },
           :is_late_registration => 0,
           :orchestra_ticket => {
@@ -90,7 +86,7 @@ module Formats
         when :name
           item.send(column)
         when :user_id
-          User.where(id: item.send(column)).pluck(:email).first
+          item.email 
         else
           value_for_item(item, column)
       end
@@ -113,21 +109,17 @@ module Formats
         }
       elsif column == :tshirt
         value = {
-            :womenxs => 0,
             :womens => 0,
             :womenm => 0,
             :womenl => 0,
             :womenxl => 0,
             :womenxxl => 0,
-            :womenxxxl => 0,
 
-            :manxs => 0,
             :mans => 0,
             :manm => 0,
             :manl => 0,
             :manxl => 0,
             :manxxl => 0,
-            :manxxxl => 0
         }
       else
         value = 0
@@ -152,8 +144,8 @@ module Formats
           when :instrument_size
             increase_hash_total(value, instrument_size_increase_for(signup.send(column)))
           when :tshirt
-            signup.orchestra_articles.where(kind: 1).each do |article|
-              increase_hash_total(value, tshirt_increase_for(article.data))
+            signup.orchestra_articles.where(kind: 0).each do |article|
+              increase_hash_total(value, tshirt_increase_for(article.size, article.data))
             end
           else
             value += signup.send(column)
@@ -200,7 +192,7 @@ module Formats
     end
 
     def item_article(item, article_name)
-      item.orchestra_articles.where(kind: article_kind_map[article_name]).count
+      item.orchestra_articles.where(kind: article_kind_map[article_name]).first.data
     end
 
     def item_ticket(item, ticket_type)
@@ -209,9 +201,9 @@ module Formats
 
     def article_kind_map
       {
-          :tshirt => 1,
-          :medal => 2,
-          :tag => 3
+          :tshirt => 0,
+          :medal => 1,
+          :tag => 2
       }
     end
 
@@ -273,39 +265,31 @@ module Formats
       increments[kind]
     end
 
-    def tshirt_increase_for(kind)
-      case kind
-        when 'Dam XS', 'Female XS'
-          {womenxs: 1}
-        when 'Dam S', 'Female S'
-          {womens: 1}
-        when 'Dam M', 'Female M'
-          {womenm: 1}
-        when 'Dam L', 'Female L'
-          {womenl: 1}
-        when 'Dam XL', 'Female XL'
-          {womenxl: 1}
-        when 'Dam XXL', 'Female XXL'
-          {womenxxl: 1}
-        when 'Dam XXXL', 'Female XXXL'
-          {womenxxxl: 1}
+    def tshirt_increase_for(size, amt)
+      case size
+        when '0'
+          {womens: amt}
+        when '1'
+          {womenm: amt}
+        when '2'
+          {womenl: amt}
+        when '3'
+          {womenxl: amt}
+        when '4'
+          {womenxxl: amt}
 
-        when 'Herr XS', 'Male XS'
-          {manxs: 1}
-        when 'Herr S', 'Male S'
-          {mans: 1}
-        when 'Herr M', 'Male M'
-          {manm: 1}
-        when 'Herr L', 'Male L'
-          {manl: 1}
-        when 'Herr XL', 'Male XL'
-          {manxl: 1}
-        when 'Herr XXL', 'Male XXL'
-          {manxxl: 1}
-        when 'Herr XXXL', 'Male XXXL'
-          {manxxxl: 1}
+        when '5'
+          {mans: amt}
+        when '6'
+          {manm: amt}
+        when '7'
+          {manl: amt}
+        when '8'
+          {manxl: amt}
+        when '9'
+          {manxxl: amt}
         else
-          FaultReport.send("Found unknown t-shirt size: #{kind}")
+          FaultReport.send("Found unknown t-shirt size: #{size}")
           {}
       end
     end
@@ -323,7 +307,7 @@ module Formats
     end
 
     def total_tshirt_str(total_field)
-      "Dam/Herr: XS: #{total_field[:womenxs]}/#{total_field[:manxs]}, S: #{total_field[:womens]}/#{total_field[:mans]}, M: #{total_field[:womenm]}/#{total_field[:manm]}, L: #{total_field[:womenl]}/#{total_field[:manl]}, XL: #{total_field[:womenxl]}/#{total_field[:manxl]}, XXL: #{total_field[:womenxxl]}/#{total_field[:manxxl]}, XXXL: #{total_field[:womenxxxl]}/#{total_field[:manxxxl]}"
+      "Dam/Herr - S: #{total_field[:womens]}/#{total_field[:mans]}, M: #{total_field[:womenm]}/#{total_field[:manm]}, L: #{total_field[:womenl]}/#{total_field[:manl]}, XL: #{total_field[:womenxl]}/#{total_field[:manxl]}, XXL: #{total_field[:womenxxl]}/#{total_field[:manxxl]}"
     end
   end
 end
