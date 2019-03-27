@@ -172,13 +172,8 @@ class API::V1::OrchestraSignupController < ApplicationController
         orchestra_articles_attributes: [
           :id,
           :kind,
-<<<<<<< HEAD
           :size,
           :data
-=======
-          :data,
-          :size
->>>>>>> shirt-sizes
         ],
         special_diets_attributes: [
             :id,
