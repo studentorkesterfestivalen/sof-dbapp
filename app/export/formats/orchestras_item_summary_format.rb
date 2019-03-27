@@ -21,6 +21,8 @@ module Formats
               :manl => 0,
               :manxl => 0,
               :manxxl => 0,
+
+              :notchosen => 0,
           },
           :is_late_registration => 0,
           :orchestra_ticket => {
@@ -120,6 +122,8 @@ module Formats
             :manl => 0,
             :manxl => 0,
             :manxxl => 0,
+
+            :notchosen => 0,
         }
       else
         value = 0
@@ -130,25 +134,27 @@ module Formats
       # looping once and handling all columns at once.
       # We could loop once and increase the total accordingly instead.
       item.orchestra_signups.each do |signup|
-        case column
-          when :is_late_registration, :consecutive_10, :attended_25
-            value += 1 if signup.send(column)
-          when :medal, :tag
-            value += item_article(signup, column)
-          when :orchestra_food_ticket, :orchestra_ticket
-            increase_hash_total(value, ticket_count_increase_for(signup.send(column).kind))
-          when :dormitory
-            if signup.send(column)
-              increase_hash_total(value, ticket_count_increase_for(signup.send(:orchestra_ticket).kind))
-            end
-          when :instrument_size
-            increase_hash_total(value, instrument_size_increase_for(signup.send(column)))
-          when :tshirt
-            signup.orchestra_articles.where(kind: 0).each do |article|
-              increase_hash_total(value, tshirt_increase_for(article.size, article.data))
-            end
-          else
-            value += signup.send(column)
+        if !signup.orchestra_ticket.nil? # Only if first signup
+          case column
+            when :is_late_registration, :consecutive_10, :attended_25
+              value += 1 if signup.send(column)
+            when :medal, :tag
+              value += item_article(signup, column)
+            when :orchestra_food_ticket, :orchestra_ticket
+              increase_hash_total(value, ticket_count_increase_for(signup.send(column).kind))
+            when :dormitory
+              if signup.send(column)
+                increase_hash_total(value, ticket_count_increase_for(signup.send(:orchestra_ticket).kind))
+              end
+            when :instrument_size
+              increase_hash_total(value, instrument_size_increase_for(signup.send(column)))
+            when :tshirt
+              signup.orchestra_articles.where(kind: 0).each do |article|
+                increase_hash_total(value, tshirt_increase_for(article.size, article.data))
+              end
+            else
+              value += signup.send(column)
+          end
         end
       end
       value
@@ -292,8 +298,7 @@ module Formats
         when 9
           {manxxl: amt}
         else
-          FaultReport.send("Found unknown t-shirt size: #{size}")
-          {}
+          {notchosen: amt}
       end
     end
 
@@ -310,7 +315,7 @@ module Formats
     end
 
     def total_tshirt_str(total_field)
-      "Dam/Herr - S: #{total_field[:womens]}/#{total_field[:mans]}, M: #{total_field[:womenm]}/#{total_field[:manm]}, L: #{total_field[:womenl]}/#{total_field[:manl]}, XL: #{total_field[:womenxl]}/#{total_field[:manxl]}, XXL: #{total_field[:womenxxl]}/#{total_field[:manxxl]}"
+      "Dam/Herr - S: #{total_field[:womens]}/#{total_field[:mans]}, M: #{total_field[:womenm]}/#{total_field[:manm]}, L: #{total_field[:womenl]}/#{total_field[:manl]}, XL: #{total_field[:womenxl]}/#{total_field[:manxl]}, XXL: #{total_field[:womenxxl]}/#{total_field[:manxxl]}, Ej valt: #{total_field[:notchosen]}"
     end
   end
 end
