@@ -266,27 +266,30 @@ module Formats
     end
 
     def tshirt_increase_for(size, amt)
+      if size.is_a? String
+        size = size.to_i
+      end
       case size
-        when '0'
+        when 0
           {womens: amt}
-        when '1'
+        when 1
           {womenm: amt}
-        when '2'
+        when 2
           {womenl: amt}
-        when '3'
+        when 3
           {womenxl: amt}
-        when '4'
+        when 4
           {womenxxl: amt}
 
-        when '5'
+        when 5
           {mans: amt}
-        when '6'
+        when 6
           {manm: amt}
-        when '7'
+        when 7
           {manl: amt}
-        when '8'
+        when 8
           {manxl: amt}
-        when '9'
+        when 9
           {manxxl: amt}
         else
           FaultReport.send("Found unknown t-shirt size: #{size}")

@@ -195,17 +195,20 @@ module Formats
     end
 
     def shirt_size_description_for(size)
+      if size.is_a? String
+        size = size.to_i
+      end
       descriptions = {
-          '0' => 'Dam S',
-          '1' => 'Dam M',
-          '2' => 'Dam L',
-          '3' => 'Dam XL',
-          '4' => 'Dam XXL',
-          '5' => 'Herr S',
-          '6' => 'Herr M',
-          '7' => 'Herr L',
-          '8' => 'Herr XL',
-          '9' => 'Herr XXL'
+          0 => 'Dam S',
+          1 => 'Dam M',
+          2 => 'Dam L',
+          3 => 'Dam XL',
+          4 => 'Dam XXL',
+          5 => 'Herr S',
+          6 => 'Herr M',
+          7 => 'Herr L',
+          8 => 'Herr XL',
+          9 => 'Herr XXL'
       }
 
       descriptions[size]
@@ -260,35 +263,38 @@ module Formats
     end
 
     def shirt_size_count_increase_for(size, amt)
+      if size.is_a? String
+        size = size.to_i
+      end
       increments = {
-          '0' => {
+          0 => {
               :ds => amt
           },
-          '1' => {
+          1 => {
               :dm => amt
           },
-          '2' => {
+          2 => {
               :dl => amt
           },
-          '3' => {
+          3 => {
               :dxl => amt
           },
-          '4' => {
+          4 => {
               :dxxl => amt
           },
-          '5' => {
+          5 => {
               :hs => amt
           },
-          '6' => {
+          6 => {
               :hm => amt
           },
-          '7' => {
+          7 => {
               :hl => amt
           },
-          '8' => {
+          8 => {
               :hxl => amt
           },
-          '9' => {
+          9 => {
               :hxxl => amt
           },
       }
