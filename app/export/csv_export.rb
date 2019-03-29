@@ -8,7 +8,9 @@ class CSVExport
         csv << columns.values
         data.each do |item|
           values = columns.keys.map { |col| format.data_for(item, col) }
-          csv << values
+          if values.all? { |e| !e.nil? }
+            csv << values
+          end
         end
         extra_row = format.extra_row
         unless extra_row.nil?

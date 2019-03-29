@@ -17,26 +17,32 @@ module Formats
       {
           :orchestra_id => 'Orkester',
           :user_id => 'Namn',
+          :email => 'Email',
           :orchestra_food_ticket => 'Dagar',
-          :vegetarian => 'Vegetariskt',
-          :vegan => 'Vegansk',
-          :lactos => 'Laktos',
-          :gluten => 'Gluten',
-          :shellfish => 'Skaldjur',
-          :fish => 'Fisk',
-          :peanuts => 'Jordnötter',
-          :other => 'Special'
+          :allergies => 'Allergi(er)',
+          #:vegetarian => 'Vegetariskt',
+          #:vegan => 'Vegansk',
+          #:lactos => 'Laktos',
+          #:gluten => 'Gluten',
+          #:shellfish => 'Skaldjur',
+          #:fish => 'Fisk',
+          #:peanuts => 'Jordnötter',
+          #:other => 'Special'
       }
     end
 
     def data_for(item, column)
       value = value_for(item, column)
-      increase_total(column, value)
+      if value.nil? || value == ''
+        return 
+      end
+      #increase_total(column, value)
       format_value(column, value)
     end
 
     def extra_row
-      column_names.keys.map { |column| total_value_for(column) }
+      return
+    #  column_names.keys.map { |column| total_value_for(column) }
     end
 
     private
@@ -48,9 +54,11 @@ module Formats
         when :user_id
           item.user.display_name
         when :orchestra_food_ticket
-          item.user.orchestra_signup.orchestra_food_ticket
-        when :other
-          item.special_diets.select { |diet| not column_names.values.include? diet.name }
+          item.user.orchestra_signup.where.not('dormitory' => nil).first.orchestra_food_ticket
+        when :email
+          item.user.email
+        #when :other
+        #  item.special_diets.select { |diet| not column_names.values.include? diet.name }
         else
           has_allergy(item, column)
       end
@@ -66,7 +74,7 @@ module Formats
 
     def format_value(column, value)
       case column
-        when :orchestra_id, :user_id
+        when :orchestra_id, :user_id, :email
           value
         when :other
           value.map! { |diet| diet.name }
@@ -75,7 +83,7 @@ module Formats
           ticket_description_for value.kind
         else
           if value.present?
-            'x'
+            value
           end
       end
     end
@@ -92,7 +100,8 @@ module Formats
     end
 
     def has_allergy(item, column)
-      item.special_diets.any? { |diet| diet.name == column_names[column] }
+      item.special_diets.sort_by { |diet| [diet.created_at, diet.updated_at].max }.last().name
+      #item.special_diets.any? { |diet| diet.name == column_names[column] }
     end
 
     def ticket_description_for(kind)

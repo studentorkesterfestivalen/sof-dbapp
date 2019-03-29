@@ -74,7 +74,7 @@ module Formats
           end
         when :instrument_size
           instrument_size_description_for value
-        when :shirt_size
+        when :shirt_size && !value.nil?
           if value.size.nil?
             shirt_size_description_for 10
           else
