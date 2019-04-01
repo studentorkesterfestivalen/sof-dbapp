@@ -18,5 +18,21 @@ class CSVExport
         end
       end
     end
+
+    def render_overlap_csv(data, format_class)
+      format = format_class.new
+      columns = format.column_names
+      CSV.generate do |csv|
+        csv << ['sep=,']
+        csv << columns.values
+        data.each do |item|
+          values = format.get_data item
+          values.each do |key, value|
+            row = [item.name , value, key]
+            csv << row
+          end
+        end
+      end
+    end
   end
 end

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
           get 'allergies', action: 'allergies'
           get 'lintek_rebate', action: 'lintek_rebate'
           get 'list_all', action: 'list_all'
+          get 'overlaps', action: 'overlapping_orchestras'
         end
       end
       resources :orchestra_signup do

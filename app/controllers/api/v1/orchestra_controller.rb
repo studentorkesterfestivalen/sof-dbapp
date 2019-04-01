@@ -76,6 +76,14 @@ class API::V1::OrchestraController < ApplicationController
 
   end
 
+  def overlapping_orchestras
+    require_admin_permission AdminPermission::ORCHESTRA_ADMIN
+
+    orchestras = Orchestra.all
+    render :plain => CSVExport.render_overlap_csv(orchestras, Formats::OrchestrasOverlappingFormat)
+  end
+
+
   def update
     orchestra = Orchestra.find(params[:id])
     require_ownership orchestra
