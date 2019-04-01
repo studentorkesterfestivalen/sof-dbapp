@@ -25,7 +25,7 @@ module Formats
                 overlap_names[u_signup.orchestra.name] = Array.new
                 overlap_emails[u_signup.orchestra.name] = Array.new
               end
-              overlap_names[u_signup.orchestra.name] << u_signup.user.name
+              overlap_names[u_signup.orchestra.name] << u_signup.user.display_name
               overlap_emails[u_signup.orchestra.name] << u_signup.user.email
             end
           end
