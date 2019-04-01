@@ -26,9 +26,9 @@ class CSVExport
         csv << ['sep=,']
         csv << columns.values
         data.each do |item|
-          values = format.get_data item
-          values.each do |key, value|
-            row = [item.name , value, key]
+          overlap_names, overlap_emails = format.get_data item
+          overlap_names.each do |key, value|
+            row = [item.name , value.count() , key, overlap_names[key], overlap_emails[key]]
             csv << row
           end
         end
