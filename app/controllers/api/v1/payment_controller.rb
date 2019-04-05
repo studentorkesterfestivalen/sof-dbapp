@@ -89,17 +89,18 @@ class API::V1::PaymentController < ApplicationController
                               \"name\" : \"Initial\"
                             }
                           ],
-                        \"payment_method_categories\": [
-                          {
-                            \"asset_urls\": {
-                              \"descriptive\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/descriptive/pink.svg\",
-                              \"standard\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/standard/pink.svg\"
-                            },
-                            \"identifier\": \"pay_now\",
-                            \"name\": \"Pay Now\"
-                          }
-                        ],
-                        \"status\":\"complete\"
+                        \"payment_method_categories\":
+                          [
+                            {
+                              \"asset_urls\":
+                              {
+                                \"descriptive\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/descriptive/pink.svg\",
+                                \"standard\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/standard/pink.svg\"
+                              },
+                           \"identifier\": \"pay_later\",
+                           \"name\": \"Pay Later\"
+                           }
+                         ]
                       }"
 
       response = http.request(request)
