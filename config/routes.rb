@@ -69,7 +69,7 @@ Rails.application.routes.draw do
       end
 
       scope '/store' do
-        post '/charge', to: 'payment#charge'
+        get '/charge', to: 'payment#charge'
       end
 
       scope '/collect' do

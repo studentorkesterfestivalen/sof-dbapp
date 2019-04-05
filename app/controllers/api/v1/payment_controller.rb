@@ -11,8 +11,10 @@ class API::V1::PaymentController < ApplicationController
 
     order = "hej"
     created_charge = create_charge!(order)
-
-
+    # Avoid sending the session_id to the front end,
+    return_copy = created_charge
+    return_copy.delete("session_id")
+    render :status => '200', :json => return_copy
     #Add
   #   order = current_user.cart.create_order
   #   if order.purchasable?
@@ -63,6 +65,7 @@ class API::V1::PaymentController < ApplicationController
     #   })
       require 'uri'
       require 'net/http'
+      require 'json'
 
       url = URI(ENV['KLARNA_API_ENDPOINT']+"/payments/v1/sessions")
       http = Net::HTTP.new(url.host, url.port)
@@ -74,8 +77,6 @@ class API::V1::PaymentController < ApplicationController
       request["Authorization"] = 'Basic '+Base64.strict_encode64(ENV['KLARNA_API_USERNAME']+':'+ENV['KLARNA_API_PASSWORD'])
       request["cache-control"] = 'no-cache'
       request.body = "{
-                        \"order_id\" : \"231234asdf\",
-                        \"status\": \"CHECKOUT_INCOMPLETE\",
                         \"purchase_country\": \"SE\",
                         \"purchase_currency\" : \"sek\",
                         \"order_amount\": 0,
@@ -87,13 +88,28 @@ class API::V1::PaymentController < ApplicationController
                               \"total_amount\": 0,\"unit_price\": 0,
                               \"name\" : \"Initial\"
                             }
-                          ]
+                          ],
+                        \"payment_method_categories\": [
+                          {
+                            \"asset_urls\": {
+                              \"descriptive\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/descriptive/pink.svg\",
+                              \"standard\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/standard/pink.svg\"
+                            },
+                            \"identifier\": \"pay_now\",
+                            \"name\": \"Pay Now\"
+                          }
+                        ],
+                        \"status\":\"complete\"
                       }"
 
       response = http.request(request)
 
-      require 'json'
-      result = JSON.parse(response)
+    #  if response.code === 200
+        result = JSON.parse(response.body)
+        puts result
+
+      return result
+    #  end
   #    puts response.read_body
 
 

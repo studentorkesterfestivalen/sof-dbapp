@@ -26,7 +26,7 @@ gem 'rack-cors', require: 'rack/cors'
 # gem 'kobra_client', git: 'https://github.com/studentorkesterfestivalen/kobra_client.git'
 
 # Stripe payments API
-gem 'stripe'
+# gem 'stripe'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -57,6 +57,9 @@ gem 'omniauth'
 gem 'devise'
 gem 'devise_token_auth', git: 'https://github.com/NaabZer/devise_token_auth.git'
 gem 'omniauth-cas'
+
+# For making API calls
+gem 'rest-client'
 
 # Ruby version for Heroku
 ruby '2.6.0'
