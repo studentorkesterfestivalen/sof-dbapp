@@ -221,7 +221,7 @@ class API::V1::UsersController < ApplicationController
     if current_user.has_admin_permission? AdminPermission::MODIFY_USERS
       # Only allows a admin to update a users display_name and permissions
       if user.update(user_admin_params)
-        redirect_to api_v1_user_url(user)
+        render :status => '200', :json => {:message => 'User was successfully updated'}
       else
         raise 'Unable to save user'
       end
