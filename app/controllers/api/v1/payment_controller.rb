@@ -79,35 +79,27 @@ class API::V1::PaymentController < ApplicationController
       request.body = "{
                         \"purchase_country\": \"SE\",
                         \"purchase_currency\" : \"sek\",
-                        \"order_amount\": 0,
+                        \"order_amount\": 10,
                         \"order_lines\":
                           [
                             {
-                              \"type\" : \"physical\",
-                              \"quantity\": 0,
-                              \"total_amount\": 0,\"unit_price\": 0,
-                              \"name\" : \"Initial\"
+                              \"type\" : \"digital\",
+                              \"quantity\": 1,
+                              \"total_amount\": 10,
+                              \"unit_price\": 10,
+                              \"name\" : \"Ticket\"
                             }
                           ],
-                        \"payment_method_categories\":
-                          [
-                            {
-                              \"asset_urls\":
-                              {
-                                \"descriptive\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/descriptive/pink.svg\",
-                                \"standard\": \"https://cdn.klarna.com/1.0/shared/image/generic/badge/en_us/pay_later/standard/pink.svg\"
-                              },
-                           \"identifier\": \"pay_later\",
-                           \"name\": \"Pay Later\"
-                           }
-                         ]
+                          \"merchant_urls\": {},
+                          \"disable_client_side_updates\": true,
+                          \"acquiring_channel\": \"IN_STORE\"
                       }"
 
       response = http.request(request)
 
     #  if response.code === 200
-        result = JSON.parse(response.body)
-        puts result
+      result = JSON.parse(response.body)
+      puts result
 
       return result
     #  end
