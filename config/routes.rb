@@ -70,11 +70,12 @@ Rails.application.routes.draw do
 
       scope '/store' do
         get '/charge', to: 'payment#charge'
+        put '/place_order', to: 'payment#place_order'
       end
 
       scope '/collect' do
         get '/:id', to: 'item_collect#show'
-        post '/:id', to: 'item_collect#collect'
+        put '/:id', to: 'item_collect#collect'
       end
 
       scope '/order_stats' do
