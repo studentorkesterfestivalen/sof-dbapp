@@ -17,8 +17,7 @@ class API::V1::PaymentController < ApplicationController
 
   def place_order
     res = create_order(params[:auth_token])
-    p params[:auth_token]
-    render :status => '200', :json => res
+    render :status => '200', :json => res['redirect_url']
 # unless current_user.shopping_cart_count == 0
     #   order = current_user.cart.create_order
     #   p "dead?"
@@ -65,8 +64,8 @@ class API::V1::PaymentController < ApplicationController
 
   def create_order(auth_token)
 
-    url = URI(ENV['KLARNA_API_ENDPOINT']+"/payments/v1/authorizations/"\
-          +auth_token+"/customer-token")
+    url = URI(ENV['KLARNA_API_ENDPOINT']+"/payments/v1/authorizations/"+auth_token+"/order")
+    p url
     http = Net::HTTP.new(url.host, url.port)
     # Required because KLARNA API only accepts https requests
     http.use_ssl = true
@@ -77,22 +76,25 @@ class API::V1::PaymentController < ApplicationController
     request["cache-control"] = 'no-cache'
     request.body = "{
                       \"purchase_country\": \"SE\",
+                      \"purchase_currency\": \"SEK\",
                       \"locale\": \"sv-SE\",
-                      \"billing_address\" : {
-                        \"given_name\": \"Doe\",
-                        \"family_name\": \"John\",
-                        \"email\": \"direct_debit@klarna.com\",
-                        \"phone\": \"01895808221\",
-                        \"street_address\": \"Stårgatan 1\",
-                        \"postal_code\": \"12345\",
-                        \"city\": \"Ankeborg\",
-                        \"country\": \"SE\"
-                      },
-                      \"description\": \"MySaaS subscription\",
+
+                      \"order_amount\": 1000,
+                        \"order_lines\":
+                          [
+                            {
+                              \"type\" : \"digital\",
+                              \"quantity\": 1,
+                              \"total_amount\": 1000,
+                              \"unit_price\": 1000,
+                              \"name\" : \"Ticket\"
+                            }
+                          ], \"description\": \"MySaaS subscription\",
                       \"intended_use\": \"subscription\",
                       \"merchant_urls\": {
-                        \"confirmation\": \"string\"
-                      }"
+                        \"confirmation\": \"https://localhost:3000/payment_confirmation\"
+                      }
+                    }"
     response = http.request(request)
 
     #  if response.code === 200
@@ -121,14 +123,14 @@ class API::V1::PaymentController < ApplicationController
       request.body = "{
                         \"purchase_country\": \"SE\",
                         \"purchase_currency\" : \"sek\",
-                        \"order_amount\": 10,
+                        \"order_amount\": 1000,
                         \"order_lines\":
                           [
                             {
                               \"type\" : \"digital\",
                               \"quantity\": 1,
-                              \"total_amount\": 10,
-                              \"unit_price\": 10,
+                              \"total_amount\": 1000,
+                              \"unit_price\": 1000,
                               \"name\" : \"Ticket\"
                             }
                           ],
