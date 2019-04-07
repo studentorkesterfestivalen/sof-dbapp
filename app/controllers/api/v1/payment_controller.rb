@@ -6,13 +6,15 @@ class API::V1::PaymentController < ApplicationController
   def charge
           # Avoid sending the session_id to the front end,
       order = "hej"
+  #    if current_user.shopping_cart_count == 0
+  #      render :status => '200'
+  #    else
       created_charge = create_credit_session(order)
-
       return_copy = created_charge
       return_copy.delete("session_id")
       render :status => '200', :json => return_copy
     #Add
-    # end
+  #   end
   end
 
   def place_order
@@ -92,7 +94,7 @@ class API::V1::PaymentController < ApplicationController
                           ], \"description\": \"MySaaS subscription\",
                       \"intended_use\": \"subscription\",
                       \"merchant_urls\": {
-                        \"confirmation\": \"https://localhost:3000/payment_confirmation\"
+                        \"confirmation\": \"http://localhost:3000/shop/payment_confirmation\"
                       }
                     }"
     response = http.request(request)
@@ -120,7 +122,7 @@ class API::V1::PaymentController < ApplicationController
       # Base64::encode64 magically creates a \n for some weird reason? Use Base64::strict_encode64
       request["Authorization"] = 'Basic '+ Base64.strict_encode64(ENV['KLARNA_API_USERNAME']+':'+ENV['KLARNA_API_PASSWORD'])
       request["cache-control"] = 'no-cache'
-      request.body = "{
+      request.body ="{
                         \"purchase_country\": \"SE\",
                         \"purchase_currency\" : \"sek\",
                         \"order_amount\": 1000,
