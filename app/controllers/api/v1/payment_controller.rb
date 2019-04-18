@@ -1,7 +1,7 @@
 class API::V1::PaymentController < ApplicationController
   include ViewPermissionConcern
 
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   def charge
           # Avoid sending the session_id to the front end,
@@ -122,9 +122,10 @@ class API::V1::PaymentController < ApplicationController
       # Base64::encode64 magically creates a \n for some weird reason? Use Base64::strict_encode64
       request["Authorization"] = 'Basic '+ Base64.strict_encode64(ENV['KLARNA_API_USERNAME']+':'+ENV['KLARNA_API_PASSWORD'])
       request["cache-control"] = 'no-cache'
-      request.body ="{
+      request.body =" {
                         \"purchase_country\": \"SE\",
-                        \"purchase_currency\" : \"sek\",
+                        \"purchase_currency\": \"SEK\",
+                        \"locale\": \"se-SE\",
                         \"order_amount\": 1000,
                         \"order_lines\":
                           [
@@ -138,7 +139,21 @@ class API::V1::PaymentController < ApplicationController
                           ],
                           \"merchant_urls\": {},
                           \"disable_client_side_updates\": true,
-                          \"acquiring_channel\": \"IN_STORE\"
+                          \"acquiring_channel\": \"IN_STORE\",
+                          \"options\": {
+                            \"color_border\": \"#FF0000\",
+                            \"color_border_selected\": \"#FF0000\",
+                            \"color_button\": \"#FF0000\",
+                            \"color_button_text\": \"#FF0000\",
+
+                            \"color_checkbox_checkmark\": \"#FF0000\",
+                            \"color_details\": \"#FF0000\",
+                            \"color_header\": \"#FF0000\",
+                            \"color_link\": \"#FF0000\",
+                            \"color_text\": \"#FF0000\",
+                            \"color_text_secondary\": \"#FF0000\",
+                            \"radius_border\": \"5px\"
+                          }
                       }"
 
       response = http.request(request)
