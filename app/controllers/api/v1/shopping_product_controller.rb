@@ -11,15 +11,15 @@ class API::V1::ShoppingProductController < ApplicationController
         enabled_products = BaseProduct.order(:id).includes(:products).where('base_products.enabled': true, 'products.enabled': true)
         products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions and current_user.has_group_permission? x.required_group_permissions }
       end
+      products.each { |x| x.update_purchasable(current_user) }
     else
       products = BaseProduct.includes(:products).where(enabled: true, required_permissions: 0, required_group_permissions: 0)
     end
 
-    products.each { |x| x.update_purchasable(current_user) }
 
-    render :json => products, methods: [:purchasable], include: {
+    render :json => products, methods: [], include: {
         products: {
-            methods: [:actual_cost, :purchasable]
+            methods: [:actual_cost]
         }
     }
   end

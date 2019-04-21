@@ -3,21 +3,21 @@ class API::V1::ShoppingCartController < ApplicationController
 
   def show
     render json: current_user.cart,
-           include: [
-               cart_items: {
-                   include: [
-                       product: {
-                           include: [
-                               :base_product
-                           ],
-                           methods: [
-                               :actual_cost
-                           ]
-                       }
-                   ]
-               }
-           ],
-           methods: [:rebate, :funkis_rebate]
+      include: [
+        cart_items: {
+          include: [
+            product: {
+              include: [
+                :base_product
+              ],
+              methods: [
+                :actual_cost
+              ]
+            }
+          ]
+        }
+    ],
+    methods: [:rebate, :funkis_rebate]
   end
 
   def clear
