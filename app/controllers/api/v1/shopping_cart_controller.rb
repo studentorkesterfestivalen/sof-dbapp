@@ -46,12 +46,30 @@ class API::V1::ShoppingCartController < ApplicationController
     end
   end
 
+  def set_cart
+    current_user.cart.empty!
+
+    for item_param in cart_params[:items]
+      item = CartItem.new(item_param)
+      item.save!
+      current_user.cart.cart_items.push(item)
+      current_user.cart.touch
+    end
+
+  end
+
   private
 
   def item_params
     params.require(:item).permit(
       :product_id,
       :amount
+    )
+  end
+
+  def cart_params
+    params.require(:cart).permit(
+      items: [:product_id, :amount]
     )
   end
 
