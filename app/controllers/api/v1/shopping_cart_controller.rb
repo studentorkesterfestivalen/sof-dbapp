@@ -9,7 +9,9 @@ class API::V1::ShoppingCartController < ApplicationController
   end
 
   def clear
-    current_user.cart.empty!
+    current_user.cart.cart_items.each do |item|
+      item.destroy!
+    end
 
     head :no_content
   end
@@ -47,7 +49,7 @@ class API::V1::ShoppingCartController < ApplicationController
   end
 
   def set_cart
-    current_user.cart.empty!
+    clear()
 
     for item_param in cart_params[:items]
       item = CartItem.new(item_param)
