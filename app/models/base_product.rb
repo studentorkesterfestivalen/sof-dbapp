@@ -3,8 +3,6 @@ class BaseProduct < ApplicationRecord
 
   accepts_nested_attributes_for :products, allow_destroy: true
 
-  attr_reader :purchasable
-
   def update_purchasable(user)
     @purchasable = is_purchasable?(user, user.cart.cart_items)
     products.each { |x| x.update_purchasable(user) }
@@ -24,6 +22,10 @@ class BaseProduct < ApplicationRecord
   end
 
   def has_sufficient_permissions?(user)
-    user.has_admin_permission?(required_permissions) && user.has_group_permission?(required_group_permissions)
+    if user.nil?
+      required_group_permissions == 0
+    else
+      user.has_admin_permission?(required_permissions) && user.has_group_permission?(required_group_permissions)
+    end
   end
 end

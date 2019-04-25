@@ -1,8 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :base_product, required: false
 
-  attr_reader :purchasable
-
   def actual_cost
     cost || base_product.cost
   end
@@ -41,4 +39,5 @@ class Product < ApplicationRecord
   def amount_bought
     OrderItem.where(product_id: id).count
   end
+
 end
