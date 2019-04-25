@@ -70,12 +70,13 @@ class Cart < ApplicationRecord
     touch
   end
 
-  def create_order
+  def create_order(order_id)
     order = Order.new
     order.user = user
     order.rebate = rebate
     order.order_items = cart_items.map { |x| create_order_item(x) }
     order.update_funkis_rebate
+    order.klarna_order_id = order_id
     order
   end
 

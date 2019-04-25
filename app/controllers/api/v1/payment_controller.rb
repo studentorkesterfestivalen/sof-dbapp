@@ -2,6 +2,7 @@ class API::V1::PaymentController < ApplicationController
   include ViewPermissionConcern
 
   before_action :authenticate_user!
+  require 'json'
 
   def update_cart(order)
 
@@ -31,28 +32,43 @@ class API::V1::PaymentController < ApplicationController
       # render :status => '200', :json => return_copy
     #Add
   #   end
-  #  if order.nil?
-
-  #    render :status => '400', :json => {'message': "Cart is empty"}
-    #else
-      response = create_credit_session(items)
-      if response.code == "200"
-        parsed_body = JSON.parse(response.body)
-        #print "This is the session_id: " + parsed_body['session_id']
-        render :status => '200', :json => response.body
+      if items.empty?
+        render :status => '400', :json => {'message': "Cart is empty"}
       else
-        print JSON.parse(response.body)
-        render :status => '400', :json => {'message': "Could not create/fetch session"}
+        response = create_credit_session(items)
+        if response.code == "200"
+          parsed_body = JSON.parse(response.body)
+          #print "This is the session_id: " + parsed_body['session_id']
+          render :status => '200', :json => response.body
+        else
+          print JSON.parse(response.body)
+          render :status => '400', :json => {'message': "Could not create/fetch session"}
+        end
       end
-  #  end
   end
 
 
 
   def place_order
     items = generate_order_lines
-    res = create_order(params[:auth_token], items)
-    render :status => '200', :json => res['redirect_url']
+    if items.empty?
+        render :status => '400', :json => {'message': "Cart is empty"}
+    else
+      res = create_order(params[:auth_token], items)
+      if res.code == '200'
+        res = JSON.parse(res.body)
+        order = current_user.cart.create_order(res['order_id'])
+        render :status => '200', :json => res['redirect_url']
+      elsif res.code == '400'
+        render :status => '400', :json => {'message' : "We were unable to create an order with the provided data. Some field constraint was violated. "}
+      elsif res.code == '403'
+        render :status => '403', :json => {'message': "You were not authorized to execute this operation."}
+      elsif res.code == '404'
+        render :status => '404', :json => {'message': "The authorization does not exist."}
+      elsif res.code == '409'
+        render :status => '409', :json => {'message': "The data in the request does not match the session for the authorization."}
+      end
+    end
 # unless current_user.shopping_cart_count == 0
     #   order = current_user.cart.create_order
     #   p "dead?"
@@ -80,7 +96,7 @@ class API::V1::PaymentController < ApplicationController
 
   require 'uri'
   require 'net/http'
-  require 'json'
+
 
   # Old stripe function
   # def create_charge!(order)
@@ -98,13 +114,20 @@ class API::V1::PaymentController < ApplicationController
   # end
 
   def create_order(auth_token, items)
+
     total_amount = 0
     items.each do|order_line|
       total_amount += order_line[:total_amount]
     end
 
+    lang = nil
+    if I18n.locale.to_s == 'sv'
+      lang = "sv-SE"
+    else
+      lang = "en-GB"
+    end
+
     url = URI(ENV['KLARNA_API_ENDPOINT'] + "/payments/v1/authorizations/"+auth_token+"/order")
-    p url
     http = Net::HTTP.new(url.host, url.port)
     # Required because KLARNA API only accepts https requests
     http.use_ssl = true
@@ -116,24 +139,23 @@ class API::V1::PaymentController < ApplicationController
     request.body = "{
                       \"purchase_country\": \"SE\",
                       \"purchase_currency\": \"SEK\",
-                      \"locale\": \"sv-SE\",
-
+                      \"locale\": \"" + lang + "\",
                       \"order_amount\": "+total_amount.to_s() + ",
                         \"order_lines\":
                         "+items.to_json+
                           ",
                       \"merchant_urls\": {
-                        \"confirmation\": \"http://localhost:3000/shop/payment_confirmation\"
+                        \"confirmation\": \"" + ENV['KLARNA_PAYMENT_REDIRECT'] + "\"
                       }
                     }"
-    response = http.request(request)
 
+    http.request(request)
     #  if response.code === 200
     #  Add error checks!
-    result = JSON.parse(response.body)
-    puts result
+    # result = JSON.parse(response.body)
+    # puts result
 
-    return result
+    # return result
   end
 
   def generate_order_lines
@@ -142,11 +164,19 @@ class API::V1::PaymentController < ApplicationController
     unless current_user.cart.cart_items.empty?
       # current_user.cart.cart_itemsprint "\nNot nil\n\n"
       result = current_user.cart.cart_items.map{|cart_item|
+        item = {}
         prod = Product.find_by(id: cart_item.product_id)
-        item = prod.attributes.slice('kind')
-        item['kind'] = prod.attributes.slice('name') + item['kind']
-        item[:unit_price] = prod.actual_cost
-        item[:amount] = cart_item.amount
+        base_prod = BaseProduct.find_by(id: prod.base_product_id)
+        # Some products have no name, add base_product name just in case
+        unless prod.kind.nil?
+          item[:name] = base_prod.name + " " + prod.kind
+        else
+          item[:name] = base_prod.name
+        end
+        item[:type] = 'digital'
+        item[:unit_price] = prod.actual_cost * 100
+        item[:quantity] = cart_item.amount
+        item[:total_amount] = item[:quantity] * item [:unit_price]
         item
       }
 
@@ -166,16 +196,17 @@ class API::V1::PaymentController < ApplicationController
       #   \"name\" : \"Rebate\"
       # }
     #  result = JSON.parse(result)
-      result.each do |order_line|
-        temp_data = {}
-        temp_data[:name] = order_line['kind']
-        temp_data[:unit_price] = order_line[:unit_price] * 100 #order_line['cost']
-        temp_data[:type] = "digital"
-        temp_data[:quantity] = order_line[:amount]
-        temp_data[:total_amount] = temp_data[:quantity] * temp_data[:unit_price]
-        json_data.append(temp_data)
-      end
-      print json_data.to_json
+      # result.each do |order_line|
+      #   temp_data = {}
+      #   temp_data[:name] = order_line[:name]
+      #   temp_data[:unit_price] = order_line[:unit_price]#order_line['cost']
+      #   temp_data[:type] = "digital"
+      #   temp_data[:quantity] = order_line[:amount]
+      #   temp_data[:total_amount] = temp_data[:quantity] * temp_data[:unit_price]
+      #   json_data.append(temp_data)
+      # end
+      # print result.to_json
+      json_data = result
       # json_data = result
 
   #    json_data = current_user.cart.cart_items do |cart_item|
@@ -188,11 +219,9 @@ class API::V1::PaymentController < ApplicationController
 
   def create_credit_session(items)
 
-
-
       #print items
       total_amount = 0
-      items.each do|order_line|
+      items.each do |order_line|
         total_amount += order_line[:total_amount]
       end
       # total_amount = total_amount.to_s
@@ -202,6 +231,16 @@ class API::V1::PaymentController < ApplicationController
       # Required because KLARNA API only accepts https requests
       http.use_ssl = true
       request = Net::HTTP::Post.new(url)
+
+      print "\n\n\nYour current language is: " + I18n.locale.to_s + "\n\n\n"
+      lang = nil
+      if I18n.locale.to_s == 'sv'
+        lang = "sv-SE"
+      else
+        lang = "en-GB"
+      end
+      print "\n\nThis is the language: " + lang + "\n\n"
+
       request["Content-Type"] = 'application/json'
       # Base64::encode64 magically creates a \n for some weird reason? Use Base64::strict_encode64
       request["Authorization"] = 'Basic '+ Base64.strict_encode64(ENV['KLARNA_API_USERNAME']+':'+ENV['KLARNA_API_PASSWORD'])
@@ -209,28 +248,15 @@ class API::V1::PaymentController < ApplicationController
       request.body =" {
                         \"purchase_country\": \"SE\",
                         \"purchase_currency\": \"SEK\",
-                        \"locale\": \"se-SE\",
+                        \"locale\": \""+lang+"\",
                         \"order_amount\":" + total_amount.to_s() + ",
                         \"order_lines\":
                           "+items.to_json+
                           ",
                           \"merchant_urls\": {},
                           \"disable_client_side_updates\": true,
-                          \"acquiring_channel\": \"IN_STORE\",
-                          \"options\": {
-                            \"color_border\": \"#FF0000\",
-                            \"color_border_selected\": \"#FF0000\",
-                            \"color_button\": \"#FF0000\",
-                            \"color_button_text\": \"#FF0000\",
+                          \"acquiring_channel\": \"IN_STORE\"
 
-                            \"color_checkbox_checkmark\": \"#FF0000\",
-                            \"color_details\": \"#FF0000\",
-                            \"color_header\": \"#FF0000\",
-                            \"color_link\": \"#FF0000\",
-                            \"color_text\": \"#FF0000\",
-                            \"color_text_secondary\": \"#FF0000\",
-                            \"radius_border\": \"5px\"
-                          }
                       }"
 
       http.request(request)

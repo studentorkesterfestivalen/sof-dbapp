@@ -12,9 +12,9 @@ class Order < ApplicationRecord
     order_items.sum { |x| x.cost * x.amount } - rebate - funkis_rebate
   end
 
-  def complete!(stripe_charge)
-    self.payment_method = 'Stripe'
-    self.payment_data = stripe_charge.id
+  def complete!(klarna_charge)
+    self.payment_method = 'Klarna'
+    self.payment_data = klarna_charge.id
     save_completed_order!
   end
 
