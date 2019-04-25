@@ -63,8 +63,10 @@ class Cart < ApplicationRecord
     [amount, user.rebate_balance].min
   end
 
-  def empty!
-    cart_items.delete_all
+  def clear!
+    cart_items.each do |item|
+      item.destroy!
+    end
     touch
   end
 

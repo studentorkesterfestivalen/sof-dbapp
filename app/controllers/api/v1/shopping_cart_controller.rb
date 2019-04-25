@@ -9,11 +9,7 @@ class API::V1::ShoppingCartController < ApplicationController
   end
 
   def clear
-    current_user.cart.cart_items.each do |item|
-      item.destroy!
-    end
-
-    head :no_content
+    current_user.cart.clear!
   end
 
   def add_item
