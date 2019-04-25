@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resources :users do
         get 'search', action: 'find_ids', on: :collection
         get 'get_user', action: 'get_user', on: :collection
+        get 'get_user_uuid', action: 'get_user_uuid', on: :collection
       end
 
       resources :cortege
@@ -63,6 +64,7 @@ Rails.application.routes.draw do
 
       scope '/cart' do
         get '/', to: 'shopping_cart#show'
+        put '/', to: 'shopping_cart#set_cart'
         delete '/', to: 'shopping_cart#clear'
         put '/item', to: 'shopping_cart#add_item'
         delete '/item/', to: 'shopping_cart#delete_item'

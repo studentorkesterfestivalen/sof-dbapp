@@ -259,6 +259,10 @@ class API::V1::UsersController < ApplicationController
     end
   end
 
+  def get_user_uuid
+    render json: current_user, :only => ['uuid']
+  end
+
   private
 
   def user_params

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190422082552) do
+ActiveRecord::Schema.define(version: 20190425103754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 20190422082552) do
     t.integer  "cost",         default: 0,     null: false
     t.boolean  "collected",    default: false, null: false
     t.datetime "collected_at"
+    t.integer  "amount"
     t.index ["gifted_by_id"], name: "index_order_items_on_gifted_by_id", using: :btree
     t.index ["order_id"], name: "index_order_items_on_order_id", using: :btree
     t.index ["owner_id"], name: "index_order_items_on_owner_id", using: :btree
