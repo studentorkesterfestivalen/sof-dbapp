@@ -10,12 +10,12 @@ Kvittot sammanställdes <%= Time.now.strftime('%Y-%m-%d %H:%M:%S') %>.
 <% @order.order_items.each do |item| %>
     --
     <% if item.product.kind.blank? %>
-        <%= item.product.base_product.name %>
+        <%= "#{item.amount}x #{item.product.base_product.name}" %>
     <% else %>
-        <%= "#{item.product.base_product.name} (#{item.product.kind})" %>
+        <%= "#{item.amount}x #{item.product.base_product.name} (#{item.product.kind})" %>
     <% end %>
 
-    <%= "#{number_with_delimiter(item.cost, delimiter: ' ')} SEK" %>
+    <%= "#{number_with_delimiter(item.cost * item.amount, delimiter: ' ')} SEK" %>
     --
 <% end %>
 

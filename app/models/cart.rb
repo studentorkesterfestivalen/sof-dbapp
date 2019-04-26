@@ -16,45 +16,45 @@ class Cart < ApplicationRecord
   }
 
   def rebate
-    if user.is_lintek_member
-      items = cart_items
-      given_lintek_rebates = Set.new
-      given_lintek_orchestra_rebates = Set.new
-
-      items.each do |item|
-        if item.product.base_product.name == 'Dagsbiljett' or item.product.base_product.name == 'Endagsbiljett' or item.product.base_product.name == 'Helhelgsbiljett'
-          if item.product.current_count(user, []) == 0
-            case item.product.kind
-              when 'Torsdag'
-                given_lintek_rebates << :thursday
-              when 'Fredag'
-                given_lintek_rebates << :friday
-              when 'Lördag'
-                given_lintek_rebates << :saturday
-              else
-                given_lintek_rebates << :weekend
-            end
-          end
-        elsif item.product.base_product.name == 'Orkesterbiljett'
-          if item.product.current_count(user, []) == 0
-            case item.product.kind
-              when 'Torsdag - Lördag'
-                given_lintek_orchestra_rebates << :thursday_saturday
-              when 'Fredag - Lördag'
-                given_lintek_orchestra_rebates << :friday_saturday
-              else
-                given_lintek_orchestra_rebates << :saturday
-            end
-          end
-        end
-
-
-      end
-
-      given_lintek_rebates.sum { |x| LINTEK_REBATES[x] } + given_lintek_orchestra_rebates.sum { |x| LINTEK_ORCHESTRA_REBATES[x] }
-    else
+    # if user.is_lintek_member
+    #   items = cart_items
+    #   given_lintek_rebates = Set.new
+    #   given_lintek_orchestra_rebates = Set.new
+    #
+    #   items.each do |item|
+    #     if item.product.base_product.name == 'Dagsbiljett' or item.product.base_product.name == 'Endagsbiljett' or item.product.base_product.name == 'Helhelgsbiljett'
+    #       if item.product.current_count(user, []) == 0
+    #         case item.product.kind
+    #           when 'Torsdag'
+    #             given_lintek_rebates << :thursday
+    #           when 'Fredag'
+    #             given_lintek_rebates << :friday
+    #           when 'Lördag'
+    #             given_lintek_rebates << :saturday
+    #           else
+    #             given_lintek_rebates << :weekend
+    #         end
+    #       end
+    #     elsif item.product.base_product.name == 'Orkesterbiljett'
+    #       if item.product.current_count(user, []) == 0
+    #         case item.product.kind
+    #           when 'Torsdag - Lördag'
+    #             given_lintek_orchestra_rebates << :thursday_saturday
+    #           when 'Fredag - Lördag'
+    #             given_lintek_orchestra_rebates << :friday_saturday
+    #           else
+    #             given_lintek_orchestra_rebates << :saturday
+    #         end
+    #       end
+    #     end
+    #
+    #
+    #   end
+    #
+    #   given_lintek_rebates.sum { |x| LINTEK_REBATES[x] } + given_lintek_orchestra_rebates.sum { |x| LINTEK_ORCHESTRA_REBATES[x] }
+    # else
       0
-    end
+    # end
   end
 
   def funkis_rebate
@@ -75,6 +75,8 @@ class Cart < ApplicationRecord
     order.user = user
     order.rebate = rebate
     order.order_items = cart_items.map { |x| create_order_item(x) }
+    p cart_items.as_json
+
     order.update_funkis_rebate
     order
   end
@@ -85,7 +87,7 @@ class Cart < ApplicationRecord
     item.user = user
     item.owner = user
     item.cost = cart_item.product.actual_cost
-    item.amount = cart_item.product.amount
+    item.amount = cart_item.amount
     item
   end
 end
