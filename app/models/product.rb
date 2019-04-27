@@ -1,6 +1,8 @@
 class Product < ApplicationRecord
   belongs_to :base_product, required: false
 
+  has_and_belongs_to_many :amount_constraints
+
   def actual_cost
     cost || base_product.cost
   end
