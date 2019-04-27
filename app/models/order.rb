@@ -15,6 +15,7 @@ class Order < ApplicationRecord
   def complete!(stripe_charge)
     self.payment_method = 'Stripe'
     self.payment_data = stripe_charge.id
+    self.receipt_url = stripe_charge.receipt_url
     save_completed_order!
   end
 
