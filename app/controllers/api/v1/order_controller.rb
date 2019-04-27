@@ -18,8 +18,7 @@
             },
             owner: {}
         }
-    },
-    receipt_url:
+    }
   }
   end
 end

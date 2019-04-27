@@ -38,9 +38,9 @@ class API::V1::PaymentController < ApplicationController
       base_prod = BaseProduct.find_by(id: prod.base_product_id)
        # Some products have no name, add base_product name just in case
        unless prod.kind.nil?
-         products += "\n" + item.amount.to_s + "x " + base_prod.name + "(" + prod.kind + ")" + "\n"
+         products += "" + item.amount.to_s + "x " + base_prod.name + "(" + prod.kind + ")" + "\n"
        else
-         products += "\n" + item.amount.to_s + "x " + base_prod.name + "\n"
+         products += "" + item.amount.to_s + "x " + base_prod.name + "\n"
       end
     end
 
