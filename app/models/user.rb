@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
     else
       # TODO: Refactor out this duration to a class variable
       if cart.updated_at < DateTime.now - 12.hours
-        cart.empty!
+        cart.clear!
       end
     end
 
