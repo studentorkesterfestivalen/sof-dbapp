@@ -4,12 +4,16 @@ class Order < ApplicationRecord
 
   ORE_PER_SEK = 100 # Öre per SEK
 
-  def amount_in_ore
-    ORE_PER_SEK * amount
+  def cost_in_ore
+    ORE_PER_SEK * cost
+  end
+
+  def cost
+    order_items.sum { |x| x.cost * x.amount } - rebate - funkis_rebate
   end
 
   def amount
-    order_items.sum { |x| x.cost * x.amount } - rebate - funkis_rebate
+    order_items.sum { |x| x.amount }
   end
 
   def complete!(stripe_charge)
@@ -42,7 +46,7 @@ class Order < ApplicationRecord
 
   def update_funkis_rebate
     self.funkis_rebate = 0
-    self.funkis_rebate = [amount, user.rebate_balance].min
+    self.funkis_rebate = [cost, user.rebate_balance].min
   end
 
   def save_completed_order!

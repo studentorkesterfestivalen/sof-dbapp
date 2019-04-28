@@ -6,7 +6,7 @@ class API::V1::PaymentController < ApplicationController
   def charge
     order = current_user.cart.create_order
     if order.purchasable? && !current_user.cart.cart_items.empty?
-      if order.amount == 0
+      if order.cost == 0
         order.complete_free_checkout!
       else
         created_charge = create_charge!(order)
@@ -46,7 +46,7 @@ class API::V1::PaymentController < ApplicationController
 
     Stripe::Charge.create(
         :customer => customer.id,
-        :amount => order.amount_in_ore,
+        :amount => order.cost_in_ore,
         :description => products,
         :currency => 'sek',
     )
