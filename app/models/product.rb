@@ -45,6 +45,7 @@ class Product < ApplicationRecord
       smallest_amount = max_num_available - amount_bought
     end
 
+    p self
     amount_constraints.each do |constraint|
       amt = constraint.amount_left
       if(smallest_amount == -1 || amt < smallest_amount)
@@ -52,12 +53,11 @@ class Product < ApplicationRecord
       end
     end
 
-    p self
-    smallest_amount - given_out_amount
+    smallest_amount
   end
 
   def amount_bought
-    OrderItem.where(product_id: id).sum{ |prod| prod.amount } 
+    OrderItem.where(product_id: id).sum{ |prod| prod.amount } + given_out_amount
   end
 
 end
