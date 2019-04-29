@@ -94,35 +94,59 @@ if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
     cost: 5000
   )
 
-  weekend_ticket.products.push(
-    Product.create
+  weekend_prod = Product.create(
+    max_num_available: 5
   )
+  weekend_ticket.products.push(weekend_prod)
 
   single_day_ticket = BaseProduct.create(
     id: 2,
     name: 'Dagsbiljett',
     description: 'En biljett som räcker en dag',
-    cost: 0
+    cost: 500
   )
 
-  single_day_ticket.products.push(
-    Product.create(
-      kind: 'Torsdag'
-    )
+  thursday = Product.create(
+    kind: 'Torsdag',
+    max_num_available: 5
   )
 
-  single_day_ticket.products.push(
-    Product.create(
-      kind: 'Fredag',
-      cost: 1000
-    )
+  single_day_ticket.products.push(thursday)
+
+  friday = Product.create(
+    kind: 'Fredag',
+    max_num_available: 10,
+    cost: 1000
   )
 
-  single_day_ticket.products.push(
-    Product.create(
-      kind: 'Lördag'
-    )
+  single_day_ticket.products.push(friday)
+
+  saturday = Product.create(
+    kind: 'Lördag'
   )
+  single_day_ticket.products.push(saturday)
+
+  thurs_constraint = AmountConstraint.create(
+    amount: 5
+  )
+
+  fri_constraint = AmountConstraint.create(
+    amount: 10
+   )
+
+  sat_constraint = AmountConstraint.create(
+    amount: 20
+  )
+
+  thursday.amount_constraints << thurs_constraint
+  friday.amount_constraints  << fri_constraint
+  saturday.amount_constraints  << sat_constraint
+
+  weekend_prod.amount_constraints << thurs_constraint
+  weekend_prod.amount_constraints  << fri_constraint
+  weekend_prod.amount_constraints  << sat_constraint
+
+
 end
 
 funkis_categories = [
