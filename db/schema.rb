@@ -297,6 +297,7 @@ ActiveRecord::Schema.define(version: 20190429123030) do
     t.integer  "rebate",         default: 0,     null: false
     t.integer  "funkis_rebate",  default: 0,     null: false
     t.boolean  "receipt_sent",   default: false, null: false
+    t.string   "receipt_url"
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
