@@ -4,7 +4,7 @@ class AmountConstraint < ApplicationRecord
   def amount_left
     amount_left = amount
     products.each do |prod|
-      amt -= prod.amount_bought
+      amount_left -= prod.amount_bought
     end
 
     amount_left

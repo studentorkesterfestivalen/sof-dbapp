@@ -52,6 +52,7 @@ class Product < ApplicationRecord
       end
     end
 
+    p self
     smallest_amount - given_out_amount
   end
 
