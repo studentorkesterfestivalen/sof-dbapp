@@ -52,7 +52,7 @@ class Product < ApplicationRecord
       end
     end
 
-    smallest_amount
+    smallest_amount - amount_given_out
   end
 
   def amount_bought
