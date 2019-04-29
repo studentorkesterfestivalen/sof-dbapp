@@ -114,7 +114,7 @@ if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
   single_day_ticket.products.push(
     Product.create(
       kind: 'Fredag',
-      cost: 1000
+      cost: 1
     )
   )
 
