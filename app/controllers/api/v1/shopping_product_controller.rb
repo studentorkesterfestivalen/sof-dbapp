@@ -18,9 +18,9 @@ class API::V1::ShoppingProductController < ApplicationController
 
 
     render :json => products, methods: [], include: {
-        products: {
-            methods: [:actual_cost]
-        }
+      products: {
+        methods: [:actual_cost, :amount_left]
+      }
     }
   end
 

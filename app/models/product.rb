@@ -25,13 +25,14 @@ class Product < ApplicationRecord
   end
 
   def below_global_limit?(additional_items)
-    if max_num_available == 0
-      true
-    else
-      current_count = additional_items.to_a.count { |x| x.product.id == id }
-      current_count += OrderItem.where(product_id: id).count
-      current_count < max_num_available
+    current_count = 0
+    additional_items.to_a.each do |item|
+      if item.product.id == id
+        current_count += item.amount
+      end
     end
+    current_count += amount_bought
+    current_count < amount_left
   end
 
   def current_count(user, additional_items)
