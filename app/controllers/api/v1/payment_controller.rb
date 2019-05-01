@@ -14,10 +14,10 @@ class API::V1::PaymentController < ApplicationController
         order.complete!(created_charge)
       end
       current_user.cart.clear!
-      render :status => 200, :json => {'message': "Successfully completed order"}
+      render :status => 200, :json => "Successfully completed order"
       # redirect_to api_v1_order_url(order)
     else
-      render :status => 406, :json => {'message': "Empty cart or items that can't be purchased"}
+      render :status => 406, :json => "Empty cart or items that can't be purchased"
       #head :not_acceptable
     end
   rescue Stripe::CardError => e
