@@ -70,6 +70,11 @@ class Cart < ApplicationRecord
     touch
   end
 
+  def set_valid_through!(valid_to)
+    self.valid_through = valid_to
+    self.save!
+  end
+
   def create_order
     order = Order.new
     order.user = user

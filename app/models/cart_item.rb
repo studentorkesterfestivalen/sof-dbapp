@@ -1,5 +1,6 @@
 class CartItem < ApplicationRecord
   belongs_to :product
+  belongs_to :cart
 
   validate :has_existing_product
 
@@ -16,6 +17,10 @@ class CartItem < ApplicationRecord
   def set_amount amt
     self.amount = amt
     self.save!
+  end
+
+  def is_reserved
+    return cart.valid_through > DateTime.now
   end
 
   private

@@ -54,6 +54,8 @@ class API::V1::ShoppingCartController < ApplicationController
       current_user.cart.touch
     end
 
+    current_user.cart.set_valid_through! 5.minutes.from_now
+
   end
 
   private
