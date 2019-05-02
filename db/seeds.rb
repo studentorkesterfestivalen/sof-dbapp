@@ -87,7 +87,7 @@ if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
   BaseProduct.delete_all
   Product.delete_all
 
-  
+
   weekend_ticket = BaseProduct.create(
     id: 1,
     name: 'Helhelgsbiljett',
