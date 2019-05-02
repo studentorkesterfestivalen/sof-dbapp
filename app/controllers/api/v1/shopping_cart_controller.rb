@@ -57,13 +57,12 @@ class API::V1::ShoppingCartController < ApplicationController
     if purchasable
       for item_params in cart_params[:items]
         item = CartItem.new(item_params)
-        item.save!
         current_user.cart.cart_items.push(item)
         current_user.cart.touch
       end
 
       current_user.cart.set_valid_through! 5.minutes.from_now
-    else 
+    else
       render :status => 406, :json => 'Items are sold out' #TODO: add locale
     end
   end
@@ -81,7 +80,7 @@ class API::V1::ShoppingCartController < ApplicationController
     else
       render :status => 406, :json => 'Rabattkoden har gått ut' #TODO: add locale
     end
-    
+
   end
 
   private
