@@ -5,7 +5,7 @@ class API::V1::PaymentController < ApplicationController
 
   def charge
     order = current_user.cart.create_order
-    if order.purchasable? && !current_user.cart.cart_items.empty?
+    if !current_user.cart.cart_items.empty? && order.purchasable?
       if order.cost == 0
         order.complete_free_checkout!
       else
@@ -14,14 +14,25 @@ class API::V1::PaymentController < ApplicationController
         order.complete!(created_charge)
       end
       current_user.cart.clear!
-      render :status => 200, :json => {'message': "Successfully completed order"}
+      render :status => 200, :json => "Successfully completed order"
       # redirect_to api_v1_order_url(order)
     else
-      render :status => 406, :json => {'message': "Empty cart or items that can't be purchased"}
+      render :status => 406, :json => "Empty cart or items that can't be purchased"
       #head :not_acceptable
     end
   rescue Stripe::CardError => e
-    raise e.message
+    render :status => 400, :json => e
+  rescue Stripe::RateLimitError => e
+    render :status => 400, :json => e
+  rescue Stripe::InvalidRequestError => e
+    render :status => 400, :json => e
+  rescue Stripe::AuthenticationError => e
+    render :status => 400, :json => e
+  rescue Stripe::APIConnectionError => e
+    render :status => 400, :json => e
+  rescue Stripe::StripeError => e
+    render :status => 400, :json => e
+
   end
 
   private
@@ -50,5 +61,6 @@ class API::V1::PaymentController < ApplicationController
         :description => products,
         :currency => 'sek',
     )
+
   end
 end
