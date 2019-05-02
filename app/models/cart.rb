@@ -70,6 +70,8 @@ class Cart < ApplicationRecord
     cart_items.each do |item|
       item.destroy!
     end
+    self.discount_code = nil
+    self.save!
     touch
   end
 

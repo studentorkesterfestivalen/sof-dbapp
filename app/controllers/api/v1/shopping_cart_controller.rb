@@ -71,7 +71,7 @@ class API::V1::ShoppingCartController < ApplicationController
   def apply_discount_code
     code = DiscountCode.find_by code: code_params[:code]
     if code.nil?
-      render :status => 406, :json => 'Discount code was not found' #TODO: add locale
+      render :status => 406, :json => 'Rabattkoden hittades inte' #TODO: add locale
     elsif code.usable?(current_user.cart)
       current_user.cart.discount_code = code;
       current_user.cart.save!
@@ -79,7 +79,7 @@ class API::V1::ShoppingCartController < ApplicationController
 
       render :status => 200, :json => code.discount
     else
-      render :status => 406, :json => 'Discount code has expired' #TODO: add locale
+      render :status => 406, :json => 'Rabattkoden har gått ut' #TODO: add locale
     end
     
   end
