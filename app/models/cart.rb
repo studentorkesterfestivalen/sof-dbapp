@@ -1,5 +1,8 @@
 class Cart < ApplicationRecord
   belongs_to :user
+
+  belongs_to :discount_code, optional: true
+
   has_many :cart_items
 
   LINTEK_REBATES = {

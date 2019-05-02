@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190501224012) do
+ActiveRecord::Schema.define(version: 20190502014317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,9 +73,10 @@ ActiveRecord::Schema.define(version: 20190501224012) do
 
   create_table "carts", force: :cascade do |t|
     t.integer  "user_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.datetime "valid_through"
+    t.integer  "discount_code_id"
     t.index ["user_id"], name: "index_carts_on_user_id", using: :btree
   end
 
@@ -134,6 +135,16 @@ ActiveRecord::Schema.define(version: 20190501224012) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "discount_codes", force: :cascade do |t|
+    t.integer  "discount"
+    t.integer  "uses"
+    t.integer  "product_id"
+    t.string :code, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_discount_codes_on_product_id", using: :btree
   end
 
   create_table "faq_groups", force: :cascade do |t|
@@ -305,15 +316,16 @@ ActiveRecord::Schema.define(version: 20190501224012) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string   "payment_method",                 null: false
+    t.string   "payment_method",                   null: false
     t.string   "payment_data"
     t.integer  "user_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "rebate",         default: 0,     null: false
-    t.integer  "funkis_rebate",  default: 0,     null: false
-    t.boolean  "receipt_sent",   default: false, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "rebate",           default: 0,     null: false
+    t.integer  "funkis_rebate",    default: 0,     null: false
+    t.boolean  "receipt_sent",     default: false, null: false
     t.string   "receipt_url"
+    t.integer  "discount_code_id"
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
@@ -387,4 +399,5 @@ ActiveRecord::Schema.define(version: 20190501224012) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
   end
 
+  add_foreign_key "discount_codes", "products"
 end

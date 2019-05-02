@@ -1,6 +1,7 @@
 class Order < ApplicationRecord
   has_many :order_items
   belongs_to :user
+  belongs_to :discount_code, optional: true
 
   ORE_PER_SEK = 100 # Öre per SEK
 

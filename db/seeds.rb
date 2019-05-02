@@ -146,6 +146,12 @@ if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
   weekend_prod.amount_constraints  << fri_constraint
   weekend_prod.amount_constraints  << sat_constraint
 
+  DiscountCode.create(
+    uses: 1,
+    discount: 100,
+    product_id: weekend_prod.id,
+    code: 'test'
+  )
 
 end
 
