@@ -80,7 +80,6 @@ class Cart < ApplicationRecord
     order.user = user
     order.rebate = rebate
     order.order_items = cart_items.map { |x| create_order_item(x) }
-    p cart_items.as_json
 
     order.update_funkis_rebate
     order

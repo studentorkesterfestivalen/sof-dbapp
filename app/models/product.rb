@@ -18,6 +18,7 @@ class Product < ApplicationRecord
     enabled && below_user_limit?(user, additional_items) && below_global_limit?(user, additional_items)
   end
 
+  # This is most likely broken, but we have no purchase limit, so always true
   def below_user_limit?(user, additional_items)
     if purchase_limit == 0
       true
@@ -29,9 +30,15 @@ class Product < ApplicationRecord
 
   def below_global_limit?(user, additional_items)
     current_count = 0
-    additional_items.to_a.each do |item|
-      if item.product.id == id
-        current_count += item.amount
+    p '------------------------------'
+    p additional_items
+    if additional_items.is_a?(Integer)
+      current_count += additional_items
+    else
+      additional_items.to_a.each do |item|
+        if item.product.id == id
+          current_count += item.amount
+        end
       end
     end
     current_count += amount_bought
@@ -76,6 +83,5 @@ class Product < ApplicationRecord
   def amount_bought
     OrderItem.where(product_id: id).sum{ |prod| prod.amount } + given_out_amount
   end
-
 
 end

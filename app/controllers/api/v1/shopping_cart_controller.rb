@@ -47,15 +47,25 @@ class API::V1::ShoppingCartController < ApplicationController
   def set_cart
     clear()
 
-    for item_param in cart_params[:items]
-      item = CartItem.new(item_param)
-      item.save!
-      current_user.cart.cart_items.push(item)
-      current_user.cart.touch
+    purchasable = true
+
+    for item_params in cart_params[:items]
+      prod = Product.find_by id: item_params[:product_id]
+      purchasable &&= prod.is_purchasable?(current_user, item_params[:amount])
     end
 
-    current_user.cart.set_valid_through! 5.minutes.from_now
+    if purchasable
+      for item_params in cart_params[:items]
+        item = CartItem.new(item_params)
+        item.save!
+        current_user.cart.cart_items.push(item)
+        current_user.cart.touch
+      end
 
+      current_user.cart.set_valid_through! 5.minutes.from_now
+    else 
+      render :status => 406, :json => 'Items are sold out'
+    end
   end
 
   private
