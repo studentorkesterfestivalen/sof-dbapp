@@ -4,6 +4,8 @@ class Product < ApplicationRecord
   has_many :cart_items
   has_and_belongs_to_many :amount_constraints
 
+  attr_accessor :current_user
+
   def actual_cost
     cost || base_product.cost
   end
@@ -13,7 +15,7 @@ class Product < ApplicationRecord
   end
 
   def is_purchasable?(user, additional_items)
-    enabled && below_user_limit?(user, additional_items) && below_global_limit?(additional_items)
+    enabled && below_user_limit?(user, additional_items) && below_global_limit?(user, additional_items)
   end
 
   def below_user_limit?(user, additional_items)
@@ -25,7 +27,7 @@ class Product < ApplicationRecord
     end
   end
 
-  def below_global_limit?(additional_items)
+  def below_global_limit?(user, additional_items)
     current_count = 0
     additional_items.to_a.each do |item|
       if item.product.id == id
@@ -33,16 +35,20 @@ class Product < ApplicationRecord
       end
     end
     current_count += amount_bought
-    current_count < amount_left
+    current_count < amount_left(user)
   end
 
   def current_count(user, additional_items)
     (user.purchased_items + additional_items).count { |x| x.product.id == id }
   end
 
-  def amount_reserved
+  def amount_reserved(user)
     reserved_amt = 0
-    reserved_items = cart_items.select{|c_item| c_item.is_reserved}
+    if user.nil?
+      reserved_items = cart_items.select{|c_item| c_item.is_reserved}
+    else
+      reserved_items = cart_items.select{|c_item| c_item.is_reserved && c_item.cart.user != user}
+    end
     reserved_items.each do |item|
       reserved_amt += item.amount
     end
@@ -50,22 +56,17 @@ class Product < ApplicationRecord
     reserved_amt
   end
 
-  def amount_left
+  def amount_left(user=nil)
+    user ||= current_user
     smallest_amount = -1
     if max_num_available > 0
-      smallest_amount = max_num_available - amount_bought - amount_reserved
+      smallest_amount = max_num_available - amount_bought - amount_reserved(user)
     end
 
     amount_constraints.each do |constraint|
-      p 'constr'
-      p constraint
-      p constraint.amount_left
-      p amount_reserved
-      p '---DONE---'
-      amt = constraint.amount_left - amount_reserved
+      amt = constraint.amount_left - amount_reserved(user)
       if(smallest_amount == -1 || amt < smallest_amount)
         smallest_amount = amt
-        p "smallest amount now " + amt.to_s
       end
     end
 
