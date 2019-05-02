@@ -68,6 +68,7 @@ Rails.application.routes.draw do
         delete '/', to: 'shopping_cart#clear'
         put '/item', to: 'shopping_cart#add_item'
         delete '/item/', to: 'shopping_cart#delete_item'
+        put '/discount', to: 'shopping_cart#apply_discount_code'
       end
 
       scope '/store' do

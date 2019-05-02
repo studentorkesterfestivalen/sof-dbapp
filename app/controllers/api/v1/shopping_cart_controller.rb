@@ -64,8 +64,24 @@ class API::V1::ShoppingCartController < ApplicationController
 
       current_user.cart.set_valid_through! 5.minutes.from_now
     else 
-      render :status => 406, :json => 'Items are sold out'
+      render :status => 406, :json => 'Items are sold out' #TODO: add locale
     end
+  end
+
+  def apply_discount_code
+    code = DiscountCode.find_by code: code_params[:code]
+    if code.nil?
+      render :status => 406, :json => 'Discount code was not found' #TODO: add locale
+    elsif code.usable?(current_user.cart)
+      current_user.cart.discount_code = code;
+      current_user.cart.save!
+      current_user.cart.touch
+
+      render :status => 200, :json => code.discount
+    else
+      render :status => 406, :json => 'Discount code has expired' #TODO: add locale
+    end
+    
   end
 
   private
@@ -80,6 +96,12 @@ class API::V1::ShoppingCartController < ApplicationController
   def cart_params
     params.require(:cart).permit(
       items: [:product_id, :amount]
+    )
+  end
+
+  def code_params
+    params.require(:discount).permit(
+      :code
     )
   end
 
