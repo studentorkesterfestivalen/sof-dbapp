@@ -1,5 +1,6 @@
 class API::V1::OrchestraSignupController < ApplicationController
   LATE_REGISTRATION_START_DATE = Time.utc(2019, 3, 18)
+  LAST_REGISTRATION_DATE = Time.utc(2019, 5, 1)
   include ViewPermissionConcern
 
   before_action :authenticate_user!
@@ -23,6 +24,9 @@ class API::V1::OrchestraSignupController < ApplicationController
     # unless current_user.orchestra_signup.nil?
     #   raise 'Cannot sign up for another orchestra'
     # end
+    if Time.current > LAST_REGISTRATION_DATE
+      render :status => '406', :json => {:message => 'Registreringen har stängt'} and return
+    end
     if !current_user.confirmed?
       render :status => '403', :json => {:message => I18n.t('errors.orchestra.unverified')} and return
     end
