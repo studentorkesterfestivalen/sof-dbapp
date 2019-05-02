@@ -35,7 +35,7 @@ class Product < ApplicationRecord
       end
     end
     current_count += amount_bought
-    current_count < amount_left(user)
+    current_count <= amount_left(user)
   end
 
   def current_count(user, additional_items)
