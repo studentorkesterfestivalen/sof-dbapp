@@ -90,8 +90,10 @@ if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
   weekend_ticket = BaseProduct.create(
     id: 1,
     name: 'Helhelgsbiljett',
+    name_english: 'Weekend ticket',
     description: 'En biljett som räcker en hel helg',
-    cost: 5000
+    description_english: 'A tikcet for a whole weekend',
+    cost: 4000
   )
 
   weekend_ticket.products.push(
@@ -101,26 +103,33 @@ if Rails.env.development? and BaseProduct.count == 0 and Product.count == 0
   single_day_ticket = BaseProduct.create(
     id: 2,
     name: 'Dagsbiljett',
+    name_english: 'Day ticket',
     description: 'En biljett som räcker en dag',
+    description_english: 'A ticket that lasts for a day',
     cost: 0
   )
 
   single_day_ticket.products.push(
     Product.create(
-      kind: 'Torsdag'
+      kind: 'Torsdag',
+      kind_english: 'Thursday',
+      cost: 1400
     )
   )
 
   single_day_ticket.products.push(
     Product.create(
       kind: 'Fredag',
-      cost: 1
+      kind_english: 'Friday',
+      cost: 1600
     )
   )
 
   single_day_ticket.products.push(
     Product.create(
-      kind: 'Lördag'
+      kind: 'Lördag',
+      kind_english: 'Saturday',
+      cost: 1900
     )
   )
 end
