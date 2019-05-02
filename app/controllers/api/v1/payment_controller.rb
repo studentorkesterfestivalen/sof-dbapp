@@ -21,17 +21,17 @@ class API::V1::PaymentController < ApplicationController
       #head :not_acceptable
     end
   rescue Stripe::CardError => e
-    render :status => 400, :json => e
+    render :status => 400, :json => e.json_body[:error][:message]
   rescue Stripe::RateLimitError => e
-    render :status => 400, :json => e
+    render :status => 400, :json => e.json_body[:error][:message]
   rescue Stripe::InvalidRequestError => e
-    render :status => 400, :json => e
+    render :status => 400, :json => e.json_body[:error][:message]
   rescue Stripe::AuthenticationError => e
-    render :status => 400, :json => e
+    render :status => 400, :json => e.json_body[:error][:message]
   rescue Stripe::APIConnectionError => e
-    render :status => 400, :json => e
+    render :status => 400, :json => e.json_body[:error][:message]
   rescue Stripe::StripeError => e
-    render :status => 400, :json => e
+    render :status => 400, :json => e.json_body[:error][:message]
 
   end
 
