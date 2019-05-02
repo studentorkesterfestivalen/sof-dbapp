@@ -10,7 +10,11 @@ class Order < ApplicationRecord
   end
 
   def cost
-    order_items.sum { |x| x.cost * x.amount } - rebate - funkis_rebate
+    cost = order_items.sum { |x| x.cost * x.amount } - rebate - funkis_rebate
+    if !discount_code.nil?
+      cost -= discount_code.discount
+    end
+    cost
   end
 
   def amount

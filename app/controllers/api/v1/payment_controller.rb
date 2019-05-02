@@ -54,6 +54,9 @@ class API::V1::PaymentController < ApplicationController
          products += "" + item.amount.to_s + "x " + base_prod.name + "\n"
       end
     end
+    if !order.discount_code.nil?
+      products += "rabattkod(" + order.discount_code.code + ")" "\n"
+    end
 
     Stripe::Charge.create(
         :customer => customer.id,
