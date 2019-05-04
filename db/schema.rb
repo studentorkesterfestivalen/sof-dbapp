@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190502070756) do
+ActiveRecord::Schema.define(version: 20190504072212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,11 +124,26 @@ ActiveRecord::Schema.define(version: 20190502070756) do
     t.index ["user_id"], name: "index_corteges_on_user_id", using: :btree
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
   create_table "discount_codes", force: :cascade do |t|
     t.integer  "discount"
     t.integer  "uses"
-    t.string   "code",       null: false
     t.integer  "product_id"
+    t.string   "code",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_discount_codes_on_product_id", using: :btree
@@ -293,9 +308,10 @@ ActiveRecord::Schema.define(version: 20190502070756) do
     t.integer  "owner_id"
     t.integer  "gifted_by_id"
     t.integer  "cost",         default: 0,     null: false
-    t.boolean  "collected",    default: false, null: false
+    t.integer  "collected",    default: 0,     null: false
     t.datetime "collected_at"
     t.integer  "amount"
+    t.boolean  "refunded",     default: false
     t.index ["gifted_by_id"], name: "index_order_items_on_gifted_by_id", using: :btree
     t.index ["order_id"], name: "index_order_items_on_order_id", using: :btree
     t.index ["owner_id"], name: "index_order_items_on_owner_id", using: :btree
