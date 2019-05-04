@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
       scope '/collect' do
         get '/:id', to: 'item_collect#show'
-        post '/:id', to: 'item_collect#collect'
+        post '/', to: 'item_collect#collect'
       end
 
       scope '/order_stats' do
