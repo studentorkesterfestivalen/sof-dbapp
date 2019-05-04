@@ -9,7 +9,7 @@ class API::V1::ItemCollectController < ApplicationController
   def show
     require_admin_permission AdminPermission::TICKETER
 
-    user = User.find_by id: params[:id]
+    user = User.find_by uuid: params[:id]
 
     if user.present?
       render json: user, include: {
