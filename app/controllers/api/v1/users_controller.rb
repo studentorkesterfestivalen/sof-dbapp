@@ -247,7 +247,7 @@ class API::V1::UsersController < ApplicationController
 
     head :no_content
   end
-
+  
   def find_ids
     require_admin_permission AdminPermission::LIST_USERS
 
@@ -258,11 +258,24 @@ class API::V1::UsersController < ApplicationController
       render :status => '404', :json => {:message => 'Användaren kunde inte hittas'}
     end
   end
-
+  
   def get_user_uuid
     render json: current_user, :only => ['uuid']
   end
-
+  
+  def set_liu_card_number
+    user = User.find_by liu_card_number: params[:liu_card_number] 
+    
+    unless user.nil? 
+      render :status => '404'
+    else
+      
+      current_user.liu_card_number = params[:liu_card_number]
+      current_user.save!
+      render :status => '200'
+    end
+  end 
+    
   private
 
   def user_params
