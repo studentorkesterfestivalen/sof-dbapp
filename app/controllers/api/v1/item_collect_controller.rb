@@ -45,7 +45,6 @@ class API::V1::ItemCollectController < ApplicationController
         order_item.collected = true
         order_item.collected_at = DateTime.now
         order_item.save!
-        puts 'Yes get this item'
       end    
       render_order_items(user)
     end
