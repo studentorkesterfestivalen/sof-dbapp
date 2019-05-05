@@ -266,7 +266,7 @@ class API::V1::UsersController < ApplicationController
   def set_liu_card_number
     user = User.find_by liu_card_number: params[:liu_card_number] 
     
-    unless user.nil? 
+    unless user.nil? || current_user.id == user.id 
       render :status => '404'
     else
       
