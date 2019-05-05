@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         get 'search', action: 'find_ids', on: :collection
         get 'get_user', action: 'get_user', on: :collection
         get 'get_user_uuid', action: 'get_user_uuid', on: :collection
+        post 'set_liu_card_number', action: 'set_liu_card_number', on: :collection
       end
 
       resources :cortege
@@ -76,7 +77,8 @@ Rails.application.routes.draw do
       end
 
       scope '/collect' do
-        get '/:id', to: 'item_collect#show'
+        get '/:uuid', to: 'item_collect#show'
+        get '/liu_card/:liu_card_number', to: 'item_collect#liu_card'
         post '/', to: 'item_collect#collect'
       end
 
