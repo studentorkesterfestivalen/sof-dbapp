@@ -41,7 +41,8 @@ class Product < ApplicationRecord
         end
       end
     end
-    current_count += amount_bought
+    p current_count;
+    p amount_left(user)
     current_count <= amount_left(user)
   end
 
