@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190504072212) do
+ActiveRecord::Schema.define(version: 20190504143211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,26 +124,11 @@ ActiveRecord::Schema.define(version: 20190504072212) do
     t.index ["user_id"], name: "index_corteges_on_user_id", using: :btree
   end
 
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-  end
-
   create_table "discount_codes", force: :cascade do |t|
     t.integer  "discount"
     t.integer  "uses"
-    t.integer  "product_id"
     t.string   "code",       null: false
+    t.integer  "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_discount_codes_on_product_id", using: :btree
@@ -246,7 +231,7 @@ ActiveRecord::Schema.define(version: 20190504072212) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "orchestra_signup_id"
-    t.string   "size"
+    t.integer  "size"
     t.index ["orchestra_signup_id"], name: "index_orchestra_articles_on_orchestra_signup_id", using: :btree
   end
 
@@ -398,6 +383,7 @@ ActiveRecord::Schema.define(version: 20190504072212) do
     t.boolean  "rebate_given",           default: false,                       null: false
     t.boolean  "allow_password_change",  default: false,                       null: false
     t.uuid     "uuid",                   default: -> { "uuid_generate_v4()" }, null: false
+    t.string   "liu_card_number"
     t.index ["email"], name: "index_users_on_email", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
