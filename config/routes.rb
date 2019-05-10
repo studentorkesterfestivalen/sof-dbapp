@@ -35,7 +35,10 @@ Rails.application.routes.draw do
       resources :cortege
       resources :case_cortege
       resources :payments
-      resources :shopping_product
+      resources :shopping_product do
+        put 'sold_separately', action: 'increase_count', on: :collection
+        put 'decrease_separately', action: 'decrease_count', on: :collection
+      end
       resources :user_groups do
         post 'modify_membership', action: 'modify_membership', on: :member
       end
