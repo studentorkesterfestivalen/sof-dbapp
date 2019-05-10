@@ -30,8 +30,6 @@ class Product < ApplicationRecord
 
   def below_global_limit?(user, additional_items)
     current_count = 0
-    p '------------------------------'
-    p additional_items
     if additional_items.is_a?(Integer)
       current_count += additional_items
     else
@@ -41,8 +39,6 @@ class Product < ApplicationRecord
         end
       end
     end
-    p current_count;
-    p amount_left(user)
     current_count <= amount_left(user)
   end
 
