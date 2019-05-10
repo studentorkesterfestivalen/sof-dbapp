@@ -11,7 +11,7 @@ class API::V1::ShoppingProductController < ApplicationController
         enabled_products = BaseProduct.order(:id).includes(:products).where('base_products.enabled': true, 'products.enabled': true)
         products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions and current_user.has_group_permission? x.required_group_permissions }
       end
-      products.each do |base_prod| 
+      products.each do |base_prod|
         base_prod.update_purchasable(current_user)
         base_prod.products.each do |prod|
           prod.current_user = current_user
@@ -50,6 +50,26 @@ class API::V1::ShoppingProductController < ApplicationController
       redirect_to api_v1_shopping_product_url(product)
     else
       raise 'Unable to update product'
+    end
+  end
+
+  def increase_count
+    product = Product.find_by_id(params[:product_id])
+    if product.nil?
+      render :status => '404', :json => {:message => 'Ingen produkt hittades' }
+    else
+      product.increment(:separately_sold, 1)
+      render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
+    end
+  end
+
+  def decrease_count
+    product = Product.find_by_id(params[:product_id])
+    if product.nil?
+      render :status => '404', :json => {:message => 'Ingen produkt hittades' }
+    else
+      product.decrement(:separately_sold, 1)
+      render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
     end
   end
 
