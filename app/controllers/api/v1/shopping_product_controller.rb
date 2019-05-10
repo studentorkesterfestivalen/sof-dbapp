@@ -8,7 +8,7 @@ class API::V1::ShoppingProductController < ApplicationController
       if current_user.has_admin_permission? AdminPermission::ALL and params[:limit_items].nil?
         products = BaseProduct.includes(:products).all
       else
-        enabled_products = BaseProduct.order(:id).includes(:products).where('base_products.enabled': true, 'products.enabled': true)
+        enabled_products = BaseProduct.order(:id).includes(:products)
         products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions and current_user.has_group_permission? x.required_group_permissions }
       end
       products.each do |base_prod| 
@@ -18,7 +18,7 @@ class API::V1::ShoppingProductController < ApplicationController
         end
       end
     else
-      products = BaseProduct.includes(:products).where(enabled: true, required_permissions: 0, required_group_permissions: 0)
+      products = BaseProduct.includes(:products).where(required_permissions: 0, required_group_permissions: 0)
     end
 
 
