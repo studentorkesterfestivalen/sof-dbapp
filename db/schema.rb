@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190504143211) do
+ActiveRecord::Schema.define(version: 20190510195951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -231,7 +231,7 @@ ActiveRecord::Schema.define(version: 20190504143211) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "orchestra_signup_id"
-    t.integer  "size"
+    t.string   "size"
     t.index ["orchestra_signup_id"], name: "index_orchestra_articles_on_orchestra_signup_id", using: :btree
   end
 
@@ -339,6 +339,7 @@ ActiveRecord::Schema.define(version: 20190504143211) do
     t.integer  "purchase_limit",    default: 0,    null: false
     t.integer  "given_out_amount",  default: 0
     t.string   "kind_english"
+    t.integer  "separately_sold",   default: 0
     t.index ["base_product_id"], name: "index_products_on_base_product_id", using: :btree
   end
 

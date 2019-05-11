@@ -11,7 +11,7 @@ class API::V1::ShoppingProductController < ApplicationController
         enabled_products = BaseProduct.order(:id).includes(:products)
         products = enabled_products.select { |x| current_user.has_admin_permission? x.required_permissions and current_user.has_group_permission? x.required_group_permissions }
       end
-      products.each do |base_prod| 
+      products.each do |base_prod|
         base_prod.update_purchasable(current_user)
         base_prod.products.each do |prod|
           prod.current_user = current_user
@@ -51,6 +51,35 @@ class API::V1::ShoppingProductController < ApplicationController
     else
       raise 'Unable to update product'
     end
+  end
+
+  def increase_count
+    p 'Start increase count'
+    params[:products].each do |product|
+      amt = product[:amount]
+      product = Product.find_by_id(product[:product_id])
+      if product.nil? || !product.is_purchasable?(current_user, product[:amount])
+        #render :status => '404', :json => {:message => 'Ingen produkt hittades' }
+      else
+        product.increment(:separately_sold, amt)
+        product.save!
+        #render :status => '200', :json => {:message => 'Antalet biljetter sålda ökad' }
+      end
+    end
+    render :status => '200', :json => {:message => 'Antalet biljetter sålda ökad' }
+  end
+
+  def decrease_count
+    params[:products].each do |product|
+      product = Product.find_by_id(product[:product_id])
+      if product.nil?
+        #render :status => '404', :json => {:message => 'Ingen produkt hittades' }
+      else
+        product.decrement(:separately_sold, product[:amount])
+        #render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
+      end
+    end
+    render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
   end
 
   def destroy
