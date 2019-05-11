@@ -339,7 +339,7 @@ ActiveRecord::Schema.define(version: 20190510195951) do
     t.integer  "purchase_limit",    default: 0,    null: false
     t.integer  "given_out_amount",  default: 0
     t.string   "kind_english"
-    t.integer  "separately_sold"
+    t.integer  "separately_sold",   default: 0
     t.index ["base_product_id"], name: "index_products_on_base_product_id", using: :btree
   end
 
