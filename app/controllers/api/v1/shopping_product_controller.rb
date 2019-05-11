@@ -54,24 +54,32 @@ class API::V1::ShoppingProductController < ApplicationController
   end
 
   def increase_count
-    product = Product.find_by_id(params[:product_id])
-    if product.nil? || !product.is_purchasable?(current_user, params[:amount])
-      render :status => '404', :json => {:message => 'Ingen produkt hittades' }
-    else
-      product.increment(:separately_sold, params[:amount])
-      product.save!
-      render :status => '200', :json => {:message => 'Antalet biljetter sålda ökad' }
+    p 'Start increase count'
+    params[:products].each do |product|
+      amt = product[:amount]
+      product = Product.find_by_id(product[:product_id])
+      if product.nil? || !product.is_purchasable?(current_user, product[:amount])
+        #render :status => '404', :json => {:message => 'Ingen produkt hittades' }
+      else
+        product.increment(:separately_sold, amt)
+        product.save!
+        #render :status => '200', :json => {:message => 'Antalet biljetter sålda ökad' }
+      end
     end
+    render :status => '200', :json => {:message => 'Antalet biljetter sålda ökad' }
   end
 
   def decrease_count
-    product = Product.find_by_id(params[:product_id])
-    if product.nil?
-      render :status => '404', :json => {:message => 'Ingen produkt hittades' }
-    else
-      product.decrement(:separately_sold, 1)
-      render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
+    params[:products].each do |product|
+      product = Product.find_by_id(product[:product_id])
+      if product.nil?
+        #render :status => '404', :json => {:message => 'Ingen produkt hittades' }
+      else
+        product.decrement(:separately_sold, product[:amount])
+        #render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
+      end
     end
+    render :status => '200', :json => {:message => 'Antalet biljetter sålda minskad' }
   end
 
   def destroy

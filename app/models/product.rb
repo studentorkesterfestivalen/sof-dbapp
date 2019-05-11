@@ -82,7 +82,7 @@ class Product < ApplicationRecord
   end
 
   def amount_bought
-    OrderItem.where(product_id: id).sum{ |prod| prod.amount } + given_out_amount
+    OrderItem.where(product_id: id).sum{ |prod| prod.amount } + given_out_amount + separately_sold
   end
 
 end
