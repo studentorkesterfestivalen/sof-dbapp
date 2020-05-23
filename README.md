@@ -22,7 +22,7 @@ $rails routes
 ```
 
 ## Deployment
-Requires sqlite3 and ruby
+Requires PostgreSQL and ruby
 
 To install bundler
 ```
@@ -46,7 +46,7 @@ After this you _might_ have to update which versions you're using in the gemfile
 
 Then you should be good to go, enjoy!
 
-## External librarys used
+## External libraries used
 
 For [authentification](https://github.com/lynndylanhurley/devise_token_auth) (login, registration, etc.):
 
